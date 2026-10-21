@@ -9,9 +9,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * Water a hose pulley drains from the world gets the purity of the block it is drained from.
- */
 @Mixin(value = FluidDrainingBehaviour.class, remap = false)
 public abstract class MixinFluidDrainingBehaviour
 {

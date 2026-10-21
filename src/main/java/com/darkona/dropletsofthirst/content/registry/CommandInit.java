@@ -76,7 +76,6 @@ public class CommandInit {
                                             ServerPlayer player = EntityArgument.getPlayer(context,"Player");
                                             PlayerThirst thirst = player.getData(ModAttachment.PLAYER_THIRST);
                                             thirst.change(player, IntegerArgumentType.getInteger(context,"thirst"), IntegerArgumentType.getInteger(context,"quenched"), ThirstChangeEvent.Cause.COMMAND);
-                                            // Quenched never exceeds thirst and listeners may cancel or change it: report what was set.
                                             int value = thirst.getThirst();
                                             int quenched = thirst.getQuenched();
                                             context.getSource().sendSuccess(() -> Component.translatable("command.droplets_of_thirst.set", value, quenched, player.getDisplayName()), true);
@@ -120,9 +119,6 @@ public class CommandInit {
                                             .executes(context -> dumpItems(context.getSource(), StringArgumentType.getString(context, "namespaces")))))));
     }
 
-    /**
-     * Development only: {@link ItemDump} of the items of the given namespaces (separated by spaces).
-     */
     private static int dumpItems(CommandSourceStack source, String namespaces)
     {
         try
@@ -168,9 +164,6 @@ public class CommandInit {
         return GameplayConfig.CLIMATE_FORMULA.get() + " formula";
     }
 
-    /**
-     * Purity of the water the player looks at, or of the block at their feet, with each step.
-     */
     private static int debugPurity(CommandSourceStack source, ServerPlayer player)
     {
         if (!WaterPurity.enabled())
@@ -209,9 +202,6 @@ public class CommandInit {
         return problems.size();
     }
 
-    /**
-     * Recomputes the estimate of one item from the current recipes and explains it; nothing is stored.
-     */
     private static int infer(CommandSourceStack source, Item item)
     {
         MinecraftServer server = source.getServer();

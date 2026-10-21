@@ -61,20 +61,13 @@ import java.util.UUID;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
-/**
- * Drinking, eating, limits, overhydration, purity effects and the commands, with the default config.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class ThirstTests
 {
-    /** Cause of the last thirst change of any player; tests run one at a time on the server thread. */
     private static ThirstChangeEvent.Cause lastCause;
-    /** Players with this tag do not die: their death is cancelled after every other listener, like a modded totem. */
     private static final String IMMORTAL_TAG = "droplets-test-immortal";
-    /** Players with this tag cannot break blocks nor attack: cancelled at low priority, like a claim or PvP mod. */
     private static final String PROTECTED_TAG = "droplets-test-protected";
-    /** Thirst changes of players with this tag are cancelled, like a mod that freezes thirst. */
     private static final String FROZEN_TAG = "droplets-test-frozen";
 
     static
@@ -103,7 +96,6 @@ public class ThirstTests
         return WaterPurity.addPurity(PotionContents.createItemStack(Items.POTION, Potions.WATER), purity);
     }
 
-    /** MIRROR_FOOD: hunger exhaustion that another mod empties between ticks (Vampirism, for its vampires) still counts. */
     @GameTest(template = "empty")
     public static void emptiedHungerExhaustionStillCounts(GameTestHelper helper)
     {
@@ -239,7 +231,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** Water that another mod keeps from being drunk ({@code ThirstChangeEvent.Pre} cancelled) is not drunk past full either. */
     @GameTest(template = "empty")
     public static void cancelledDrinksDoNotOverhydrate(GameTestHelper helper)
     {
@@ -276,7 +267,6 @@ public class ThirstTests
         PlayerThirst.consume(waterBottle(0), player);
         MobEffectInstance nausea = player.getEffect(MobEffects.CONFUSION);
         helper.assertTrue(nausea != null, "dirty water gives Nausea (100% by default)");
-        // Vanilla only builds up the screen distortion while more than 60 ticks are left, at 1/150 per tick.
         helper.assertTrue(nausea.getDuration() >= 200, "dirty water gives at least 10 seconds of Nausea, not " + nausea.getDuration() + " ticks");
         helper.assertTrue(player.hasEffect(MobEffects.HUNGER), "dirty water gives Hunger (100% by default)");
         helper.succeed();
@@ -293,7 +283,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** Default {@code [effects]}: contaminated and dirty water can poison, murky and acceptable only sicken, clean and pure do nothing. */
     @GameTest(template = "empty")
     public static void defaultEffectTablesFollowTheSixLevels(GameTestHelper helper)
     {
@@ -320,8 +309,6 @@ public class ThirstTests
         Level level = helper.getLevel();
         BlockPos low = helper.absolutePos(BlockPos.ZERO).atY(level.getSeaLevel());
         BlockPos high = low.above(200);
-        // Plains, not the biome where the test runs: in a hot biome the LEGACY formula halves temperatures above 1, so
-        // cooling with height can raise the multiplier there.
         var plains = level.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(Biomes.PLAINS);
         float atSea = ThirstHelper.biomeClimate(level, plains, low, 1.0F, false);
         float onTop = ThirstHelper.biomeClimate(level, plains, high, 1.0F, false);
@@ -359,7 +346,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** The tooltip line of estimated values: the translated values in gray, kept while they stay the same. */
     @GameTest(template = "empty")
     public static void estimatedLineIsKeptWhileTheValuesStay(GameTestHelper helper)
     {
@@ -371,7 +357,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** Gaining or losing an effect recomputes the thirst loss multiplier right away (Fire Resistance: none by default). */
     @GameTest(template = "empty")
     public static void effectsRecomputeTheMultiplier(GameTestHelper helper)
     {
@@ -386,7 +371,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** The respawn values come with the respawn, not with the death: a death another mod cancels (its own totem) keeps the thirst. */
     @GameTest(template = "empty")
     public static void aCancelledDeathKeepsThirst(GameTestHelper helper)
     {
@@ -400,7 +384,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** Respawning after a death gives {@code death.respawnThirst} and {@code respawnQuenched}; coming back from the End is not a death. */
     @GameTest(template = "empty")
     public static void respawningGivesTheRespawnValues(GameTestHelper helper)
     {
@@ -417,7 +400,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** Dehydration adds thirst exhaustion like any activity: not to creative players nor to players with thirst disabled. */
     @GameTest(template = "empty")
     public static void dehydrationSparesCreativeAndDisabledPlayers(GameTestHelper helper)
     {
@@ -438,7 +420,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** OWN mode: a block break or an attack that another mod cancels (claims, PvP rules) costs no thirst, as it costs no hunger in vanilla. */
     @GameTest(template = "empty")
     public static void cancelledActivitiesCostNothingInOwnMode(GameTestHelper helper)
     {
@@ -472,7 +453,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** OWN mode: an attack costs thirst only when it lands, as vanilla charges hunger; a swing at an invulnerable mob costs nothing. */
     @GameTest(template = "empty")
     public static void onlyLandedAttacksCostThirstInOwnMode(GameTestHelper helper)
     {
@@ -504,7 +484,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** Right clicks reach this mod's handlers on the server too; hand drinking itself only acts on the client. */
     @GameTest(template = "empty")
     public static void rightClicksRunOnTheServer(GameTestHelper helper)
     {
@@ -515,7 +494,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** The thirst sync only goes to clients: a server refuses to decode one sent by a client. */
     @GameTest(template = "empty")
     public static void thirstSyncOnlyGoesToClients(GameTestHelper helper)
     {

@@ -7,11 +7,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import java.util.Optional;
 
-/**
- * Value of the {@code droplets_of_thirst:drinks} item data map. {@code purity} is the purity of the drink when the stack
- * stores none; without it, drinks that are not water containers roll no purity effects. Negative values (salty food)
- * remove thirst and quenched.
- */
 public record DrinkValues(int thirst, int quenched, Optional<Integer> purity)
 {
     public static final Codec<DrinkValues> CODEC = RecordCodecBuilder.create(instance -> instance.group(

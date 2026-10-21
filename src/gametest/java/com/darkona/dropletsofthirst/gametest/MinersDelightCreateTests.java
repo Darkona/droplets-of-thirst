@@ -14,10 +14,6 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import static com.darkona.dropletsofthirst.gametest.MinersDelightTests.item;
 
-/**
- * Miner's Delight with Create ({@code -PwithDelight -PwithCompat}): Create fills and empties the water cup with its
- * purity, through the recipes of this mod (the ones Miner's Delight ships sit in a folder 1.21 does not read).
- */
 @PrefixGameTestTemplate(false)
 public class MinersDelightCreateTests
 {

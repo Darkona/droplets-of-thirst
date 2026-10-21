@@ -10,10 +10,6 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 @EventBusSubscriber(modid = DropletsOfThirst.ID, value = Dist.CLIENT)
 public final class PurityTintClient
 {
-    /**
-     * The terracotta water bowl draws its liquid with a grey second layer (layer1 of its model), so it needs the vanilla water color by default;
-     * the purity color replaces it in the {@code ItemColors} mixin.
-     */
     @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event)
     {

@@ -17,20 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.ByteBuffer;
 import java.util.stream.LongStream;
 
-/**
- * Water sources poured into the world (buckets, dispensers, {@code FluidUtil.tryPlaceFluid}, Create open pipe ends),
- * with the purity of the water poured, so pouring sea water into a meadow does not give clean water back. One map
- * per chunk ({@code BlockPos.asLong} to purity), saved with the chunk and never synced: only the server decides a
- * purity. Nothing runs per tick: the map is read when water is taken from the world and written when it is poured.
- * <ul>
- * <li>A registered position that still holds a water source has the stored purity.</li>
- * <li>An unregistered water source next to registered ones (the infinite source between two poured buckets) has the
- * worst purity of those neighbours.</li>
- * <li>Picking up a registered source removes its entry and passes its purity to the unregistered water sources
- * beside it, so the source that refills its place is not clean either.</li>
- * <li>An entry whose position no longer holds a water source is ignored, and removed when read.</li>
- * </ul>
- */
 public final class PouredWater
 {
     private static final byte NONE = -1;
@@ -62,16 +48,11 @@ public final class PouredWater
         return sources.isEmpty();
     }
 
-    /** Entries of this chunk, for tests and debugging. */
     public Long2ByteMap entries()
     {
         return sources;
     }
 
-    /**
-     * Registers the water source at {@code pos} as poured water of {@code purity}. Server side, with purity on, and
-     * only when the position now holds a water source.
-     */
     public static void poured(Level level, BlockPos pos, int purity)
     {
         if (level.isClientSide() || !WaterPurity.enabled() || !isWaterSource(level.getFluidState(pos)))
@@ -83,11 +64,6 @@ public final class PouredWater
         chunk.setUnsaved(true);
     }
 
-    /**
-     * Purity of the water source at {@code pos} from the registry: its own entry, or the worst entry of its
-     * horizontal neighbours; -1 when neither applies or there is no water source there (the world decides). Stale
-     * entries met on the way are removed.
-     */
     public static int purityAt(Level level, BlockPos pos)
     {
         if (level.isClientSide())
@@ -98,11 +74,6 @@ public final class PouredWater
         return worstNeighbour(level, pos);
     }
 
-    /**
-     * The water source at {@code pos} was just picked up: returns its purity from the registry (its entry, or else the
-     * worst registered neighbour), or -1. A registered source leaves its purity to the unregistered water sources
-     * beside it, and its entry is removed.
-     */
     public static int pickedUp(Level level, BlockPos pos)
     {
         if (level.isClientSide())
@@ -137,10 +108,6 @@ public final class PouredWater
         return worst;
     }
 
-    /**
-     * Entry at {@code pos} while it still holds a water source, or -1; with {@code clean}, an entry without a water
-     * source is removed. Chunks that are not loaded are not loaded for it.
-     */
     private static int stored(Level level, BlockPos pos, boolean clean)
     {
         LevelChunk chunk = chunk(level, pos);

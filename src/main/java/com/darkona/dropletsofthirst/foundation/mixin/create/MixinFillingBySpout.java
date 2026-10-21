@@ -9,11 +9,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * A spout filling a water container through a filling recipe (terracotta bowl) gives it the purity of the water it
- * used; the recipe's result has none. Bottles and buckets are filled by {@code GenericItemFilling} and the fluid
- * capability, which already carry it.
- */
 @Mixin(value = FillingBySpout.class, remap = false)
 public class MixinFillingBySpout
 {

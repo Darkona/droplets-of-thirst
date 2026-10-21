@@ -35,10 +35,6 @@ public class DrinkableItem extends Item
         return this;
     }
 
-    /**
-     * Uses up one drink and hands back its empty container, like vanilla bottles: into the inventory, or dropped when
-     * it is full.
-     */
     public @NotNull ItemStack finishUsingItem(@NotNull ItemStack item, @NotNull Level level, @NotNull LivingEntity entity)
     {
         level.gameEvent(entity, GameEvent.ITEM_INTERACT_FINISH, entity.getEyePosition());

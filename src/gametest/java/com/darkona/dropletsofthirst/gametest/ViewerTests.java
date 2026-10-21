@@ -18,10 +18,6 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import java.util.List;
 
-/**
- * What the recipe viewer pages (JEI, EMI) show. The pages are built from plain data that the server can build too,
- * so the content is checked here without a client.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class ViewerTests

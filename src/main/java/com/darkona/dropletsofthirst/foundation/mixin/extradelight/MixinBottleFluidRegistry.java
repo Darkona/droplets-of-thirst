@@ -10,11 +10,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * Extra Delight turns water bottles into 250 mB of water and back through a static table that knows nothing of
- * components, so the purity was lost both ways: a dirty bottle went into its tanks as water without a purity. The
- * fluid it returns is the table's own stack, so it is copied before the purity is set.
- */
 @Mixin(value = BottleFluidRegistry.class, remap = false)
 public abstract class MixinBottleFluidRegistry
 {

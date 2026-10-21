@@ -46,8 +46,6 @@ public final class DropletsAPI
         return Objects.requireNonNull(service, "Droplets of Thirst is not loaded");
     }
 
-    /* Reading */
-
     /**
      * The player's thirst, live. Cheap: no copy is made.
      */
@@ -65,8 +63,6 @@ public final class DropletsAPI
     {
         return service().getDrinkValues(stack);
     }
-
-    /* Changing (server side) */
 
     /**
      * Sets thirst, clamped to 0..{@link #MAX_THIRST}; quenched is lowered to stay at or below it.
@@ -141,8 +137,6 @@ public final class DropletsAPI
     {
         service().addExhaustion(player, amount);
     }
-
-    /* Purity */
 
     /**
      * Whether water purity is on ({@code purity.enabled}, the server's value on remote clients). When off, nothing
@@ -219,8 +213,6 @@ public final class DropletsAPI
     {
         return service().getWaterPurity(level, pos);
     }
-
-    /* Registering */
 
     /**
      * Gives an item thirst values from code. Call any time from mod construction on; items are resolved when the

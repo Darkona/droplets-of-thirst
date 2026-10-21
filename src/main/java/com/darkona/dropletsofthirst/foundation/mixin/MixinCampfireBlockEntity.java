@@ -13,11 +13,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-/**
- * Water containers cooking on a campfire give off vapour ({@code EFFECT} particles) instead of smoke; the other items
- * and the campfire itself keep their smoke. {@code particleTick} only runs on the client thread, so one flag, set for
- * each slot before its particles, is enough.
- */
 @Mixin(CampfireBlockEntity.class)
 public abstract class MixinCampfireBlockEntity
 {

@@ -6,9 +6,6 @@ import com.darkona.dropletsofthirst.foundation.network.message.ThirstValuesSyncM
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-/**
- * Payloads; registered on the mod bus from the mod constructor.
- */
 public class ThirstModPacketHandler
 {
     private static final String PROTOCOL_VERSION = "0.1.12";

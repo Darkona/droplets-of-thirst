@@ -11,9 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Thirst data of the receiving player plus the server rules the client applies itself ({@code PlayerThirst.SYNC_*} bits).
- */
 public record PlayerThirstSyncMessage(int thirst, int quenched, float exhaustion, int flags) implements CustomPacketPayload
 {
 

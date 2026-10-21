@@ -16,14 +16,9 @@ import reliquary.init.ModItems;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
-/**
- * Reliquary: the Emperor's Chalice hydrates, the Infernal Chalice does not, and the optional cooldown. Registered by
- * {@link DropletsGameTests} only when Reliquary is installed.
- */
 @PrefixGameTestTemplate(false)
 public class ReliquaryTests
 {
-    /** The full use path: the item's own finish, then the Finish event that droplets_of_thirst and the compat listen to. */
     private static void drink(GameTestHelper helper, ServerPlayer player, ItemStack chalice)
     {
         NeoForge.EVENT_BUS.post(new LivingEntityUseItemEvent.Finish(player, chalice, 0, chalice.finishUsingItem(helper.getLevel(), player)));

@@ -13,11 +13,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * Water the hose sucks from a source block in the world gets that water's purity, as buckets and bottles do. Both
- * stacks {@code use} builds in that branch get it: the one checked against the tank (so water of the purity already in
- * the tank still stacks) and the one filled in after the source is gone, which reuses the purity read before.
- */
 @Mixin(value = HoseItem.class, remap = false)
 public abstract class MixinHoseItem
 {

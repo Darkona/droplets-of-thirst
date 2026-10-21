@@ -17,15 +17,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * A filled waterskin gets the purity of the water it was filled with. Cold Sweat builds every filled waterskin in
- * {@code getFilledItem(empty, level, pos)}: {@code pos} is the water source or the cauldron (already lowered, maybe
- * empty); for a tank the water is drained before, so its purity is handed over from {@code useOn}'s tank lambda.
- */
 @Mixin(value = WaterskinItem.class, remap = false)
 public abstract class MixinWaterskinItem
 {
-    /** Purity of the water just drained from a tank, -1 outside that fill. Server thread only. */
     @Unique
     private static int droplets_of_thirst$tankPurity = -1;
 

@@ -14,9 +14,6 @@ import net.neoforged.neoforge.network.PacketDistributor;
 @OnlyIn(Dist.CLIENT)
 public class DrinkByHandClient
 {
-    /**
-     * Only a hint to avoid useless packets; the server repeats every check and plays the sound.
-     */
     public static void drinkByHand()
     {
         LocalPlayer player = Minecraft.getInstance().player;

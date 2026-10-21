@@ -17,9 +17,6 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
-/**
- * Traveler's Backpack: the hose water effect. Registered by {@link DropletsGameTests} only when it is installed.
- */
 @PrefixGameTestTemplate(false)
 public class TravelersBackpackTests
 {

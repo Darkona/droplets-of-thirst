@@ -43,9 +43,6 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import java.util.List;
 
-/**
- * Create: open pipe ends and the Sand Filter. Registered by {@link DropletsGameTests} only when Create is installed.
- */
 @PrefixGameTestTemplate(false)
 public class CreateTests
 {
@@ -83,7 +80,6 @@ public class CreateTests
         OpenEndedPipe pipe = new OpenEndedPipe(new BlockFace(water.above(), Direction.DOWN));
         pipe.manageSource(helper.getLevel(), null);
         IFluidHandler handler = pipe.provideHandler().getCapability();
-        // The pipe pours once its internal tank is full, like a pump filling it tick after tick.
         for (int i = 0; i < 10 && !helper.getLevel().getFluidState(water).isSource(); i++)
             handler.fill(water(contaminated, 250), IFluidHandler.FluidAction.EXECUTE);
         helper.assertTrue(helper.getLevel().getFluidState(water).isSource(), "the open pipe end placed no water source");
@@ -125,10 +121,6 @@ public class CreateTests
         });
     }
 
-    /**
-     * A filter hands its water on to a filter placed in front of it after it was filtered, and, once turned, to the one
-     * in its new front; not to a filter that was taken away.
-     */
     @GameTest(template = "box", templateNamespace = DropletsOfThirst.ID, timeoutTicks = 400)
     public static void sandFilterFindsTheFilterInFrontWhenItChanges(GameTestHelper helper)
     {
@@ -192,7 +184,6 @@ public class CreateTests
         helper.succeed();
     }
 
-    /** Water below the rate per tick (the last millibuckets a pipe delivers) is filtered too, not left in the dirty tank. */
     @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)
     public static void sandFilterFiltersLessThanItsRate(GameTestHelper helper)
     {
@@ -211,7 +202,6 @@ public class CreateTests
         helper.succeed();
     }
 
-    /** Asked without a side (Jade, other inspectors), the filter shows both tanks and lets nothing in or out. */
     @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)
     public static void sandFilterShowsItsTanksWithoutASide(GameTestHelper helper)
     {
@@ -285,29 +275,20 @@ public class CreateTests
             for (int purity = clean; purity <= PurityLevel.MAX; purity++)
                 helper.assertFalse(AllFanProcessingTypes.SPLASHING.canProcess(WaterPurity.addPurity(container.copy(), purity), helper.getLevel()), "a fan washes " + container + " of purity " + purity);
         }
-        // Create hands back a bucket's crafting remainder next to the result: washing water buckets would make buckets.
         helper.assertFalse(AllFanProcessingTypes.SPLASHING.canProcess(WaterPurity.addPurity(new ItemStack(Items.WATER_BUCKET), 0), helper.getLevel()), "a fan washes water buckets");
         helper.succeed();
     }
 
-    /**
-     * Fans smoke with the smoker recipes (the {@code purify_smoking} pack, on in the gametest world) and blast with the
-     * furnace ones; with both packs on, Create burns what can be smoked in a blasting fan, as it does with food.
-     */
     @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)
     public static void smokingFanPurifiesWithTheSmokerRecipes(GameTestHelper helper)
     {
         ItemStack bottle = PotionContents.createItemStack(Items.POTION, Potions.WATER);
-        // Smoker recipes add two levels, and stop at clean with Create.
         int clean = PurityLevel.CLEAN.level();
         for (int purity = PurityLevel.MIN; purity < clean; purity++)
             helper.assertValueEqual(fanned(helper, AllFanProcessingTypes.SMOKING, bottle, purity), Math.min(purity + 2, clean), "water bottle of purity " + purity + " smoked by a fan");
         helper.succeed();
     }
 
-    /**
-     * Purity of what a fan of {@code type} turns {@code container} of {@code purity} into; -1 when it gives nothing.
-     */
     private static int fanned(GameTestHelper helper, FanProcessingType type, ItemStack container, int purity)
     {
         ItemStack input = WaterPurity.addPurity(container.copy(), purity);
@@ -377,9 +358,6 @@ public class CreateTests
         return WaterPurity.addPurity(new FluidStack(Fluids.WATER, amount), purity);
     }
 
-    /**
-     * An open pipe end at {@code pipePos} facing down, drained like a pump would.
-     */
     private static FluidStack drainThroughPipe(GameTestHelper helper, BlockPos pipePos)
     {
         OpenEndedPipe pipe = new OpenEndedPipe(new BlockFace(pipePos, Direction.DOWN));

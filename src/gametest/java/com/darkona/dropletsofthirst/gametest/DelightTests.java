@@ -34,11 +34,6 @@ import java.util.Arrays;
 
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 
-/**
- * Farmer's Delight addons and Let's Do mods ({@code -PwithDelight}): kettles refuse dirty water, the infinite water
- * sources give the world's purity, Extra Delight bottles keep theirs. Registered by {@link DropletsGameTests} only when
- * Extra Delight, Farm & Charm, HerbalBrews and Brewery are all installed.
- */
 @PrefixGameTestTemplate(false)
 public class DelightTests
 {
@@ -116,8 +111,6 @@ public class DelightTests
     @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)
     public static void farmAndCharmSinkIsHooked(GameTestHelper helper)
     {
-        // Farm & Charm has the sink class but other Let's Do mods register the block, so this only checks that the
-        // hook applies to it.
         try
         {
             Class<?> sink = Class.forName("net.satisfy.farm_and_charm.core.block.SinkBlock");

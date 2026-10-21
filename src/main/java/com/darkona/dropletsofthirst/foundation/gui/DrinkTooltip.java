@@ -15,10 +15,6 @@ import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactori
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Thirst droplets and quenched icons in the tooltip of items that restore thirst (like AppleSkin's for food); red
- * when the item removes them (salty).
- */
 public final class DrinkTooltip implements TooltipComponent, ClientTooltipComponent
 {
     private static final int GAP = 2;
@@ -48,9 +44,6 @@ public final class DrinkTooltip implements TooltipComponent, ClientTooltipCompon
         estimatedText = values.estimated() ? I18n.get("droplets_of_thirst.tooltip.estimated_short") : null;
     }
 
-    /**
-     * The same droplets and quenched icons outside a tooltip (the recipe viewer's hydration page).
-     */
     public static DrinkTooltip of(ThirstValues values)
     {
         return new DrinkTooltip(values);
@@ -61,10 +54,6 @@ public final class DrinkTooltip implements TooltipComponent, ClientTooltipCompon
         event.register(DrinkTooltip.class, tooltip -> tooltip);
     }
 
-    /**
-     * Runs every frame while a tooltip is open: reuses the last component while the values stay the same. Registered at
-     * low priority, so with AppleSkin the droplets go right under its food row.
-     */
     public static void gather(RenderTooltipEvent.GatherComponents event)
     {
         if (!ClientConfig.SHOW_TOOLTIP_ICONS.get() || !AppleSkinCompat.tooltip())

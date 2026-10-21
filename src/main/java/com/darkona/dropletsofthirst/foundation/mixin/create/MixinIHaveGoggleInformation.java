@@ -12,10 +12,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * Create goggles on a fluid container: water and fluids that carry a purity show it, in its colour, before the fluid
- * name. Create styles the whole line gray afterwards; the purity keeps its own colour because it is a child component.
- */
 @Mixin(value = IHaveGoggleInformation.class, remap = false)
 public interface MixinIHaveGoggleInformation
 {

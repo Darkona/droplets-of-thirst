@@ -6,10 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import java.util.Optional;
 
-/**
- * Value of the {@code droplets_of_thirst:biome_water} biome data map: {@code base} replaces the base purity of the biome's
- * water, {@code delta} is added after the other sources, and the result never exceeds {@code max}.
- */
 public record BiomeWater(Optional<Integer> base, int delta, int max)
 {
     public static final Codec<BiomeWater> CODEC = RecordCodecBuilder.create(instance -> instance.group(

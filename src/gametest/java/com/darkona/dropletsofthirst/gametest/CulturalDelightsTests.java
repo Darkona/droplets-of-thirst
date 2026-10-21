@@ -12,10 +12,6 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
-/**
- * Cultural Delights ({@code -PwithDelight}): the vat holds no fluid and hands out no water, water only goes in as
- * buckets in its aging recipes, so its purity rule lives in those recipes (the {@code clean_water_cooking} pack).
- */
 @PrefixGameTestTemplate(false)
 public class CulturalDelightsTests
 {

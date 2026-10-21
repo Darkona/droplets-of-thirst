@@ -15,11 +15,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-/**
- * An empty bucket (vanilla, or another mod's that keeps {@code BucketItem.use}) picking up water gets the purity of
- * that water, on the server. Changed in place, so the advancement trigger sees it too. A water bucket emptied into
- * the world (by a player or a dispenser) registers the source it leaves as poured water of its purity.
- */
 @Mixin(BucketItem.class)
 public abstract class MixinBucketItem
 {

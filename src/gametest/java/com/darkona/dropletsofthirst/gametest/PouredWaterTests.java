@@ -30,10 +30,6 @@ import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * Poured water: water sources poured into the world keep the purity of the water poured, the infinite source between
- * two of them inherits it, and picking one up hands it on.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class PouredWaterTests
@@ -45,7 +41,6 @@ public class PouredWaterTests
         return WaterPurity.addPurity(new ItemStack(Items.WATER_BUCKET), purity);
     }
 
-    /** Empties a water bucket of {@code purity} at {@code pos} as a player does. */
     private static void pour(GameTestHelper helper, ServerPlayer player, BlockPos pos, int purity)
     {
         ItemStack bucket = waterBucket(purity);
@@ -60,7 +55,6 @@ public class PouredWaterTests
         return water != null && water.entries().containsKey(pos.asLong());
     }
 
-    /** World purity of still water at {@code pos}; the tests need it above contaminated to tell poured water apart. */
     private static int worldPurity(GameTestHelper helper, BlockPos pos)
     {
         int purity = WaterPurity.getWaterPurity(helper.getLevel(), helper.getLevel().getBiome(pos), pos, true, null);
@@ -107,7 +101,6 @@ public class PouredWaterTests
         ServerPlayer player = TestSupport.player(helper);
         pour(helper, player, west, CONTAMINATED);
         pour(helper, player, east, PurityLevel.MURKY.level());
-        // The source two poured sources form between them, without waiting for the water to flow.
         helper.getLevel().setBlockAndUpdate(middle, Blocks.WATER.defaultBlockState());
         helper.assertFalse(registered(helper, middle), "the formed source is registered");
         helper.assertValueEqual(WaterPurity.getBlockPurity(helper.getLevel(), middle), CONTAMINATED, "the formed source takes the worst purity beside it");
@@ -140,7 +133,6 @@ public class PouredWaterTests
         helper.getLevel().setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
         helper.assertValueEqual(WaterPurity.getBlockPurity(helper.getLevel(), pos), world, "water that replaced an old entry");
 
-        // Beside a source: an old entry next to it is not inherited either.
         BlockPos east = pos.east();
         pour(helper, player, east, CONTAMINATED);
         helper.getLevel().setBlockAndUpdate(east, Blocks.STONE.defaultBlockState());

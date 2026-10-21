@@ -26,10 +26,6 @@ import java.util.UUID;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
-/**
- * The scripts of {@code examples/kubejs}, running inside KubeJS. Registered by {@link DropletsGameTests} only when
- * KubeJS is installed; {@code -PwithKubeJS} copies the scripts into {@code run/kubejs} before the run.
- */
 @PrefixGameTestTemplate(false)
 public class KubeJSTests
 {
@@ -106,18 +102,15 @@ public class KubeJSTests
         ServerPlayer player = player(helper);
         thirst(player).change(player, 10, 0, ThirstChangeEvent.Cause.COMMAND);
 
-        // A golden carrot hydrates what Droplets of Thirst says, and 4 more (drink() from the script)
         ItemStack carrot = new ItemStack(Items.GOLDEN_CARROT);
         ThirstValues own = DropletsAPI.getDrinkValues(carrot);
         int expected = 14 + (own == null ? 0 : own.thirst());
         player.eat(helper.getLevel(), carrot);
         helper.assertValueEqual(DropletsAPI.view(player).thirst(), expected, "thirst after the golden carrot" + HINT);
 
-        // The sponge dries 2 points
         rightClick(player, Items.SPONGE);
         helper.assertValueEqual(DropletsAPI.view(player).thirst(), expected - 2, "thirst after the sponge" + HINT);
 
-        // The clock refills when sneaking, and only reads otherwise
         rightClick(player, Items.CLOCK);
         helper.assertValueEqual(DropletsAPI.view(player).thirst(), expected - 2, "thirst after reading the clock");
         player.setShiftKeyDown(true);
@@ -131,14 +124,12 @@ public class KubeJSTests
     public static void purityScriptsReadAndWrite(GameTestHelper helper)
     {
         ServerPlayer player = player(helper);
-        // The glass bottle gives a pure water bottle
         rightClick(player, Items.GLASS_BOTTLE);
         boolean found = false;
         for (ItemStack stack : player.getInventory().items)
             if (stack.is(Items.POTION) && DropletsAPI.getPurity(stack) == PurityLevel.PURE.level())
                 found = true;
         helper.assertTrue(found, "no pure water bottle after the glass bottle" + HINT);
-        // The water bottle read (the script only tells; an error would show in kubejs/logs/server.log)
         rightClick(player, Items.POTION);
         helper.succeed();
     }

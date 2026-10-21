@@ -4,9 +4,6 @@ import com.mojang.serialization.MapCodec;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * {@code droplets_of_thirst:purity_enabled}: true when {@code purity.enabled} is on; checked when datapacks load.
- */
 public record PurityEnabledCondition() implements ICondition
 {
     public static final PurityEnabledCondition INSTANCE = new PurityEnabledCondition();

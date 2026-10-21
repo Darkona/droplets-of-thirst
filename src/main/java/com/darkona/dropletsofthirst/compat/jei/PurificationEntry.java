@@ -18,27 +18,11 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A way of purifying water that is not a recipe, for the recipe viewer's purification category: the water cauldron
- * (plain and on a heat source) and, with Create, the Sand Filter. Cooking recipes and Create's own recipes are shown by
- * the viewer in their usual categories. Plain data, no recipe viewer classes, so the server can build it too.
- *
- * @param method    {@code cauldron}, {@code heated_cauldron} or {@code sand_filter}: the last part of the text key
- * @param inputs    water containers going in, one per output (the viewer cycles them together)
- * @param outputs   water containers coming out
- * @param fluidIn   water going in, or empty
- * @param fluidOut  water coming out, or empty
- * @param machine   the block doing it
- * @param below     blocks that must be under {@code machine}, or none
- */
 public record PurificationEntry(String method, List<ItemStack> inputs, List<ItemStack> outputs, FluidStack fluidIn, FluidStack fluidOut,
                                 ItemStack machine, List<ItemStack> below)
 {
     public static final int FLUID_AMOUNT = 1000;
 
-    /**
-     * Every entry, in display order; none with {@code purity.enabled=false}, so the category is not shown then.
-     */
     public static List<PurificationEntry> all()
     {
         if (!WaterPurity.enabled())
@@ -60,9 +44,6 @@ public record PurificationEntry(String method, List<ItemStack> inputs, List<Item
         return entries;
     }
 
-    /**
-     * Water containers of every purity below {@code purity} in, the same containers at {@code purity} out.
-     */
     private static PurificationEntry containers(String method, int purity, ItemStack machine, List<ItemStack> below)
     {
         List<ItemStack> inputs = new ArrayList<>();
@@ -76,17 +57,11 @@ public record PurificationEntry(String method, List<ItemStack> inputs, List<Item
         return new PurificationEntry(method, inputs, outputs, FluidStack.EMPTY, FluidStack.EMPTY, machine, below);
     }
 
-    /**
-     * The containers a water cauldron fills: bottle, bucket and terracotta bowl.
-     */
     private static List<ItemStack> waterContainers()
     {
         return List.of(PotionContents.createItemStack(Items.POTION, Potions.WATER), new ItemStack(Items.WATER_BUCKET), new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()));
     }
 
-    /**
-     * Items of the blocks in {@code droplets_of_thirst:cauldron_heat_sources} (fire and lava have none).
-     */
     private static List<ItemStack> heatSources()
     {
         List<ItemStack> items = new ArrayList<>();

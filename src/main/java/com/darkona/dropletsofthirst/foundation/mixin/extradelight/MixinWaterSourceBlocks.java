@@ -14,10 +14,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * A glass bottle used on a tap or a sink is filled from a new water stack, not from its tank: that water gets the
- * purity of the world there too, and {@link MixinBottleFluidRegistry} passes it to the bottle.
- */
 @Mixin(value = {TapBlock.class, SinkCabinetBlock.class}, remap = false)
 public abstract class MixinWaterSourceBlocks
 {

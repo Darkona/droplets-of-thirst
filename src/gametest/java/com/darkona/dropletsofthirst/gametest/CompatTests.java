@@ -28,11 +28,6 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
-/**
- * Optional mods, with or without them on the runtime ({@code -PwithCompat}): what Droplets of Thirst registers and calls
- * must follow what is installed, and every bridge must answer on a real player. Runs on a dedicated server, so it also
- * shows that none of this reaches client-only code.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class CompatTests

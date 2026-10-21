@@ -10,11 +10,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-/**
- * The Farm & Charm sink fills itself from nowhere and hands out new water buckets and bottles: they get the purity
- * of the world's water where it stands. Only water containers change; the empty bucket or bottle it gives back when
- * filled is left alone.
- */
 @Mixin(value = SinkBlock.class, remap = false)
 public abstract class MixinSinkBlock
 {

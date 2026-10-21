@@ -33,15 +33,9 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
-/**
- * Vampirism ({@code -PwithVampirism}): a vampire loses thirst like anyone, only blood hydrates it, and every drink of
- * blood goes through Vampirism's own path ({@code VampirePlayer#drinkBlood}, which posts its event). Registered by
- * {@link DropletsGameTests} only when Vampirism is installed.
- */
 @PrefixGameTestTemplate(false)
 public class VampirismTests
 {
-    /** Purity of the last drink of any player; tests run one at a time on the server thread. */
     private static int lastPurity;
 
     static
@@ -74,7 +68,6 @@ public class VampirismTests
         helper.succeed();
     }
 
-    /** Quenchness is not blood: it gives a vampire nothing. */
     @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)
     public static void quenchnessDoesNotHydrateAVampire(GameTestHelper helper)
     {

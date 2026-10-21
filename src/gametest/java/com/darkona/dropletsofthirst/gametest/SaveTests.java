@@ -31,10 +31,6 @@ import net.neoforged.neoforge.network.connection.ConnectionType;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
-/**
- * Saved data and codecs: the player attachment, the purity component on disk and on the wire, the drinks data map and
- * the payloads the HUD is fed from.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class SaveTests
@@ -94,7 +90,6 @@ public class SaveTests
         helper.succeed();
     }
 
-    /** Thirst Was Taken's {@code thirst:purity} had four levels: 0, 1, 2 and 3 load as 0, 1, 3 and 5. */
     @GameTest(template = "empty")
     public static void thirstWasTakenPurityMovesToSixLevels(GameTestHelper helper)
     {

@@ -2,9 +2,6 @@ package com.darkona.dropletsofthirst.foundation.config;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-/**
- * {@code config/droplets_of_thirst/client.toml}: visuals only.
- */
 public final class ClientConfig
 {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();

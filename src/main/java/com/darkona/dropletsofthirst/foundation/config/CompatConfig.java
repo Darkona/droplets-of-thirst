@@ -5,9 +5,6 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
 
-/**
- * {@code config/droplets_of_thirst/compat.toml}: one section per optional mod; ignored when that mod is not installed.
- */
 public final class CompatConfig
 {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();

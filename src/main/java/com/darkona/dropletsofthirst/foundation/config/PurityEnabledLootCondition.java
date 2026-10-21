@@ -8,10 +8,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Loot condition {@code droplets_of_thirst:purity_enabled}: true while {@code purity.enabled} is on. Checked each time loot
- * is rolled; the chest loot tables put it on the {@code set_components} function that stores a purity.
- */
 public record PurityEnabledLootCondition() implements LootItemCondition
 {
     public static final PurityEnabledLootCondition INSTANCE = new PurityEnabledLootCondition();

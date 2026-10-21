@@ -15,10 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * Water placed in the world through NeoForge's {@code FluidUtil.tryPlaceFluid} (fluid containers of many mods, and
- * the {@code ItemStack} overload, which ends here) registers the source it leaves as poured water of its purity.
- */
 @Mixin(value = FluidUtil.class, remap = false)
 public abstract class MixinFluidUtil
 {

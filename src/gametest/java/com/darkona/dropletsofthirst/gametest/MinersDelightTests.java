@@ -23,10 +23,6 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 
-/**
- * Miner's Delight ({@code -PwithDelight}): the water cup carries a purity like a bottle. Registered by
- * {@link DropletsGameTests} only when Miner's Delight is installed.
- */
 @PrefixGameTestTemplate(false)
 public class MinersDelightTests
 {
