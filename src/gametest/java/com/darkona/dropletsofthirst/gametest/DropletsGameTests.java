@@ -6,7 +6,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 
-@EventBusSubscriber(modid = DropletsOfThirst.ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = DropletsOfThirst.ID)
 public final class DropletsGameTests
 {
     private DropletsGameTests() {}

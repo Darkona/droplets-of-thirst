@@ -1,13 +1,10 @@
 package com.darkona.dropletsofthirst.foundation.config;
 
-import com.darkona.dropletsofthirst.core.NumberRows;
+import dev.darkona.jdlib.core.config.NumberRows;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
 
-/**
- * {@code config/droplets_of_thirst/gameplay.toml}: thirst loss, drinking, damage and regeneration rules.
- */
 public final class GameplayConfig
 {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();

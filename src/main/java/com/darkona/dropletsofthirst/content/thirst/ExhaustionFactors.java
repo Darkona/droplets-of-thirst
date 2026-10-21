@@ -2,7 +2,8 @@ package com.darkona.dropletsofthirst.content.thirst;
 
 import com.darkona.dropletsofthirst.api.ExhaustionModifier;
 import com.darkona.dropletsofthirst.content.registry.EffectInit;
-import com.darkona.dropletsofthirst.core.NumberRows;
+import dev.darkona.jdlib.core.config.NumberRows;
+import dev.darkona.jdlib.core.registry.PriorityList;
 import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -12,35 +13,20 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.TreeMap;
-
-/**
- * The part of the thirst loss multiplier that depends on the surroundings, armor and effects. {@link PlayerThirst}
- * caches it (recomputed every second or after a change) and multiplies it by the {@code droplets_of_thirst:thirst_drain}
- * attribute each tick. Modifiers registered through the API run last, in id order.
- */
 public final class ExhaustionFactors
 {
     public static final String[] FACTORS = {"climate", "fire protection", "fire resistance", "rain/thunder", "day/night", "sun", "altitude", "water", "hydrated", "other mods"};
 
     private static final NumberRows ALTITUDE = new NumberRows(3);
-    private static final Map<ResourceLocation, ExhaustionModifier> REGISTERED = new TreeMap<>();
-    private static volatile ExhaustionModifier[] modifiers = new ExhaustionModifier[0];
+    private static final PriorityList<ResourceLocation, ExhaustionModifier> MODIFIERS = new PriorityList<>(PriorityList.Order.LOWEST_FIRST, PriorityList.Ties.BY_ID);
 
-    public static synchronized void register(ResourceLocation id, ExhaustionModifier modifier)
+    public static void register(ResourceLocation id, ExhaustionModifier modifier)
     {
-        REGISTERED.put(Objects.requireNonNull(id), Objects.requireNonNull(modifier));
-        modifiers = REGISTERED.values().toArray(new ExhaustionModifier[0]);
+        MODIFIERS.put(id, 0, modifier);
     }
 
     private ExhaustionFactors() {}
 
-    /**
-     * Product of the factors, then passed through the registered modifiers; when {@code breakdown} is given (length
-     * {@link #FACTORS}) each factor is written to it, the modifiers as one ratio.
-     */
     public static float compute(Player player, @Nullable float[] breakdown)
     {
         Level level = player.level();
@@ -74,8 +60,9 @@ public final class ExhaustionFactors
         }
         float own = climate * fireProtection * fireResistance * weather * time * sun * altitude * water * hydrated;
         float result = own;
-        for (ExhaustionModifier modifier : modifiers)
-            result = Math.max(0.0F, modifier.apply(player, result));
+        PriorityList.Snapshot<ResourceLocation, ExhaustionModifier> modifiers = MODIFIERS.snapshot();
+        for (int i = 0; i < modifiers.size(); i++)
+            result = Math.max(0.0F, modifiers.value(i).apply(player, result));
         if (breakdown != null)
             breakdown[9] = own == 0.0F ? 1.0F : result / own;
         return result;
