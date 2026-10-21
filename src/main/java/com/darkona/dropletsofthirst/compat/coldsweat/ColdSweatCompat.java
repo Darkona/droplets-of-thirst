@@ -18,24 +18,16 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.neoforged.fml.ModList;
+import dev.darkona.jdlib.api.compat.Bridges;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
-/**
- * Cold Sweat, through its public API (GPL-3.0 with an exception for use as a library; no code of it is copied):
- * body temperature for the climate multiplier and hot dirty water, and drinking water cools. The waterskin's purity
- * (filled: purity of its water; emptied: none) is two small runtime mixins in {@code foundation.mixin.cold_sweat},
- * until Cold Sweat has a hook for it. The waterskin's drink values and its purity container entry are data
- * ({@code droplets_of_thirst:drinks}, {@code droplets_of_thirst:purity_containers}).
- */
 public final class ColdSweatCompat
 {
-    public static final boolean LOADED = ModList.get().isLoaded("cold_sweat");
-
+    public static final boolean LOADED = Bridges.isLoaded("cold_sweat");
 
     private ColdSweatCompat() {}
 
@@ -51,10 +43,6 @@ public final class ColdSweatCompat
         return LOADED ? ColdSweatBridge.bodyTemperature(player) : 0;
     }
 
-    /**
-     * {@code coldsweat.drinkCooling}: water cools, except Cold Sweat's waterskin, which brings its own temperature.
-     * Drinking by hand and the hose come with no item.
-     */
     private static void coolAfterDrinking(DrinkEvent.Post event)
     {
         double cooling = CompatConfig.COLD_SWEAT_DRINK_COOLING.get();
