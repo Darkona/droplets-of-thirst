@@ -14,19 +14,12 @@ import net.minecraft.world.item.Items;
 
 import java.util.List;
 
-/**
- * JEI (and EMI, which loads JEI plugins when both are installed): a purification page for the ways of purifying water
- * that are not recipes, and a hydration page listing what each item does to thirst. JEI finds and loads this class
- * itself, only when installed; nothing else imports JEI. JEI calls every step again each time it starts (joining a
- * world or server, {@code /reload}), so the pages follow the server's tables and {@code purity.enabled}.
- */
 @JeiPlugin
 public final class DropletsJeiPlugin implements IModPlugin
 {
     static final RecipeType<PurificationEntry> PURIFICATION = RecipeType.create(DropletsOfThirst.ID, "purification", PurificationEntry.class);
     static final RecipeType<HydrationEntry> HYDRATION = RecipeType.create(DropletsOfThirst.ID, "hydration", HydrationEntry.class);
 
-    /** Purification entries of this start; empty with purity off, and then the category is not registered. */
     private List<PurificationEntry> purification = List.of();
 
     @Override

@@ -16,11 +16,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * Water in a cauldron seen through the fluid capability (pumps and pipes of other mods) carries the cauldron purity,
- * as buckets and bottles do: in the tank contents and in what is drained, simulated or not. A drain request for water
- * of exactly that purity is accepted too; NeoForge only accepts stacks without components.
- */
 @Mixin(value = CauldronWrapper.class, remap = false)
 public abstract class MixinCauldronWrapper
 {

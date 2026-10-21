@@ -7,9 +7,6 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * {@code config/droplets_of_thirst/purity.toml}: water purity in the world and its effects.
- */
 public final class PurityConfig
 {
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
@@ -27,9 +24,7 @@ public final class PurityConfig
     public static final ModConfigSpec.IntValue RUNNING_WATER_PURIFICATION_AMOUNT;
     public static final ModConfigSpec.IntValue STILL_WATER_PURIFICATION_AMOUNT;
 
-    /** Keys of the effect lists in {@code [effects]}, by purity: the {@link PurityLevel} ids. */
     public static final String[] EFFECT_LEVELS = Arrays.stream(PurityLevel.values()).map(PurityLevel::id).toArray(String[]::new);
-    /** Effect lists by purity. */
     public static final List<ModConfigSpec.ConfigValue<List<? extends String>>> EFFECTS;
 
     public static final ModConfigSpec.BooleanValue HOT_DIRTY_WATER;
@@ -42,7 +37,6 @@ public final class PurityConfig
 
     public static final ModConfigSpec SPEC;
 
-    /** "0 contaminated, 1 dirty, ..." for config comments. */
     private static final String LEVELS = String.join(", ", Arrays.stream(PurityLevel.values()).map(level -> level.level() + " " + level.id()).toList());
 
     static
@@ -112,10 +106,6 @@ public final class PurityConfig
         return BUILDER.<String>defineListAllowEmpty(level.id(), defaults, () -> "minecraft:nausea,200,0,100", PurityConfig::isValidEffect);
     }
 
-    /**
-     * {@code "namespace:effect,durationTicks 1+,amplifier 0-255,chancePercent 0-100[,true|false]"}; the effect id is
-     * checked later, when registries are ready.
-     */
     public static boolean isValidEffect(Object entry)
     {
         if (!(entry instanceof String effect))
@@ -138,9 +128,6 @@ public final class PurityConfig
         }
     }
 
-    /**
-     * {@code "minY,maxY,delta"} with minY <= maxY and delta between -{@link PurityLevel#MAX} and {@link PurityLevel#MAX}.
-     */
     public static boolean isValidAltitudeBand(Object entry)
     {
         if (!(entry instanceof String band))

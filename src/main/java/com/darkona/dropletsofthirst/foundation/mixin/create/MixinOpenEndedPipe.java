@@ -19,13 +19,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * Water pulled from the world or from a water cauldron by an open pipe end keeps the purity it had there, as buckets
- * and the hose pulley do ({@code create.openEndedPipePurity}). The purity is read before Create drains the block,
- * because afterwards the source or the cauldron level is gone; a poured source it drains leaves its purity to the
- * sources beside it, as when a bucket picks it up. Water an open pipe end places in the world registers the source
- * as poured water of its purity.
- */
 @Mixin(value = OpenEndedPipe.class, remap = false)
 public abstract class MixinOpenEndedPipe
 {

@@ -10,12 +10,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * The infinite water of Extra Delight's taps and sinks gets the purity of the world's water where they stand
- * ({@code delight.worldPurityWaterSources}). The tank does not know its block, so the tap or sink tells it
- * ({@link MixinWaterSourceBlockEntities}). {@code getFluid} too, so pipes that match what they see with what they
- * drain get the same water.
- */
 @Mixin(value = WellFluidCapability.class, remap = false)
 public abstract class MixinWellFluidCapability implements WaterSourceTank
 {

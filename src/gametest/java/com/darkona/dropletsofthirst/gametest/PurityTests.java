@@ -48,9 +48,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
-/**
- * Purity of water taken from cauldrons (murky, or clean on a heat source) and of water in the world.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class PurityTests
@@ -246,14 +243,9 @@ public class PurityTests
         return WaterPurity.getWaterPurity(level, holder, pos, source, null);
     }
 
-    /**
-     * Built-in {@code biome_water} data map: jungles and dark forests start at 1 like plains, taiga, birch and snowy
-     * biomes at 2, mountains and windswept at 3, deserts and badlands at 0 capped at 2, swamps at 0 capped at 1.
-     */
     @GameTest(template = "box")
     public static void defaultBiomeWaterValues(GameTestHelper helper)
     {
-        // Plains still water is worldWaterBasePurity (1) plus the altitude band of the test position.
         int alt = biomePurity(helper, Biomes.PLAINS, true) - 1;
         helper.assertTrue(alt >= 0 && alt <= 3, "altitude delta " + alt);
         int max = PurityLevel.PURE.level();
@@ -270,14 +262,12 @@ public class PurityTests
         helper.succeed();
     }
 
-    /** Still water: base plus altitude; running water one more; both capped. */
     private static void base(GameTestHelper helper, ResourceKey<Biome> biome, int base, int max, int alt)
     {
         check(helper, biome.location() + " still", biomePurity(helper, biome, true), Math.min(max, base + alt));
         check(helper, biome.location() + " running", biomePurity(helper, biome, false), Math.min(max, base + alt + 1));
     }
 
-    /** Default {@code altitudeBands}: +1, +2, +3 from 30, 60 and 100 blocks above sea level and from 16, 48 and 80 below it. */
     @GameTest(template = "box")
     public static void altitudeBandsAddUpToThree(GameTestHelper helper)
     {
@@ -294,7 +284,6 @@ public class PurityTests
         helper.succeed();
     }
 
-    /** The tint function is pure: only water containers with a stored purity change, and level 3 keeps vanilla blue. */
     @GameTest(template = "box")
     public static void tintChangesOnlyPurifiedWater(GameTestHelper helper)
     {
@@ -317,10 +306,6 @@ public class PurityTests
         helper.succeed();
     }
 
-    /**
-     * Each level reads as its translation (the id when there is none), and its tooltip line is that text in its colour;
-     * out-of-range values read as the default purity. Both are built once, not on every frame of a tooltip.
-     */
     @GameTest(template = "empty")
     public static void purityTextFollowsTheTranslation(GameTestHelper helper)
     {
@@ -340,7 +325,6 @@ public class PurityTests
         helper.succeed();
     }
 
-    /** Some mods build tooltips on a dedicated server, where the client config is not loaded. */
     @GameTest(template = "empty")
     public static void tooltipsBuildOnADedicatedServer(GameTestHelper helper)
     {

@@ -15,11 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * Every item interaction with a water cauldron (vanilla bottles and buckets, the terracotta bowl, other mods' entries
- * in {@code CauldronInteraction.WATER}) runs inside {@link WaterPurity#takingFromCauldron}, so the water it takes out
- * gets the cauldron purity; see {@link MixinItemUtils}.
- */
 @Mixin(AbstractCauldronBlock.class)
 public abstract class MixinAbstractCauldronBlock
 {

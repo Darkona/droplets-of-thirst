@@ -25,22 +25,13 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * {@code /droplets_of_thirst dev dump_items <namespace>...}, development only: one CSV row per item of those namespaces
- * ({@code *}: every namespace with food or drinks) with its food values, effects, tags and the thirst values Blue
- * Droplets resolves today. Input for the data scripts.
- */
 public final class ItemDump
 {
-    /** Namespace argument for every namespace with food or drinks. */
     public static final String ALL = "*";
     public static final String HEADER = "id,mod,is_drink,nutrition,saturation,effects,always_edible,current_thirst,current_quenched,tags";
 
     private ItemDump() {}
 
-    /**
-     * Writes {@code <game dir>/delight/items.csv}; returns the rows written.
-     */
     public static int dump(Collection<String> namespaces) throws IOException
     {
         List<String> lines = rows(namespaces);
@@ -55,9 +46,6 @@ public final class ItemDump
         return FMLPaths.GAMEDIR.get().resolve("delight").resolve("items.csv");
     }
 
-    /**
-     * Header and rows, sorted by id.
-     */
     public static List<String> rows(Collection<String> namespaces)
     {
         Set<String> wanted = namespaces.contains(ALL) ? consumableNamespaces() : Set.copyOf(namespaces);
@@ -70,9 +58,6 @@ public final class ItemDump
         return lines;
     }
 
-    /**
-     * Namespaces with at least one item that is eaten or drunk, or that Droplets of Thirst gives thirst values.
-     */
     private static Set<String> consumableNamespaces()
     {
         Set<String> namespaces = new HashSet<>();

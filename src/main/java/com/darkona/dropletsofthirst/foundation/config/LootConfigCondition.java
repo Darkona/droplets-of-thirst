@@ -4,10 +4,6 @@ import com.mojang.serialization.MapCodec;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * {@code droplets_of_thirst:loot_config}: data (the chest loot tables and the global loot modifier list) loads only with
- * {@code loot.enabled}. Like every NeoForge load condition it is checked when datapacks load, not per chest.
- */
 public record LootConfigCondition() implements ICondition
 {
     public static final LootConfigCondition INSTANCE = new LootConfigCondition();

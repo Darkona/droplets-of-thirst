@@ -13,9 +13,6 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Development tools: the item dump behind {@code /droplets_of_thirst dev dump_items}, which only exists outside production.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class DevTests

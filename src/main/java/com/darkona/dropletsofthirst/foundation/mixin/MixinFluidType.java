@@ -9,10 +9,6 @@ import net.neoforged.neoforge.fluids.FluidType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * A bucket filled with a fluid that has a purity gets that purity. {@code FluidUtil.getFilledBucket} (and with it
- * {@code FluidBucketWrapper.fill}) only skips this method for fluids without components.
- */
 @Mixin(value = FluidType.class, remap = false)
 public abstract class MixinFluidType
 {

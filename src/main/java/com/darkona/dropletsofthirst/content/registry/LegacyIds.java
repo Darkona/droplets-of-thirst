@@ -13,14 +13,6 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Registry aliases from the Thirst Was Taken namespace ({@code thirst:*}) to {@code droplets_of_thirst:*},
- * so items, blocks, block entities, effects and the player attachment saved by Thirst Was Taken load under the new
- * ids. Saving writes the new id, so each entry migrates once. The purity component is the exception: Thirst Was
- * Taken had four levels, so {@code thirst:purity} loads as {@link ThirstComponent#LEGACY_PURITY}, which stacks turn
- * into {@link ThirstComponent#PURITY} on the new scale as they load ({@link #purityFromLegacy}).
- * Never remove: unloaded chunks and offline players can keep old ids indefinitely.
- */
 public final class LegacyIds
 {
     public static final String LEGACY_NAMESPACE = "thirst";
@@ -34,14 +26,10 @@ public final class LegacyIds
             NeoForgeRegistries.Keys.CONDITION_CODECS, List.of("loot_config")
     );
 
-    /** Droplets of Thirst level of each Thirst Was Taken level: dirty, slightly dirty, acceptable, purified. */
     private static final int[] LEGACY_PURITY = {PurityLevel.CONTAMINATED.level(), PurityLevel.DIRTY.level(), PurityLevel.ACCEPTABLE.level(), PurityLevel.PURE.level()};
 
     private LegacyIds() {}
 
-    /**
-     * A Thirst Was Taken purity (0-3) as a Droplets of Thirst level; anything else, like -1 for "no fixed purity", is kept.
-     */
     public static int purityFromLegacy(int purity)
     {
         return purity >= 0 && purity < LEGACY_PURITY.length ? LEGACY_PURITY[purity] : purity;

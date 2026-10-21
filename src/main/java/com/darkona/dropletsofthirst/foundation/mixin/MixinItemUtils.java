@@ -9,11 +9,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * Cauldron interactions hand out the filled item through {@code createFilledResult} (the 3-argument overload calls this
- * one): during one, a water container that comes out gets the cauldron purity. Empty items poured back are not water
- * containers and are left alone.
- */
 @Mixin(ItemUtils.class)
 public abstract class MixinItemUtils
 {

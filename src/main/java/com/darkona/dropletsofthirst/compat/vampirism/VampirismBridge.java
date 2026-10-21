@@ -22,10 +22,6 @@ final class VampirismBridge
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, VampirismBridge::drinkBlood);
     }
 
-    /**
-     * Every drink of blood by a vampire player, after other mods changed the amount. A context without an entity, item
-     * or block is an altar or a command filling the blood bar, not drinking.
-     */
     private static void drinkBlood(BloodDrinkEvent.PlayerDrinkBloodEvent event)
     {
         if (!(event.getVampire().asEntity() instanceof Player player) || player.level().isClientSide || event.getAmount() <= 0)

@@ -12,10 +12,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-/**
- * A glass bottle filled from water in the world gets the purity of that water, on the server; with
- * {@code drinking.canFillFromFlowingWater} it also fills from flowing water. Dragon's breath is left alone.
- */
 @Mixin(BottleItem.class)
 public abstract class MixinBottleItem
 {

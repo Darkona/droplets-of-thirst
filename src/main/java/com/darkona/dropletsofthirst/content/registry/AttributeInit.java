@@ -14,10 +14,6 @@ public final class AttributeInit
 {
     private static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(Registries.ATTRIBUTE, DropletsOfThirst.ID);
 
-    /**
-     * Multiplies every player's thirst loss (base 1.0). Items, enchantments ({@code minecraft:attributes}), effects,
-     * Curios and commands change it with ordinary attribute modifiers.
-     */
     public static final DeferredHolder<Attribute, Attribute> THIRST_DRAIN = ATTRIBUTES.register("thirst_drain",
             () -> new RangedAttribute("attribute.name.droplets_of_thirst.thirst_drain", 1.0, 0.0, 10.0).setSyncable(true));
 

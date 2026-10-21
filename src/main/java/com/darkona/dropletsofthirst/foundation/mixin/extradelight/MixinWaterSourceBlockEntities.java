@@ -13,9 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * Taps and sinks tell their infinite water tank which block it belongs to (see {@link MixinWellFluidCapability}).
- */
 @Mixin(value = {TapBlockEntity.class, SinkCabinetBlockEntity.class}, remap = false)
 public abstract class MixinWaterSourceBlockEntities
 {

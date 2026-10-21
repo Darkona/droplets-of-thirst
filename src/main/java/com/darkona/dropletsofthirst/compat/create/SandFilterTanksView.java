@@ -4,10 +4,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * The Sand Filter's fluid handler without a side (Jade, other inspectors): both tanks, dirty first, read only. Water
- * only goes in at the back and out at the front, so nothing is filled or drained through here.
- */
 final class SandFilterTanksView implements IFluidHandler
 {
     private final SandFilterBlockEntity filter;

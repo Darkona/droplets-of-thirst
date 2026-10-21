@@ -49,10 +49,6 @@ import java.util.stream.Stream;
 public class PlayerThirstManager {
     private static volatile RecipeManager reloadingRecipes;
 
-    /**
-     * Block foods of {@code droplets_of_thirst:hydrating_blocks} (a cake slice): vanilla feeds the player straight from the
-     * block, so a bite is detected after the interaction as a higher food level.
-     */
     @SubscribeEvent
     public static void eatBlock(PlayerInteractEvent.RightClickBlock event) {
         if (event.getHand() != InteractionHand.MAIN_HAND || !(event.getEntity() instanceof ServerPlayer player))
@@ -83,10 +79,6 @@ public class PlayerThirstManager {
             DrinkByHandClient.drinkByHand();
     }
 
-    /**
-     * Single place for purity effects: water containers, and drinks that are not food, hydrate here, once per use,
-     * on the server. Food hydrates in {@code Player#eat} (MixinPlayer).
-     */
     @SubscribeEvent
     public static void drink(LivingEntityUseItemEvent.Finish event) {
         if (!(event.getEntity() instanceof ServerPlayer player))
@@ -103,9 +95,6 @@ public class PlayerThirstManager {
         }
     }
 
-    /**
-     * The only place that sends thirst data: at most one packet per player and tick, and only when a synced value changed.
-     */
     @SubscribeEvent
     public static void syncThirst(PlayerTickEvent.Post event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
@@ -116,9 +105,6 @@ public class PlayerThirstManager {
         }
     }
 
-    /**
-     * The client creates a new player (with default thirst data) on respawn and on every dimension change.
-     */
     @SubscribeEvent
     public static void onChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         PlayerThirst thirst = event.getEntity().getData(ModAttachment.PLAYER_THIRST);
@@ -126,11 +112,6 @@ public class PlayerThirstManager {
         thirst.invalidateModifier();
     }
 
-    /**
-     * The new player after a death gets {@code death.respawnThirst} and {@code respawnQuenched} (-1 keeps what was
-     * copied from the dead player). Done here and not at the death, which another mod may cancel; coming back from
-     * the End is not a death. Then a full sync: the client player is new too.
-     */
     @SubscribeEvent
     public static void onRespawn(PlayerEvent.PlayerRespawnEvent event) {
         PlayerThirst thirst = event.getEntity().getData(ModAttachment.PLAYER_THIRST);
@@ -174,17 +155,10 @@ public class PlayerThirstManager {
             activity(player, player.isSprinting() ? GameplayConfig.SPRINT_JUMP : GameplayConfig.JUMP, 1.0F);
     }
 
-    /**
-     * An attack that landed, from {@code MixinPlayer}, where vanilla charges it hunger.
-     */
     public static void attackLanded(ServerPlayer player) {
         activity(player, GameplayConfig.ATTACK, 1.0F);
     }
 
-    /**
-     * Lowest priority: a block break that another mod cancels (claims, spawn protection) costs nothing, as it costs no
-     * hunger in vanilla.
-     */
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         if (event.getPlayer() instanceof ServerPlayer player)
@@ -197,25 +171,16 @@ public class PlayerThirstManager {
             activity(player, GameplayConfig.DAMAGE_MULTIPLIER, event.getSource().getFoodExhaustion());
     }
 
-    /**
-     * OWN mode only: the same activities vanilla charges to hunger.
-     */
     private static void activity(ServerPlayer player, ModConfigSpec.DoubleValue value, float factor) {
         if (GameplayConfig.MODE.get() == GameplayConfig.Mode.OWN)
             player.getData(ModAttachment.PLAYER_THIRST).addActivity(player, value.get().floatValue() * factor);
     }
 
-    /**
-     * The recipes of the data reload in progress: its {@code TagsUpdatedEvent} comes before the server exists on world load.
-     */
     @SubscribeEvent
     public static void captureRecipes(AddReloadListenerEvent event){
         reloadingRecipes = event.getServerResources().getRecipeManager();
     }
 
-    /**
-     * Lowest priority: NeoForge applies the reloaded data maps in its own {@code TagsUpdatedEvent} listener.
-     */
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void rebuildDrinks(TagsUpdatedEvent event){
         if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD) {
@@ -227,10 +192,6 @@ public class PlayerThirstManager {
             ThirstHelper.rebuild(null, null);
     }
 
-    /**
-     * Client only (registered in {@code DropletsOfThirst}): it reads the client config, which a dedicated server does not
-     * load, and some mods build tooltips there.
-     */
     public static void estimatedTooltip(ItemTooltipEvent event){
         ItemStack stack = event.getItemStack();
         if (!ClientConfig.SHOW_TOOLTIP_ICONS.get() && ThirstHelper.isEstimated(stack))
@@ -241,10 +202,6 @@ public class PlayerThirstManager {
 
     private static volatile @Nullable EstimatedLine lastEstimated;
 
-    /**
-     * The tooltip line of an item with estimated values. The tooltip is rebuilt every frame, so the last line is kept
-     * while the values stay the same; it is translated when drawn, so a language change needs no new line.
-     */
     public static Component estimatedLine(int thirst, int quenched){
         EstimatedLine last = lastEstimated;
         if (last == null || last.thirst() != thirst || last.quenched() != quenched)
@@ -252,10 +209,6 @@ public class PlayerThirstManager {
         return last.line();
     }
 
-    /**
-     * Sends the resolved tables to remote clients on join and after {@code /reload} (after the rebuild above).
-     * Not over the in-memory connection of singleplayer: that client shares the tables with the server.
-     */
     @SubscribeEvent
     public static void syncValues(OnDatapackSyncEvent event){
         sendValues(event.getRelevantPlayers());
@@ -267,10 +220,6 @@ public class PlayerThirstManager {
                 .forEach(player -> PacketDistributor.sendToPlayer(player, message));
     }
 
-    /**
-     * Mod bus. A common config file of this mod changed while a server runs: rebuild the tables, resend them and the
-     * player rules, and recompute every player's exhaustion modifier. The event may come from the file watcher thread.
-     */
     public static void onConfigReloaded(ModConfigEvent.Reloading event){
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         if (server == null || event.getConfig().getType() == ModConfig.Type.CLIENT || !DropletsOfThirst.ID.equals(event.getConfig().getModId()))

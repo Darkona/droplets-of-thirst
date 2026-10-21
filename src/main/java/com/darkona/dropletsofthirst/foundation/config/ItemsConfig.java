@@ -9,10 +9,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * {@code config/droplets_of_thirst/items.toml}: per-item overrides, purity containers, keywords and recipe inference (was item_settings.toml,
- * container.toml and keyword.toml).
- */
 public final class ItemsConfig
 {
     private static final Logger LOGGER = LogUtils.getLogger();
@@ -110,9 +106,6 @@ public final class ItemsConfig
 
     private ItemsConfig() {}
 
-    /**
-     * {@code ["namespace:item" or "#namespace:tag", thirst -20..20, quenched >= -20]}
-     */
     public static boolean isValidEntry(Object entry)
     {
         return entry instanceof List<?> list && list.size() == 3 && list.get(0) instanceof String

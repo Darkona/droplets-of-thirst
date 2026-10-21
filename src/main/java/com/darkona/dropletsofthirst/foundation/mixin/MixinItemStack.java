@@ -35,9 +35,6 @@ public abstract class MixinItemStack
             cir.setReturnValue(SyncedValues.waterBottleStackSize());
     }
 
-    /**
-     * Stacks read from a save or the network: a Thirst Was Taken purity becomes a purity on the new scale.
-     */
     @Inject(method = "<init>(Lnet/minecraft/core/Holder;ILnet/minecraft/core/component/DataComponentPatch;)V", at = @At("TAIL"))
     private void droplets_of_thirst$migrateLegacyPurity(Holder<Item> item, int count, DataComponentPatch components, CallbackInfo ci)
     {

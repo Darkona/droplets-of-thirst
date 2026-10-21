@@ -27,10 +27,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * {@link #FACING} is where purified water leaves (down by default); dirty water enters from the opposite side. Placed
- * facing down as before; Create's wrench turns it (the same property as Create's directional blocks).
- */
 public class SandFilterBlock extends Block implements IWrenchable, IBE<SandFilterBlockEntity> {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -77,9 +73,6 @@ public class SandFilterBlock extends Block implements IWrenchable, IBE<SandFilte
         AdvancementBehaviour.setPlacedBy(pLevel, pPos, pPlacer);
     }
 
-    /**
-     * Keeps the tanks in the dropped item (pickaxe or wrench); the block item loads them back when placed.
-     */
     @Override
     public @NotNull List<ItemStack> getDrops(@NotNull BlockState state, LootParams.@NotNull Builder params)
     {

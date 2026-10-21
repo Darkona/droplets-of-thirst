@@ -10,10 +10,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-/**
- * Every {@code effects.quenchnessIntervalTicks}, restores (level) thirst and quenched, like Regeneration for health.
- * Not to vampires: only blood hydrates them.
- */
 public class QuenchnessEffect extends MobEffect {
     public QuenchnessEffect(MobEffectCategory category, int color) {
         super(category, color);

@@ -9,9 +9,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * A water container Create fills (spouts, clicking a tank or basin) gets the purity of the water it was filled with.
- */
 @Mixin(value = GenericItemFilling.class, remap = false)
 public class MixinGenericItemFilling
 {

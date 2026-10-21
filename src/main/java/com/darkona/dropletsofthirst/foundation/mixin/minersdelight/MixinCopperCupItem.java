@@ -15,13 +15,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-/**
- * The copper cup does its own pickup and placing instead of extending {@code BucketItem}, so it gets what
- * {@code MixinBucketItem} gives buckets: an empty cup filled from water in the world takes the purity of that water
- * (on the server, in place, so the advancement trigger sees it too), and the water cup emptied into the world
- * registers the source it leaves as poured water of its purity. Cauldrons, Create and the purity container tag need
- * nothing else.
- */
 @Mixin(value = CopperCupItem.class, remap = false)
 public abstract class MixinCopperCupItem
 {

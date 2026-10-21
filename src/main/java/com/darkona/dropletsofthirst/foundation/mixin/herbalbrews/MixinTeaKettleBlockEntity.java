@@ -11,10 +11,6 @@ import net.satisfy.herbalbrews.core.registry.TagsRegistry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * The HerbalBrews tea kettle takes water from its water slot by item tag, one check per tick. Water below
- * {@code delight.kettleMinPurity} does not count as water, so it stays in the slot and the kettle is not filled.
- */
 @Mixin(value = TeaKettleBlockEntity.class, remap = false)
 public abstract class MixinTeaKettleBlockEntity
 {

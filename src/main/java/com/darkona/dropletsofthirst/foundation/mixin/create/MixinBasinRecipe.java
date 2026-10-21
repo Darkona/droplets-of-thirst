@@ -16,11 +16,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
 
-/**
- * Basin outputs in {@code droplets_of_thirst:carries_purity} without their own purity take the purity of the input water.
- * Works on copies in the basin's output list, never on the recipe's shared stacks, and only in the simulated pass
- * that builds that list (the input is not drained yet); skipped when Create only tests the recipe.
- */
 @Mixin(BasinRecipe.class)
 public class MixinBasinRecipe {
 

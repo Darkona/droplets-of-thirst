@@ -20,13 +20,6 @@ import sereneseasons.season.SeasonHandler;
 import sereneseasons.season.SeasonSavedData;
 import sereneseasons.season.SeasonTime;
 
-/**
- * Serene Seasons: the biome climate formula with the season's temperature and the tropical dry season. The runs with
- * Serene Seasons also have Cold Sweat, which turns the compat off in play, so these tests call
- * {@link ThirstHelper#biomeClimate} with the seasons forced on (the call the game makes without Cold Sweat) and check
- * the Cold Sweat switch apart. Each test sets the season and puts it back in the same call, so no other test sees it.
- * Registered by {@link DropletsGameTests} only when Serene Seasons is installed.
- */
 @PrefixGameTestTemplate(false)
 public class SereneSeasonsTests
 {
@@ -35,7 +28,6 @@ public class SereneSeasonsTests
         return level.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(key);
     }
 
-    /** Climate multiplier of {@code biome} in the middle of {@code season}, with seasons; the level's season is restored. */
     private static float inSeason(GameTestHelper helper, Holder<Biome> biome, Season.SubSeason season)
     {
         SeasonSavedData data = SeasonHandler.getSeasonSavedData(helper.getLevel());
@@ -73,7 +65,6 @@ public class SereneSeasonsTests
     {
         Holder<Biome> desert = biome(helper.getLevel(), Biomes.DESERT);
         float none = withoutSeasons(helper, desert);
-        // Mid summer is the early dry season in the tropics, mid spring the late wet one.
         helper.assertValueEqual(inSeason(helper, desert, Season.SubSeason.MID_SUMMER), CompatConfig.SERENE_SEASONS_TROPICAL_DRY.get().floatValue() * none, "desert, dry season");
         helper.assertValueEqual(inSeason(helper, desert, Season.SubSeason.MID_SPRING), CompatConfig.SERENE_SEASONS_TROPICAL_WET.get().floatValue() * none, "desert, wet season");
         helper.succeed();

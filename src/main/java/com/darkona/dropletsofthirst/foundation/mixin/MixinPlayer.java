@@ -18,10 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Player.class)
 public abstract class MixinPlayer
 {
-    /**
-     * Food hydrates here, once per bite; water containers and drinks that are not food hydrate when their use finishes
-     * ({@code PlayerThirstManager#drink}).
-     */
     @Inject(method = "eat", at = @At("HEAD"))
     public void onEatDrink(Level level, ItemStack food, FoodProperties foodProperties, CallbackInfoReturnable<ItemStack> cir)
     {
@@ -30,12 +26,6 @@ public abstract class MixinPlayer
             PlayerThirst.consume(food, player);
     }
 
-    /**
-     * OWN mode: an attack costs thirst where vanilla charges it hunger, only when the hit lands. A swing that another
-     * mod cancels, or one at an invulnerable target, costs nothing. Hooked on vanilla's own charge because no event
-     * comes after a landed hit for every target: {@code LivingDamageEvent} misses boats, minecarts and end crystals,
-     * and comes once per mob a sweep hits instead of once per swing.
-     */
     @Inject(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;causeFoodExhaustion(F)V"))
     private void droplets_of_thirst$attackLanded(Entity target, CallbackInfo ci)
     {

@@ -6,10 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import java.util.Optional;
 
-/**
- * Value of the {@code droplets_of_thirst:dimension_water} dimension type data map: {@code base} is the base purity of water
- * in biomes without their own; {@code thirst_multiplier} replaces the climate multiplier of thirst loss there.
- */
 public record DimensionWater(Optional<Integer> base, Optional<Float> thirstMultiplier)
 {
     public static final Codec<DimensionWater> CODEC = RecordCodecBuilder.create(instance -> instance.group(

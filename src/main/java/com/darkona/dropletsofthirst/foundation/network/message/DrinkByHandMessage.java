@@ -25,9 +25,6 @@ import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * "I want to drink by hand": carries no data. The server checks config, hands, cooldown and its own raycast.
- */
 public record DrinkByHandMessage() implements CustomPacketPayload
 {
     public static final DrinkByHandMessage INSTANCE = new DrinkByHandMessage();

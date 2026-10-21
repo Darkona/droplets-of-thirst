@@ -26,10 +26,6 @@ final class ColdSweatBridge
         return stack.is(ModItems.WATERSKIN);
     }
 
-    /**
-     * {@code ticks == 0}: lowers the core temperature once. Otherwise lowers the base temperature for {@code ticks},
-     * replacing an earlier drink's modifier instead of stacking with it.
-     */
     static void cool(Player player, double amount, int ticks)
     {
         if (ticks <= 0)

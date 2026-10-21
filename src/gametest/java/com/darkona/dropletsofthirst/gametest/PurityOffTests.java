@@ -63,15 +63,10 @@ import java.util.Map;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
-/**
- * {@code purity.enabled=false}: nothing stores, shows or rolls a purity. Each test turns it off and back on within
- * the same method, like the other config tests.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class PurityOffTests
 {
-    /** Purity of the last drink; tests run one at a time on the server thread. */
     private static int lastDrinkPurity;
 
     static
@@ -225,10 +220,6 @@ public class PurityOffTests
         return count;
     }
 
-    /**
-     * Recipes are only checked when datapacks load, so this looks at the files: every recipe of this mod that stores or
-     * matches a purity must carry the {@code droplets_of_thirst:purity_enabled} condition, or it would load with purity off.
-     */
     @GameTest(template = "empty")
     public static void purityRecipesCarryThePurityCondition(GameTestHelper helper)
     {

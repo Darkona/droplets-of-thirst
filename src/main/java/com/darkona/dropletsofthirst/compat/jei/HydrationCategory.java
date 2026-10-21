@@ -15,9 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
-/**
- * One item that changes thirst: its thirst and quenched values as droplets (like the item tooltip) and in numbers.
- */
 final class HydrationCategory extends AbstractRecipeCategory<HydrationEntry>
 {
     private static final int WIDTH = 150;
@@ -43,9 +40,6 @@ final class HydrationCategory extends AbstractRecipeCategory<HydrationEntry>
         builder.addText(Component.translatable(key, values.thirst(), values.quenched()), WIDTH - VALUES_X, 10).setPosition(VALUES_X, 22).setColor(0xFF404040);
     }
 
-    /**
-     * The tooltip row drawn in the recipe; built once per shown recipe, not per frame.
-     */
     private record Droplets(DrinkTooltip row) implements IDrawable
     {
         @Override

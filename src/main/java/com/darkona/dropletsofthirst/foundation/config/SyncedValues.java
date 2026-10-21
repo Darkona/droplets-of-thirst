@@ -1,9 +1,5 @@
 package com.darkona.dropletsofthirst.foundation.config;
 
-/**
- * Common config values that clients must share with the server. On a client of a remote server they hold the
- * server's values (sent with the drink tables); everywhere else, and before any server sent them, the local config.
- */
 public final class SyncedValues
 {
     private static volatile int defaultPurity = -1;

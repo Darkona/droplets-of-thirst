@@ -7,15 +7,6 @@ import net.neoforged.bus.api.Event;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Posted on the game bus every time the thirst tables are rebuilt (world load and {@code /reload}).
- * Values added here can be overridden by the config, the {@code droplets_of_thirst:drinks} data map and
- * {@code DropletsAPI.registerDrink}.
- *
- * @deprecated register once with {@link com.darkona.dropletsofthirst.api.DropletsAPI#registerDrink},
- * {@link com.darkona.dropletsofthirst.api.DropletsAPI#registerDrinkProvider} and
- * {@link com.darkona.dropletsofthirst.api.DropletsAPI#registerContainer}; this event is not part of the API jar.
- */
 @Deprecated
 @SuppressWarnings("unused")
 public class RegisterThirstValueEvent extends Event {
@@ -29,33 +20,20 @@ public class RegisterThirstValueEvent extends Event {
         this.containers = containers;
     }
 
-    /**
-     * Adds a hydration and "quenchness" value to an item via code, and treats it as food.
-     * */
     public void addFood(Item item, int thirst, int quenched)
     {
         foods.putIfAbsent(item, new int[]{thirst, quenched, -1});
     }
 
-    /**
-     * Adds a hydration and "quenchness" value to an item via code, and treats it as a drink.
-     * */
     public void addDrink(Item item, int thirst, int quenched)
     {
         drinks.putIfAbsent(item, new int[]{thirst, quenched, -1});
     }
 
-    /**
-     *Registers new custom water container
-     *the container will be taken into consider of purity
-     */
     public void addContainer(ContainerWithPurity container){
         containers.add(container);
     }
 
-    /**
-     * A simple version, If you don't need your item to harvest water like bucket.
-     */
     public void addContainer(Item item){
         containers.add(new ContainerWithPurity(item));
     }

@@ -27,21 +27,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-/**
- * Estimates {thirst, quenched} of items that have no values from any other source, from the ingredients of the recipes
- * that make them (E13, off by default). Built once per table rebuild on the server; one memoized depth-first pass over
- * a result → recipes index. An ingredient is worth the average of its items that have values; a recipe is worth the
- * sum of its ingredients times the multiplier of its category, divided by the result count and capped. The best recipe
- * wins. Negative values (salty items) count as 0. Fluids in recipes are not seen (only {@link Recipe#getIngredients()}).
- */
 public final class RecipeInference
 {
     private static final Logger LOGGER = LogUtils.getLogger();
     private static final int[] NONE = {0, 0, -1};
 
-    /**
-     * Values of the other sources and the items that are never estimated nor passed on (blacklists, {@code no_thirst}).
-     */
     public record Inputs(Map<Item, int[]> known, Set<Item> excluded)
     {
         public static final Inputs EMPTY = new Inputs(Map.of(), Set.of());
@@ -128,9 +118,6 @@ public final class RecipeInference
         return new Result(drinks, foods, List.copyOf(inference.problems));
     }
 
-    /**
-     * Every recipe of the item with its ingredients' values, the estimate and why it would not be used.
-     */
     public static List<String> explain(Item item, Inputs inputs, RecipeManager recipeManager, HolderLookup.Provider registries)
     {
         RecipeInference inference = new RecipeInference(inputs, recipeManager, registries);

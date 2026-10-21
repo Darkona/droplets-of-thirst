@@ -9,10 +9,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
-/**
- * The fluid of a bucket carries the bucket's purity: every read goes through {@code getFluid} (tank contents, both
- * {@code drain} overloads).
- */
 @Mixin(value = FluidBucketWrapper.class, remap = false)
 public abstract class MixinFluidBucketWrapper
 {

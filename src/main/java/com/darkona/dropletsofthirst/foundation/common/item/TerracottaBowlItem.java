@@ -21,10 +21,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Empty terracotta bowl: fills from water in the world like a glass bottle, with the purity of that water (decided on
- * the server). Filling from a water cauldron is a cauldron interaction.
- */
 public class TerracottaBowlItem extends Item
 {
     public TerracottaBowlItem(Properties properties)

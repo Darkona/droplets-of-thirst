@@ -18,11 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Values resolved by the server (config, data map, tags, keywords, {@code RegisterThirstValueEvent}, blacklist applied):
- * item → {thirst, quenched, purity} for drinks and foods (thirst {@code Integer.MIN_VALUE}: the item's {@code DrinkValueProvider} gives them), the items whose values are estimated from recipes, filled
- * items of data-driven purity containers, and the {@link SyncedValues}. Sent on join, after {@code /reload} and after a config file changes.
- */
 public record ThirstValuesSyncMessage(Map<Item, int[]> drinks, Map<Item, int[]> foods, List<Item> estimated, List<Item> containers, int defaultPurity, int waterBottleStackSize, boolean purityEnabled, boolean canFillFromFlowingWater,
                                       int pureThirstBonus, int pureQuenchedBonus) implements CustomPacketPayload
 {
@@ -41,7 +36,6 @@ public record ThirstValuesSyncMessage(Map<Item, int[]> drinks, Map<Item, int[]> 
             ByteBufCodecs.BOOL, flags -> flags[1],
             (first, second) -> new boolean[]{first, second});
 
-    /** defaultPurity, waterBottleStackSize, pureThirstBonus, pureQuenchedBonus. */
     private static final StreamCodec<ByteBuf, int[]> NUMBERS = StreamCodec.composite(
             ByteBufCodecs.VAR_INT, numbers -> numbers[0],
             ByteBufCodecs.VAR_INT, numbers -> numbers[1],

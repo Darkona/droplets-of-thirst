@@ -26,9 +26,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
-/**
- * What {@link com.darkona.dropletsofthirst.api.DropletsAPI} calls; set in the mod constructor.
- */
 public final class DropletsServiceImpl implements DropletsService
 {
     public static final DropletsServiceImpl INSTANCE = new DropletsServiceImpl();

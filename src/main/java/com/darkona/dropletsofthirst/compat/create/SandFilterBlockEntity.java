@@ -32,13 +32,8 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
     public static final int TANK_SIZE = 1000;
     SmartFluidTankBehaviour dirtyTank;
     SmartFluidTankBehaviour purifiedTank;
-    /** The block in front, recomputed only when the filter is turned. */
     private Direction nextFacing;
     private BlockPos nextPos;
-    /**
-     * Watches the block in front: NeoForge invalidates it when a block entity is placed, removed, loaded or unloaded
-     * there, and only then is the filter in front looked up again. Its capability is not used.
-     */
     private @Nullable BlockCapabilityCache<IFluidHandler, @Nullable Direction> nextWatch;
     private @Nullable SandFilterBlockEntity next;
     private boolean nextStale = true;
@@ -62,9 +57,6 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
         return super.createRenderBoundingBox().expandTowards(0, -2, 0);
     }
 
-    /**
-     * Back: the dirty tank; front: the purified tank; no side: both, read only, for Jade and other inspectors.
-     */
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(
                 Capabilities.FluidHandler.BLOCK,
@@ -80,11 +72,6 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
         );
     }
 
-    /**
-     * Moves up to {@code sandFilterMbPerTick} from the dirty to the purified tank, only what the purified tank accepts:
-     * water of a different purity is not mixed, it waits. Then hands purified water on to a filter right in front
-     * that faces the same way, so a row of filters purifies in stages.
-     */
     public void tick()
     {
         super.tick();
@@ -119,9 +106,6 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
         purified.fill(water.copyWithAmount(drained), IFluidHandler.FluidAction.EXECUTE);
     }
 
-    /**
-     * {@code sandFilterFiltrationAmount} more, up to {@code sandFilterMaxPurity}; water already above it passes unchanged.
-     */
     public static int filteredPurity(int purity)
     {
         return CreateCompat.sandFilterPurity(purity);
@@ -141,10 +125,6 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
             nextDirty.fill(purified.drain(accepted, IFluidHandler.FluidAction.EXECUTE), IFluidHandler.FluidAction.EXECUTE);
     }
 
-    /**
-     * The filter right in front, facing the same way, or null. The block entity there is looked up only after the
-     * filter is turned or the watch on the block in front is invalidated, not every tick.
-     */
     private @Nullable SandFilterBlockEntity nextFilter(Direction facing)
     {
         if(facing != nextFacing)
@@ -157,7 +137,6 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
         if(nextStale || next != null && next.isRemoved())
         {
             nextStale = false;
-            // Only a query arms the watch again after an invalidation.
             nextWatch.getCapability();
             next = level.getBlockEntity(nextPos) instanceof SandFilterBlockEntity filter ? filter : null;
         }
@@ -191,9 +170,6 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
         return hasFluid();
     }
 
-    /**
-     * The purity and fluid name of a tank, and its amount over its capacity; nothing for an empty tank.
-     */
     private static void tankTooltip(List<Component> tooltip, LangBuilder mb, SmartFluidTankBehaviour tank) {
         if(tank.isEmpty())
             return;

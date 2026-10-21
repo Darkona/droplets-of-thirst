@@ -10,9 +10,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-/**
- * Buckets filled at the Farm & Charm timber well carry groundwater: the purity of the world's water where it stands.
- */
 @Mixin(value = TimberWellBlock.class, remap = false)
 public abstract class MixinTimberWellBlock
 {

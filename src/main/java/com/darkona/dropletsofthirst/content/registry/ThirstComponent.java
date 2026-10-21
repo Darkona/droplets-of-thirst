@@ -18,31 +18,18 @@ public class ThirstComponent {
     public static final DeferredRegister<DataComponentType<?>> DR = DeferredRegister
             .create(Registries.DATA_COMPONENT_TYPE, DropletsOfThirst.ID);
 
-    /** {@code purity.defaultPurity}'s own default, for values read before the config is loaded. */
     private static final int UNLOADED_DEFAULT_PURITY = PurityLevel.ACCEPTABLE.level();
 
     private ThirstComponent() {
     }
 
-    /**
-     * Water purity, {@link PurityLevel#MIN} to {@link PurityLevel#MAX}. Out-of-range values (old saves, other mods) read as the default purity instead of failing
-     * the whole item or fluid, so they also stack with water of that purity.
-     */
     public static final DataComponentType<Integer> PURITY = register("purity",
             builder -> builder.persistent(Codec.INT.xmap(ThirstComponent::bounded, Function.identity()))
                     .networkSynchronized(ByteBufCodecs.VAR_INT.map(ThirstComponent::bounded, Function.identity())));
 
-    /**
-     * {@code thirst:purity} of Thirst Was Taken stacks, on its scale of four levels. Never kept: stacks swap it for
-     * {@link #PURITY} as they are built from saved or received data ({@link #migrateLegacyPurity}).
-     */
     public static final DataComponentType<Integer> LEGACY_PURITY = register("legacy_purity",
             builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
 
-    /**
-     * Replaces a {@link #LEGACY_PURITY} by the same purity on the new scale, unless the stack already has a
-     * {@link #PURITY}. One map lookup when there is none.
-     */
     public static void migrateLegacyPurity(MutableDataComponentHolder stack)
     {
         if (!stack.has(LEGACY_PURITY))
