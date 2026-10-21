@@ -27,7 +27,6 @@ import com.darkona.dropletsofthirst.foundation.gui.ThirstBarRenderer;
 import com.darkona.dropletsofthirst.foundation.gui.ThirstBarStyles;
 import com.darkona.dropletsofthirst.foundation.network.ThirstModPacketHandler;
 import com.darkona.dropletsofthirst.foundation.tab.ThirstTab;
-import com.darkona.dropletsofthirst.gametest.DropletsGameTests;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -47,7 +46,6 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
-
 @Mod(DropletsOfThirst.ID)
 public class DropletsOfThirst
 {
@@ -62,7 +60,6 @@ public class DropletsOfThirst
         modBus.addListener(PlayerThirstManager::onConfigReloaded);
         modBus.addListener(DropletsOfThirst::addPacks);
         modBus.addListener(ThirstModPacketHandler::register);
-        modBus.addListener(DropletsGameTests::register);
         TravelersBackpackCompat.init(modBus);
         ColdSweatCompat.init();
         ReliquaryCompat.init();
@@ -73,7 +70,7 @@ public class DropletsOfThirst
 
         if(FMLEnvironment.dist.isClient())
         {
-            modBus.addListener(ThirstBarRenderer::registerLayer);
+            ThirstBarRenderer.registerLayer();
             ThirstBarStyles.registerBuiltIns();
             VampirismCompat.initClient();
             SupernaturalCompat.initClient();
@@ -123,10 +120,6 @@ public class DropletsOfThirst
         }
     }
 
-    /**
-     * Optional built-in datapacks under {@code datapacks/} in the jar. {@code BUILT_IN} packs are enabled by default,
-     * also in existing worlds; {@code FEATURE} packs must be enabled when creating the world or with {@code /datapack enable}.
-     */
     private static void addPacks(AddPackFindersEvent event)
     {
         addPack(event, "purify_smelting", "Water purification: furnace", PackSource.BUILT_IN);

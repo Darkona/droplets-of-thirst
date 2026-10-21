@@ -13,7 +13,7 @@ import com.darkona.dropletsofthirst.content.data.DropletsTags;
 import com.darkona.dropletsofthirst.content.registry.EffectInit;
 import com.darkona.dropletsofthirst.content.registry.ItemInit;
 import com.darkona.dropletsofthirst.content.registry.ThirstComponent;
-import com.darkona.dropletsofthirst.core.NumberRows;
+import dev.darkona.jdlib.core.config.NumberRows;
 import com.darkona.dropletsofthirst.foundation.common.event.RegisterThirstValueEvent;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.ItemInteractionResult;
@@ -69,7 +69,6 @@ import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 
-
 @SuppressWarnings({"SpellCheckingInspection","unused"})
 public class WaterPurity
 {
@@ -78,9 +77,7 @@ public class WaterPurity
     private static volatile List<ContainerWithPurity> dataContainers = List.of();
     public static final int MIN_PURITY = PurityLevel.MIN;
     public static final int MAX_PURITY = PurityLevel.MAX;
-    /** Purity of water taken from a water cauldron. */
     public static final int CAULDRON_PURITY = PurityLevel.MURKY.level();
-    /** Purity of water taken from a water cauldron on a heat source. */
     public static final int HEATED_CAULDRON_PURITY = PurityLevel.CLEAN.level();
 
     public static void init()
@@ -88,18 +85,11 @@ public class WaterPurity
         registerContainers();
     }
 
-    /**
-     * Main thread only: the interaction maps are not thread-safe.
-     */
     public static void registerCauldronInteractions()
     {
         CauldronInteraction.WATER.map().put(ItemInit.TERRACOTTA_BOWL.get(), fillFromCauldron(() -> new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()), SoundEvents.BUCKET_FILL));
     }
 
-    /**
-     * Takes one level of water from a water cauldron into {@code filled}; the purity is added by
-     * {@link #applyCauldronPurity}, as for every other cauldron interaction.
-     */
     public static CauldronInteraction fillFromCauldron(Supplier<ItemStack> filled, SoundEvent sound)
     {
         return (state, level, pos, player, hand, stack) -> {
@@ -132,11 +122,6 @@ public class WaterPurity
         return contents != null && contents.is(Potions.WATER);
     }
 
-    /**
-     * Registers a water container for the whole session.
-     *
-     * @deprecated use {@code DropletsAPI.registerContainer}
-     */
     @Deprecated
     public static void addContainer(ContainerWithPurity container)
     {
@@ -144,35 +129,22 @@ public class WaterPurity
         waterContainers = merge(waterContainers.values(), List.of(container));
     }
 
-    /**
-     * Replaces the data-driven containers (config and {@link RegisterThirstValueEvent}); code containers are kept.
-     * One container per filled item: the first registered wins.
-     */
     public static void setContainers(List<ContainerWithPurity> containers)
     {
         dataContainers = List.copyOf(containers);
         waterContainers = merge(codeContainers, containers);
     }
 
-    /**
-     * Filled items of the data-driven containers (config and {@link RegisterThirstValueEvent}), as sent to clients.
-     */
     public static List<Item> dataContainerItems()
     {
         return dataContainers.stream().map(ContainerWithPurity::getFilledItem).toList();
     }
 
-    /**
-     * {@code defaultPurity} of the server; on a client of a remote server it replaces the local config value.
-     */
     public static int defaultPurity()
     {
         return SyncedValues.defaultPurity();
     }
 
-    /**
-     * {@code purity.enabled} (the server's on remote clients): when false nothing stores, shows or rolls purity.
-     */
     public static boolean enabled()
     {
         return SyncedValues.purityEnabled();
@@ -188,9 +160,6 @@ public class WaterPurity
         return Map.copyOf(byFilled);
     }
 
-    /**
-     * Same ray as vanilla {@code Item.getPlayerPOVHitResult}: from the eyes, along the view, up to the block interaction range.
-     */
     public static BlockHitResult pickFluid(Player player, ClipContext.Fluid fluid)
     {
         Vec3 eye = player.getEyePosition();
@@ -198,10 +167,6 @@ public class WaterPurity
         return player.level().clip(new ClipContext(eye, end, ClipContext.Block.OUTLINE, fluid, player));
     }
 
-    /**
-     * Client only (registered in {@code DropletsOfThirst}): the purity line of water containers. It reads the client
-     * config, which a dedicated server does not load, and some mods build tooltips there.
-     */
     public static void renderPurityTooltip(ItemTooltipEvent event)
     {
         if(enabled() && isWaterFilledContainer(event.getItemStack()) && (event.getFlags().hasShiftDown() || !ClientConfig.ONLY_SHOW_PURITY_WHEN_SHIFTING.get()))
@@ -212,19 +177,12 @@ public class WaterPurity
         }
     }
 
-    /**
-     * One map lookup by the stack's item, then that container's own check (e.g. water bottle vs. other potions).
-     */
     public static boolean isWaterFilledContainer(ItemStack item)
     {
         ContainerWithPurity container = waterContainers.get(item.getItem());
         return container != null && !item.is(DropletsTags.PURITY_OPT_OUT) && container.equalsFilled(item);
     }
 
-    /**
-     * Reads the purity from an item without modifying it; missing purity reads as the drink's data map purity if it has
-     * one, missing or invalid purity as the default purity
-     */
     public static Integer getPurity(ItemStack item)
     {
         Integer stored = item.get(ThirstComponent.PURITY);
@@ -237,9 +195,6 @@ public class WaterPurity
         return sanitizePurity(stored);
     }
 
-    /**
-     * Reads the purity from a fluid without modifying it; missing or invalid purity reads as the default purity
-     */
     public static Integer getPurity(FluidStack fluid)
     {
         return sanitizePurity(fluid.get(ThirstComponent.PURITY));
@@ -250,31 +205,20 @@ public class WaterPurity
         return purity == null || purity < MIN_PURITY || purity > MAX_PURITY ? defaultPurity() : purity;
     }
 
-    /**
-     * Returns the purity string in the language selected by the player; out-of-range values read as the default purity.
-     */
     public static String getPurityText(int purity)
     {
         return purityTexts().texts()[level(purity).level()];
     }
 
-    /**
-     * The purity line of a water container's tooltip: the purity text in the purity colour. The same instance while the
-     * language stays the same, so the tooltip, rebuilt every frame, allocates nothing for it.
-     */
     public static Component purityLine(int purity)
     {
         return purityTexts().lines()[level(purity).level()];
     }
 
-    /** Texts and tooltip lines of every purity level in one language. */
     private record PurityTexts(Language language, String[] texts, Component[] lines) {}
 
     private static volatile @Nullable PurityTexts purityTexts;
 
-    /**
-     * Translated once per language: a resource reload or a language change gives a new {@link Language} instance.
-     */
     private static PurityTexts purityTexts()
     {
         Language language = Language.getInstance();
@@ -294,9 +238,6 @@ public class WaterPurity
         return cached;
     }
 
-    /**
-     * Returns the purity color, {@code 0xRRGGBB}
-     */
     public static int getPurityColor(int purity)
     {
         return level(purity).color();
@@ -318,11 +259,6 @@ public class WaterPurity
         return fluid.get(ThirstComponent.PURITY) != null;
     }
 
-
-    /**
-     * Sets the purity component on an item; it is always stored, also for the default purity.
-     * Invalid values are stored as the default purity. Items in {@code droplets_of_thirst:purity_opt_out}, or any item with {@code purity.enabled=false}, are left unchanged.
-     */
     public static ItemStack addPurity(ItemStack item, int purity)
     {
         if (enabled() && !item.is(DropletsTags.PURITY_OPT_OUT))
@@ -330,10 +266,6 @@ public class WaterPurity
         return item;
     }
 
-    /**
-     * Sets the purity component on a fluid; it is always stored, also for the default purity.
-     * Invalid values are stored as the default purity; nothing is stored with {@code purity.enabled=false}.
-     */
     public static FluidStack addPurity(FluidStack fluid, int purity)
     {
         if (enabled())
@@ -341,10 +273,6 @@ public class WaterPurity
         return fluid;
     }
 
-
-    /**
-     * Calculates the water purity of a specific block in the level
-     */
     public static int getBlockPurity(Level level, BlockPos pos)
     {
         FluidState fluid = level.getFluidState(pos);
@@ -353,12 +281,6 @@ public class WaterPurity
         return level.getBlockState(pos).is(Blocks.WATER_CAULDRON) ? cauldronPurity(level, pos) : defaultPurity();
     }
 
-    /**
-     * Purity of water just taken from {@code pos} by a container, a machine or a dispenser: the water or water cauldron
-     * still there, or else a source that was picked up. A picked up source keeps the purity of poured water
-     * ({@link PouredWater#pickedUp}, which also hands it to the sources beside it); otherwise world water purity
-     * depends on the biome and height, not on the block.
-     */
     public static int takenWaterPurity(Level level, BlockPos pos)
     {
         FluidState fluid = level.getFluidState(pos);
@@ -370,13 +292,8 @@ public class WaterPurity
         return poured >= MIN_PURITY ? poured : getWaterPurity(level, pos, true);
     }
 
-    /** Purity for water leaving the water cauldron being used right now, -1 outside one. Server thread only. */
     private static int takingFromCauldron = -1;
 
-    /**
-     * Start of an item interaction with a cauldron: when it is a water cauldron on the server, water containers that
-     * come out of it until {@link #doneTakingFromCauldron} get its purity. Returns whether it started.
-     */
     public static boolean takingFromCauldron(BlockState state, Level level, BlockPos pos)
     {
         if (level.isClientSide() || !enabled() || !state.is(Blocks.WATER_CAULDRON))
@@ -390,21 +307,12 @@ public class WaterPurity
         takingFromCauldron = -1;
     }
 
-    /**
-     * During a water cauldron interaction, gives {@code filled} the cauldron purity if it is a water container with none.
-     */
     public static void applyCauldronPurity(ItemStack filled)
     {
         if (takingFromCauldron >= MIN_PURITY && isWaterFilledContainer(filled) && !hasPurity(filled))
             addPurity(filled, takingFromCauldron);
     }
 
-    /**
-     * Purity of water taken from a water cauldron. The cauldron stores nothing: the purity is decided when the water
-     * leaves it, {@link #CAULDRON_PURITY}, or {@link #HEATED_CAULDRON_PURITY} while it stands on a heat source (block
-     * tag {@code droplets_of_thirst:cauldron_heat_sources}; blocks with a {@code lit} property only when lit). Never pure:
-     * that is what filters and cooking are for.
-     */
     public static int cauldronPurity(BlockGetter level, BlockPos pos)
     {
         BlockState below = level.getBlockState(pos.below());
@@ -412,19 +320,11 @@ public class WaterPurity
                 ? HEATED_CAULDRON_PURITY : CAULDRON_PURITY;
     }
 
-    /**
-     * Purity of water in the world: poured water ({@link PouredWater}), salt water rule, then base (biome data map, biome tag, dimension data map,
-     * {@code worldWaterBasePurity}), plus altitude, running water and biome deltas, capped by the biome's {@code max}.
-     */
     public static int getWaterPurity(Level level, BlockPos pos, boolean source)
     {
         return getWaterPurity(level, pos, source, null);
     }
 
-    /**
-     * Same, writing each step to {@code trace} when given ({@code /droplets_of_thirst debug purity}). A water source poured
-     * into the world, or next to poured ones, has the purity of the water poured ({@link PouredWater}).
-     */
     public static int getWaterPurity(Level level, BlockPos pos, boolean source, @Nullable List<String> trace)
     {
         if (source)
@@ -440,9 +340,6 @@ public class WaterPurity
         return getWaterPurity(level, level.getBiome(pos), pos, source, trace);
     }
 
-    /**
-     * Same, for a given {@code biome} instead of the one at {@code pos} (the position still gives the altitude).
-     */
     public static int getWaterPurity(Level level, Holder<Biome> biome, BlockPos pos, boolean source, @Nullable List<String> trace)
     {
         int salt = PurityConfig.SALT_WATER_PURITY.get();
@@ -475,9 +372,6 @@ public class WaterPurity
 
     private static final NumberRows ALTITUDE_BANDS = new NumberRows(3);
 
-    /**
-     * Delta of the first {@code altitudeBands} entry containing {@code y}; parsed once per config value.
-     */
     private static int altitudeDelta(Level level, int y)
     {
         if (PurityConfig.ALTITUDE_RELATIVE_TO_SEA_LEVEL.get())
@@ -520,46 +414,27 @@ public class WaterPurity
         return -1;
     }
 
-    /**
-     * Thirst added to water of this purity when drunk: {@code pureWater.thirstBonus} for pure water
-     * ({@link PurityLevel#PURE}), 0 for any other purity or with purity off. Only for water, never for other drinks
-     * with a purity.
-     */
     public static int waterThirstBonus(int purity)
     {
         return purity == PurityLevel.PURE.level() && enabled() ? SyncedValues.pureThirstBonus() : 0;
     }
 
-    /**
-     * Quenched added to water of this purity when drunk, as {@link #waterThirstBonus}.
-     */
     public static int waterQuenchedBonus(int purity)
     {
         return purity == PurityLevel.PURE.level() && enabled() ? SyncedValues.pureQuenchedBonus() : 0;
     }
 
-    /**
-     * Purity a drink rolls effects for: the stored purity of a water container, the fixed purity of other drinks, or -1.
-     */
     public static int drinkPurity(ItemStack item)
     {
         return isWaterFilledContainer(item) ? getPurity(item) : ThirstHelper.getDrinkPurity(item);
     }
 
-    /**
-     * One entry of a {@code purity.toml} effect list; {@code chance} is 0-1.
-     */
     public record PurityEffect(Holder<MobEffect> effect, int duration, int amplifier, float chance, boolean blocksHydration) {}
 
     private record EffectTables(List<List<? extends String>> source, PurityEffect[][] byPurity) {}
 
     private static volatile EffectTables effectTables = new EffectTables(List.of(), new PurityEffect[0][]);
 
-    /**
-     * Rolls once, collects every effect of this purity's list whose chance is above the roll, adds Dehydration for dirty water in a hot climate ({@code hotDirtyWater}), lets
-     * {@link PurityEffectEvent} change them, and applies them (effects only on the server). Returns whether the drink
-     * should still restore thirst.
-     */
     public static boolean givePurityEffects(Player player, int purity)
     {
         if (!enabled() || purity < MIN_PURITY || purity > MAX_PURITY)
@@ -585,9 +460,6 @@ public class WaterPurity
         return event.hydrates();
     }
 
-    /**
-     * Parsed {@code effects} list of a purity, cached until the config changes; unknown effect ids are left out.
-     */
     public static PurityEffect[] effectTable(int purity)
     {
         EffectTables cached = effectTables;

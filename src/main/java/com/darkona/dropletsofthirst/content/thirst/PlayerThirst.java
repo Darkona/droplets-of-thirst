@@ -34,6 +34,8 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
+import dev.darkona.jdlib.core.stat.FractionalCarry;
+import dev.darkona.jdlib.core.stat.ShownFields;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -45,10 +47,8 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
     public static final int SYNC_SPRINT_BLOCKED = 2;
     public static final int SYNC_BOTH_HANDS = 4;
     public static final int SYNC_HAND_DRINKING = 8;
-    /** Bits 8-15 of the synced rules: {@code sprint.minThirst}. */
     public static final int SYNC_SPRINT_MIN_SHIFT = 8;
     private static final double MAX_STEP = 10.0;
-    /** Results of {@link #apply}. */
     private static final int UNCHANGED = 0;
     private static final int CHANGED = 1;
     private static final int CANCELLED = 2;
@@ -73,24 +73,17 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
     boolean pausedByEffect;
     boolean stoppedByEffect;
     boolean nauseous;
-    boolean forceSync = true;
-    int sentThirst;
-    int sentQuenched;
-    int sentExhaustionStep;
-    int sentFlags;
+    private enum Shown { THIRST, QUENCHED, EXHAUSTION_STEP, RULES }
+    private final ShownFields<Shown> shown = new ShownFields<>(Shown.class);
     int syncedRules = SYNC_SPRINT_BLOCKED | SYNC_BOTH_HANDS | SPRINT_MIN_THIRST << SYNC_SPRINT_MIN_SHIFT;
     int handDrinkReadyTick = 0;
     int fullHydrationTicks;
     float overflow;
-    float bloodThirst;
-    float bloodQuenched;
+    private final FractionalCarry bloodThirst = new FractionalCarry();
+    private final FractionalCarry bloodQuenched = new FractionalCarry();
 
     public PlayerThirst() {}
 
-    /**
-     * Whether an active effect is in {@code droplets_of_thirst:stops_thirst} or {@code droplets_of_thirst:pauses_thirst}, and
-     * whether the player has Nausea; read when effects change and every {@code MODIFIER_INTERVAL_TICKS}, not every tick.
-     */
     private void readThirstEffects(Player player)
     {
         boolean paused = false;
@@ -167,20 +160,11 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
         return exhaustionModifier;
     }
 
-    /**
-     * The way thirst changes on the server: clamps, keeps quenched at or below thirst and, only when something
-     * changes, posts {@link ThirstChangeEvent.Pre} (which may cancel or change it) and {@link ThirstChangeEvent.Post}.
-     *
-     * @return whether anything changed
-     */
     public boolean change(Player player, int newThirst, int newQuenched, ThirstChangeEvent.Cause cause)
     {
         return apply(player, newThirst, newQuenched, cause) == CHANGED;
     }
 
-    /**
-     * {@link #change}, telling a change that another mod cancelled apart from one that changes nothing.
-     */
     private int apply(Player player, int newThirst, int newQuenched, ThirstChangeEvent.Cause cause)
     {
         newThirst = Mth.clamp(newThirst, 0, MAX_THIRST);
@@ -207,11 +191,6 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
     @Override
     public boolean getShouldTickThirst(){return shouldTickThirst;}
 
-    /**
-     * Drinking or eating an item with thirst values; nothing for other items, nor for a vampire and anything but blood.
-     * Drunk when it has the drink animation or is a water container, eaten otherwise. Pure water gets the
-     * {@code pureWater} bonus.
-     */
     public static void consume(ItemStack item, Player player)
     {
         ThirstValues values = ThirstHelper.drinkValuesOf(item);
@@ -223,42 +202,21 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
             eat(player, item, values.thirst(), values.quenched());
     }
 
-    /**
-     * Blood a vampire drank outside the drinks data map (Vampirism's bites, bottles and containers): a drink without
-     * purity that never counts towards Overhydrated. Fractions carry over to the next sip.
-     *
-     * @return whether thirst or quenched changed
-     */
     public static boolean drinkBlood(Player player, ItemStack source, float thirst, float quenched)
     {
         if (player.level().isClientSide)
             return false;
         PlayerThirst data = player.getData(ModAttachment.PLAYER_THIRST);
-        thirst += data.bloodThirst;
-        quenched += data.bloodQuenched;
-        int wholeThirst = (int) thirst;
-        int wholeQuenched = (int) quenched;
-        data.bloodThirst = thirst - wholeThirst;
-        data.bloodQuenched = quenched - wholeQuenched;
+        int wholeThirst = data.bloodThirst.add(thirst);
+        int wholeQuenched = data.bloodQuenched.add(quenched);
         return (wholeThirst != 0 || wholeQuenched != 0) && drink(player, source, wholeThirst, wholeQuenched, DropletsAPI.NO_PURITY, false);
     }
 
-    /**
-     * A container's worth of water drunk without the container (the Traveler's Backpack hose): {@link #drink} with the
-     * {@code pureWater} bonus for pure water. A sip by hand is not a container's worth: it calls {@link #drink}.
-     */
     public static boolean drinkWater(Player player, int thirst, int quenched, int purity)
     {
         return drink(player, ItemStack.EMPTY, thirst + WaterPurity.waterThirstBonus(purity), quenched + WaterPurity.waterQuenchedBonus(purity), purity);
     }
 
-    /**
-     * Every bite (food items, block foods, the API), server side only: {@link EatEvent.Pre}, hydration,
-     * {@link EatEvent.Post}. No purity effects. {@code item} is empty for block foods and the API. Nothing for a vampire
-     * unless the item is blood.
-     *
-     * @return whether thirst or quenched changed
-     */
     public static boolean eat(Player player, ItemStack item, int thirst, int quenched)
     {
         if (player.level().isClientSide || !VampireThirst.canHydrate(item, player))
@@ -271,13 +229,6 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
         return hydrated;
     }
 
-    /**
-     * Every drink (items, hand drinking, the API), server side only: {@link DrinkEvent.Pre}, purity effects, which may
-     * prevent hydration, hydration, {@link DrinkEvent.Post}. {@code item} is empty for hand drinking and the API. With
-     * purity off the events carry {@code NO_PURITY}. Nothing for a vampire unless the item is blood.
-     *
-     * @return whether thirst or quenched changed
-     */
     public static boolean drink(Player player, ItemStack item, int thirst, int quenched, int purity)
     {
         return VampireThirst.canHydrate(item, player) && drink(player, item, thirst, quenched, purity, true);
@@ -298,19 +249,12 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
         return hydrated;
     }
 
-    /**
-     * Hydration of a drink or food: with {@code extraThirstToQuenched}, thirst above the maximum becomes quenched; with
-     * {@code overflows}, what does not fit counts towards Overhydrated.
-     */
     public boolean hydrate(Player player, int thirst, int quenched, boolean overflows, ThirstChangeEvent.Cause cause)
     {
         int extra = GameplayConfig.EXTRA_THIRST_TO_QUENCHED.get() ? Math.max(this.thirst + thirst - MAX_THIRST, 0) : 0;
         return absorb(player, thirst, quenched, this.thirst + thirst, this.quenched + quenched + extra, overflows, cause);
     }
 
-    /**
-     * What does not fit counts towards Overhydrated, unless another mod cancels the change: then nothing was drunk.
-     */
     private boolean absorb(Player player, int thirst, int quenched, int newThirst, int newQuenched, boolean overflows, ThirstChangeEvent.Cause cause)
     {
         int wasted = 0;
@@ -325,10 +269,6 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
         return result == CHANGED;
     }
 
-    /**
-     * Adds water drunk past full; at {@code overhydration.threshold} applies Overhydrated (one level more per half
-     * threshold past it, or while it is active; at most III) and resets the overflow.
-     */
     private void overflow(Player player, int wasted)
     {
         overflow += wasted;
@@ -346,12 +286,6 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
             player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, OVERHYDRATION_NAUSEA_TICKS));
     }
 
-    /**
-     * Server tick, the thirst counterpart of vanilla's {@code FoodData#tick}: adds this tick's exhaustion (activity,
-     * basal, Nausea, regeneration), turns it into lost quenched and then thirst, and applies Peaceful regeneration,
-     * rain drinking, the full hydration bonus, the overflow decay and dehydration damage. Nothing for invulnerable
-     * players or with thirst disabled, and nothing past the effect check while an effect stops thirst.
-     */
     public void tick(Player player)
     {
         if(player.getAbilities().invulnerable || !shouldTickThirst)
@@ -453,10 +387,6 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
             damageTimer = 0;
     }
 
-    /**
-     * {@code hydration.fullBonus}: Hydrated I after {@code fullBonusSeconds} at full thirst and enough quenched,
-     * refreshed when it is about to run out. Checked every {@code MODIFIER_INTERVAL_TICKS}.
-     */
     private void fullHydrationBonus(Player player)
     {
         if(thirst < MAX_THIRST || quenched < GameplayConfig.FULL_HYDRATION_MIN_QUENCHED.get())
@@ -484,9 +414,6 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
         }).get().floatValue();
     }
 
-    /**
-     * MIRROR_FOOD: what vanilla added to the hunger exhaustion since last tick.
-     */
     private float mirroredFoodExhaustion(Player player)
     {
         float hungerExhaustion = player.getFoodData().getExhaustionLevel();
@@ -496,17 +423,12 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
         else if (exhaustionRecalculate)
             deltaExhaustion = hungerExhaustion + 4.0F - this.prevTickExhaustion;
         else
-            // Emptied by someone else since last tick (Vampirism moves it to a vampire's blood bar every tick): counted from 0.
             deltaExhaustion = hungerExhaustion;
         exhaustionRecalculate = false;
         this.prevTickExhaustion = hungerExhaustion;
         return deltaExhaustion;
     }
 
-    /**
-     * OWN: vanilla's movement exhaustion (swimming or walking in water, sprinting on the ground) from the position
-     * change since last tick; jumps over {@code MAX_STEP} blocks (teleports) and riding count nothing.
-     */
     private float movementExhaustion(Player player)
     {
         double dx = player.getX() - lastX;
@@ -531,19 +453,12 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
         return 0.0F;
     }
 
-    /**
-     * OWN: exhaustion of a jump, attack, broken block or damage, added on the next tick.
-     */
     public void addActivity(Player player, float amount)
     {
         if(!player.getAbilities().invulnerable && shouldTickThirst)
             pendingActivity += amount;
     }
 
-    /**
-     * Health regenerated from food: in MIRROR_FOOD the next exhaustion delta is treated as regeneration; in OWN it
-     * costs {@code healPerHealth} per point.
-     */
     public void onFoodHeal(float amount)
     {
         if(GameplayConfig.MODE.get() == GameplayConfig.Mode.OWN)
@@ -552,18 +467,11 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
             justHealed = true;
     }
 
-    /**
-     * Sends the thirst data with the next {@link #syncIfChanged}, even if nothing changed.
-     */
     public void updateThirstData(Player player)
     {
-        forceSync = true;
+        shown.resendNext();
     }
 
-    /**
-     * Sends thirst, quenched, exhaustion (in steps of 1/{@code EXHAUSTION_SYNC_STEPS}) and the synced rules
-     * when one of them differs from the last packet, or when a sync was forced. Called once per player tick.
-     */
     public void syncIfChanged(ServerPlayer player)
     {
         int flags = (shouldTickThirst ? SYNC_ENABLED : 0)
@@ -571,23 +479,17 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
                 | (GameplayConfig.HAND_DRINKING_BOTH_HANDS.get() ? SYNC_BOTH_HANDS : 0)
                 | (GameplayConfig.HAND_DRINKING.get() ? SYNC_HAND_DRINKING : 0)
                 | GameplayConfig.SPRINT_MIN_THIRST.get() << SYNC_SPRINT_MIN_SHIFT;
-        int exhaustionStep = (int) (exhaustion * EXHAUSTION_SYNC_STEPS);
-        if(!forceSync && thirst == sentThirst && quenched == sentQuenched && exhaustionStep == sentExhaustionStep && flags == sentFlags)
-            return;
         if(player instanceof FakePlayer || player.connection == null)
             return;
-
-        forceSync = false;
-        sentThirst = thirst;
-        sentQuenched = quenched;
-        sentExhaustionStep = exhaustionStep;
-        sentFlags = flags;
+        shown.show(Shown.THIRST, thirst);
+        shown.show(Shown.QUENCHED, quenched);
+        shown.show(Shown.EXHAUSTION_STEP, (int) (exhaustion * EXHAUSTION_SYNC_STEPS));
+        shown.show(Shown.RULES, flags);
+        if(!shown.shouldSend())
+            return;
         PacketDistributor.sendToPlayer(player, new PlayerThirstSyncMessage(thirst, quenched, exhaustion, flags));
     }
 
-    /**
-     * Server rules received with the last sync ({@code SYNC_*} bits); only meaningful on the client.
-     */
     public void setSyncedRules(int flags)
     {
         syncedRules = flags;
@@ -647,19 +549,12 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
             justHealed = false;
     }
 
-    /**
-     * Exhaustion from another mod, multiplied like the mod's own activities.
-     */
     public void addScaledExhaustion(Player player, float amount)
     {
         if(!player.getAbilities().invulnerable && shouldTickThirst)
             exhaustion = Math.max(0.0F, exhaustion + amount * exhaustionModifier(player));
     }
 
-    /**
-     * {@link ExhaustionFactors} cached (recomputed every {@code MODIFIER_INTERVAL_TICKS}, staggered per player, and
-     * after {@link #invalidateModifier()}) times the {@code droplets_of_thirst:thirst_drain} attribute (cached by vanilla).
-     */
     public float exhaustionModifier(Player player)
     {
         if(modifierDirty)
@@ -670,15 +565,11 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
         return exhaustionModifier * (float) player.getAttributeValue(AttributeInit.THIRST_DRAIN);
     }
 
-    /**
-     * Recomputes the exhaustion modifier on next use: armor or effects changed, dimension change, respawn.
-     */
     public void invalidateModifier()
     {
         modifierDirty = true;
         effectsDirty = true;
     }
-
 
     @Override
     public @UnknownNullability CompoundTag serializeNBT(HolderLookup.@NotNull Provider provider) {

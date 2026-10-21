@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.foundation.config;
 
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.core.NumberRows;
+import dev.darkona.jdlib.core.config.NumberRows;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -13,12 +13,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-/**
- * Problems NeoForge's per-key validation cannot see (unknown ids, overlapping bands, unordered curves, bad patterns,
- * recipes the inference could not read).
- * Reported as one warning each time the tables are rebuilt (world load, {@code /reload}, config file change) and by
- * {@code /droplets_of_thirst config check}. Nothing here stops loading: bad entries are skipped where they are used.
- */
 public final class ConfigCheck
 {
     private static final Logger LOGGER = LogUtils.getLogger();

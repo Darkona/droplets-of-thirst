@@ -1,45 +1,43 @@
 package com.darkona.dropletsofthirst.compat.appleskin;
 
 import com.darkona.dropletsofthirst.foundation.config.ClientConfig;
-import net.neoforged.fml.ModList;
+import dev.darkona.jdlib.api.hud.AppleSkinOptions;
+import dev.darkona.jdlib.api.hud.HudCompat;
+import net.minecraft.client.gui.screens.Screen;
 
-/**
- * AppleSkin, client only: with {@code followAppleSkin}, each thirst HUD visual and the tooltip icons are also turned
- * off when the player turns off AppleSkin's food counterpart, so both are set in one place. Nothing is drawn through
- * AppleSkin; without it every check here passes.
- */
 public final class AppleSkinCompat
 {
-    public static final boolean LOADED = ModList.get().isLoaded("appleskin");
-
     private AppleSkinCompat() {}
 
-    private static boolean following()
+    private static AppleSkinOptions followed()
     {
-        return LOADED && ClientConfig.FOLLOW_APPLESKIN.get();
+        if (!ClientConfig.FOLLOW_APPLESKIN.get())
+            return null;
+        AppleSkinOptions options = HudCompat.appleSkin();
+        return options.present() ? options : null;
     }
 
-    /** Quenched outline, as AppleSkin's saturation outline. */
     public static boolean quenchedOverlay()
     {
-        return !following() || AppleSkinBridge.saturationOverlay();
+        AppleSkinOptions options = followed();
+        return options == null || options.saturationOverlay();
     }
 
-    /** Drink preview, as AppleSkin's held-food preview; {@code offhand} for a drink in the off hand only. */
     public static boolean drinkPreview(boolean offhand)
     {
-        return !following() || AppleSkinBridge.foodValuesOverlay(offhand);
+        AppleSkinOptions options = followed();
+        return options == null || options.foodValuesOverlay(offhand);
     }
 
-    /** Exhaustion underlay, as AppleSkin's. */
     public static boolean exhaustionUnderlay()
     {
-        return !following() || AppleSkinBridge.exhaustionUnderlay();
+        AppleSkinOptions options = followed();
+        return options == null || options.exhaustionUnderlay();
     }
 
-    /** Tooltip icons, shown when AppleSkin would show food values in the tooltip (including its hold-Shift option). */
     public static boolean tooltip()
     {
-        return !following() || AppleSkinBridge.foodTooltip();
+        AppleSkinOptions options = followed();
+        return options == null || options.foodTooltip(Screen.hasShiftDown());
     }
 }

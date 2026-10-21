@@ -1,16 +1,17 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.DropletsOfThirst;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 
-/**
- * Registers the test classes that link against optional mods, only when that mod is installed; the rest are found
- * through {@code @GameTestHolder}. Tests only run with {@code neoforge.enabledGameTestNamespaces=droplets_of_thirst}.
- */
+@EventBusSubscriber(modid = DropletsOfThirst.ID)
 public final class DropletsGameTests
 {
     private DropletsGameTests() {}
 
+    @SubscribeEvent
     public static void register(RegisterGameTestsEvent event)
     {
         if (ModList.get().isLoaded("create"))

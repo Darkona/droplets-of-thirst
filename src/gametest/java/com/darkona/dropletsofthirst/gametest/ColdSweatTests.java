@@ -6,7 +6,7 @@ import com.darkona.dropletsofthirst.compat.coldsweat.ColdSweatCompat;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.core.NumberRows;
+import dev.darkona.jdlib.core.config.NumberRows;
 import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
 import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
 import com.momosoftworks.coldsweat.core.init.ModItems;
@@ -37,10 +37,6 @@ import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 
-/**
- * Cold Sweat: its waterskin as a water drink with purity, drinking water cools, body temperature drives the climate
- * multiplier. Registered by {@link DropletsGameTests} only when Cold Sweat is installed.
- */
 @PrefixGameTestTemplate(false)
 public class ColdSweatTests
 {
