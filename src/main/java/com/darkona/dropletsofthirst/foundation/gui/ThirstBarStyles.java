@@ -11,17 +11,14 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import dev.darkona.jdlib.api.hud.HudStyles;
+import dev.darkona.jdlib.core.registry.PriorityList;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 
-/**
- * Colours of the thirst bar while a status applies (the active style with the highest priority wins) and the effects
- * that make it wave.
- */
 public final class ThirstBarStyles
 {
     public static final int VAMPIRE_PRIORITY = 400;
@@ -32,43 +29,29 @@ public final class ThirstBarStyles
     public static final int HYDRATED_PRIORITY = 50;
     public static final IntSupplier VAMPIRE_COLOR = color(ClientConfig.VAMPIRE_COLOR);
 
-    private record Style(ResourceLocation id, Predicate<Player> active, IntSupplier rgb, int priority) {}
-
-    private static final Comparator<Style> ORDER = Comparator.comparingInt(Style::priority).reversed().thenComparing(Style::id);
-    private static volatile Style[] styles = {};
+    private static final HudStyles<Player, IntSupplier, Void> STYLES = HudStyles.plain(PriorityList.Ties.BY_ID);
     private static final List<Holder<MobEffect>> waveEffects = new CopyOnWriteArrayList<>();
 
     private ThirstBarStyles() {}
 
-    /** Adds or replaces the style with this id. */
     public static synchronized void register(ResourceLocation id, Predicate<Player> active, IntSupplier rgb, int priority)
     {
-        List<Style> list = new ArrayList<>(List.of(styles));
-        list.removeIf(style -> style.id.equals(id));
-        list.add(new Style(id, active, rgb, priority));
-        list.sort(ORDER);
-        styles = list.toArray(Style[]::new);
+        STYLES.define(id, rgb);
+        STYLES.addRule(id, priority, player -> active.test(player) ? id : null);
     }
 
-    /** {@code 0xRRGGBB} of the winning active style, or -1 for the normal bar. */
     public static int resolve(Player player)
     {
-        for (Style style : styles)
-            if (style.active.test(player))
-                return style.rgb.getAsInt();
-        return -1;
+        ResourceLocation id = STYLES.select(player);
+        IntSupplier rgb = id == null ? null : STYLES.style(id);
+        return rgb == null ? -1 : rgb.getAsInt();
     }
 
-    /** Id of the winning active style, or null for the normal bar. */
     public static @Nullable ResourceLocation activeStyle(Player player)
     {
-        for (Style style : styles)
-            if (style.active.test(player))
-                return style.id;
-        return null;
+        return STYLES.select(player);
     }
 
-    /** Effects that make the droplets bounce one at a time, like hearts under Regeneration. */
     public static void registerWave(Holder<MobEffect> effect)
     {
         waveEffects.add(effect);

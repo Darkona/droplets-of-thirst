@@ -46,7 +46,6 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
-
 @Mod(DropletsOfThirst.ID)
 public class DropletsOfThirst
 {
@@ -71,7 +70,7 @@ public class DropletsOfThirst
 
         if(FMLEnvironment.dist.isClient())
         {
-            modBus.addListener(ThirstBarRenderer::registerLayer);
+            ThirstBarRenderer.registerLayer();
             ThirstBarStyles.registerBuiltIns();
             VampirismCompat.initClient();
             SupernaturalCompat.initClient();
@@ -121,10 +120,6 @@ public class DropletsOfThirst
         }
     }
 
-    /**
-     * Optional built-in datapacks under {@code datapacks/} in the jar. {@code BUILT_IN} packs are enabled by default,
-     * also in existing worlds; {@code FEATURE} packs must be enabled when creating the world or with {@code /datapack enable}.
-     */
     private static void addPacks(AddPackFindersEvent event)
     {
         addPack(event, "purify_smelting", "Water purification: furnace", PackSource.BUILT_IN);
