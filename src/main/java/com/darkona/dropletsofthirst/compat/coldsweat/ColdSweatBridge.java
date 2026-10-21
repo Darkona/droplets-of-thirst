@@ -11,11 +11,6 @@ final class ColdSweatBridge
 {
     private ColdSweatBridge() {}
 
-    static double bodyTemperature(Player player)
-    {
-        return Temperature.get(player, Temperature.Trait.BODY);
-    }
-
     static boolean isWaterskin(ItemStack stack)
     {
         return stack.is(ModItems.FILLED_WATERSKIN);
