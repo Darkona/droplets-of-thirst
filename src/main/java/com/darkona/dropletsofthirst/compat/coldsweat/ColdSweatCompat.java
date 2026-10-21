@@ -19,6 +19,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import dev.darkona.jdlib.api.compat.Bridges;
+import dev.darkona.jdlib.api.compat.climate.BodyTemperature;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -40,7 +41,7 @@ public final class ColdSweatCompat
 
     public static double bodyTemperature(Player player)
     {
-        return LOADED ? ColdSweatBridge.bodyTemperature(player) : 0;
+        return BodyTemperature.of(player, 0);
     }
 
     private static void coolAfterDrinking(DrinkEvent.Post event)
