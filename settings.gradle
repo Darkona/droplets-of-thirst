@@ -9,3 +9,8 @@ plugins {
 }
 
 rootProject.name = 'droplets-of-thirst'
+
+def jdlibDir = file(providers.gradleProperty('jdlibDir').getOrElse('../JDLib'))
+if (jdlibDir.isDirectory()) {
+    includeBuild(jdlibDir)
+}

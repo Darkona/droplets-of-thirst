@@ -27,7 +27,6 @@ import com.darkona.dropletsofthirst.foundation.gui.ThirstBarRenderer;
 import com.darkona.dropletsofthirst.foundation.gui.ThirstBarStyles;
 import com.darkona.dropletsofthirst.foundation.network.ThirstModPacketHandler;
 import com.darkona.dropletsofthirst.foundation.tab.ThirstTab;
-import com.darkona.dropletsofthirst.gametest.DropletsGameTests;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -62,7 +61,6 @@ public class DropletsOfThirst
         modBus.addListener(PlayerThirstManager::onConfigReloaded);
         modBus.addListener(DropletsOfThirst::addPacks);
         modBus.addListener(ThirstModPacketHandler::register);
-        modBus.addListener(DropletsGameTests::register);
         TravelersBackpackCompat.init(modBus);
         ColdSweatCompat.init();
         ReliquaryCompat.init();
