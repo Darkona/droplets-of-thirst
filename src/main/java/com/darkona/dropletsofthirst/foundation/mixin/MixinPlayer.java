@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.foundation.mixin;
 
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.PlayerThirstManager;
 import net.minecraft.server.level.ServerPlayer;

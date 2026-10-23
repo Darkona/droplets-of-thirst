@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.foundation.network.message;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.VampireThirst;
 import com.darkona.dropletsofthirst.thirst.ModAttachment;

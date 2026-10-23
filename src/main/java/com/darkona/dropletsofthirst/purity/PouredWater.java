@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.content.purity;
+package com.darkona.dropletsofthirst.purity;
 
 import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import com.mojang.serialization.Codec;

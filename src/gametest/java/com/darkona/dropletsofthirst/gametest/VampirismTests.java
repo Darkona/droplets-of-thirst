@@ -6,7 +6,7 @@ import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.api.event.DrinkEvent;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.thirst.EffectInit;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;

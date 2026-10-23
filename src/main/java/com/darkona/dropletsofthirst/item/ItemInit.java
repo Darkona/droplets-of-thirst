@@ -1,8 +1,6 @@
-package com.darkona.dropletsofthirst.content.registry;
+package com.darkona.dropletsofthirst.item;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.foundation.common.item.DrinkableItem;
-import com.darkona.dropletsofthirst.foundation.common.item.TerracottaBowlItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;

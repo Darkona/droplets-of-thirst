@@ -9,7 +9,7 @@ import com.darkona.dropletsofthirst.api.event.DrinkEvent;
 import com.darkona.dropletsofthirst.api.event.EatEvent;
 import com.darkona.dropletsofthirst.api.event.OverhydrationEvent;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.data.DropletsTags;
 import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
 import com.darkona.dropletsofthirst.foundation.network.message.PlayerThirstSyncMessage;

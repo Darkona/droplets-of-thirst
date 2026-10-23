@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.thirst;
 
-import com.darkona.dropletsofthirst.content.purity.ContainerWithPurity;
+import com.darkona.dropletsofthirst.purity.ContainerWithPurity;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.Event;
 

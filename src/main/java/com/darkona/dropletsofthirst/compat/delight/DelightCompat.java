@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.compat.delight;
 
 import com.darkona.dropletsofthirst.data.DropletsTags;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;

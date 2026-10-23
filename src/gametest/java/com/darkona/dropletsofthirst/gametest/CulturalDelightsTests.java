@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.gametest;
 
 import com.baisylia.culturaldelights.recipes.VatRecipe;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;

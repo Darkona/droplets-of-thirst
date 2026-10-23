@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.compat.travelersbackpack;
 
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import com.tiviacz.travelersbackpack.api.fluids.EffectFluid;

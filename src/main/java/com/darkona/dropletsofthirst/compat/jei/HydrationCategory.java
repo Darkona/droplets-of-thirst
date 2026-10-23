@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.compat.jei;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.ThirstValues;
-import com.darkona.dropletsofthirst.content.registry.ItemInit;
+import com.darkona.dropletsofthirst.item.ItemInit;
 import com.darkona.dropletsofthirst.foundation.gui.DrinkTooltip;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;

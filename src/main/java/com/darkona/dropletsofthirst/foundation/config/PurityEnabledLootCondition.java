@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.foundation.config;
 
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.content.registry.ConditionInit;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.storage.loot.LootContext;

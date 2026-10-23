@@ -2,8 +2,8 @@ package com.darkona.dropletsofthirst.gametest;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
-import com.darkona.dropletsofthirst.content.purity.PouredWater;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.PouredWater;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

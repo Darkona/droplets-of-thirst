@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.gametest;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.sammy.minersdelight.content.item.CopperCupItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -54,7 +54,7 @@ public class MinersDelightTests
     {
         BlockPos pos = helper.absolutePos(new BlockPos(2, 2, 2));
         helper.getLevel().setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
-        com.darkona.dropletsofthirst.content.purity.PouredWater.poured(helper.getLevel(), pos, CONTAMINATED);
+        com.darkona.dropletsofthirst.purity.PouredWater.poured(helper.getLevel(), pos, CONTAMINATED);
         helper.assertValueEqual(WaterPurity.getBlockPurity(helper.getLevel(), pos), CONTAMINATED, "purity of the poured source");
 
         ItemStack cup = useFromAbove(player(helper), pos, new ItemStack(item("copper_cup")));

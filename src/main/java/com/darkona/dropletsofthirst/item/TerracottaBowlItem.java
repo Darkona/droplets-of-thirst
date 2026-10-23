@@ -1,7 +1,6 @@
-package com.darkona.dropletsofthirst.foundation.common.item;
+package com.darkona.dropletsofthirst.item;
 
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.content.registry.ItemInit;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.foundation.config.SyncedValues;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;

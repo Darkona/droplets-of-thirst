@@ -1,7 +1,7 @@
-package com.darkona.dropletsofthirst.content.purity;
+package com.darkona.dropletsofthirst.purity;
 
 import com.darkona.dropletsofthirst.api.PurityLevel;
-import com.darkona.dropletsofthirst.content.registry.ItemInit;
+import com.darkona.dropletsofthirst.item.ItemInit;
 import net.minecraft.world.item.ItemStack;
 
 public final class PurityTint

@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.DrinkValues;
 import com.darkona.dropletsofthirst.foundation.config.ClientConfig;

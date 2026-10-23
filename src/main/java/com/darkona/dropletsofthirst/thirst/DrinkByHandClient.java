@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.thirst;
 
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.foundation.network.message.DrinkByHandMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;

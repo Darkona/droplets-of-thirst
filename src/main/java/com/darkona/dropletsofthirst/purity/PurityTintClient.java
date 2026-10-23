@@ -1,7 +1,7 @@
-package com.darkona.dropletsofthirst.content.purity;
+package com.darkona.dropletsofthirst.purity;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.content.registry.ItemInit;
+import com.darkona.dropletsofthirst.item.ItemInit;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;

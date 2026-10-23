@@ -1,7 +1,7 @@
-package com.darkona.dropletsofthirst.foundation.config;
+package com.darkona.dropletsofthirst.legacy;
 
+import com.darkona.dropletsofthirst.foundation.config.PurityConfig;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.content.registry.LegacyIds;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.Config;
 import dev.darkona.jdlib.api.config.ConfigMigration;

@@ -1,8 +1,8 @@
 package com.darkona.dropletsofthirst.compat.coldsweat;
 
 import com.darkona.dropletsofthirst.api.event.DrinkEvent;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.content.registry.ThirstComponent;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.ThirstComponent;
 import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;

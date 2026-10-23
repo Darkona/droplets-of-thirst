@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.foundation.mixin.cold_sweat;
 
-import com.darkona.dropletsofthirst.content.registry.ThirstComponent;
+import com.darkona.dropletsofthirst.purity.ThirstComponent;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.momosoftworks.coldsweat.common.item.FilledWaterskinItem;
 import net.minecraft.world.item.ItemStack;

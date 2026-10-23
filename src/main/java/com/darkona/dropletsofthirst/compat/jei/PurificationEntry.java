@@ -2,8 +2,8 @@ package com.darkona.dropletsofthirst.compat.jei;
 
 import com.darkona.dropletsofthirst.compat.create.CreateCompat;
 import com.darkona.dropletsofthirst.data.DropletsTags;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.content.registry.ItemInit;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.item.ItemInit;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;

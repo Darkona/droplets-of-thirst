@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.foundation.mixin.create;
 
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;

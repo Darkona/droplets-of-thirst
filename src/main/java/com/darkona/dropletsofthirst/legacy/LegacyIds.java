@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.content.registry;
+package com.darkona.dropletsofthirst.legacy;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;

@@ -9,7 +9,7 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.foundation.tab.ThirstTab;
+import com.darkona.dropletsofthirst.item.ThirstTab;
 
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 

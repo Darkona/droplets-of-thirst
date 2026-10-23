@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.foundation.mixin;
 
-import com.darkona.dropletsofthirst.content.registry.ThirstComponent;
+import com.darkona.dropletsofthirst.purity.ThirstComponent;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.level.material.Fluid;

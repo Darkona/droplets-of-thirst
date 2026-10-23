@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.foundation.common.item;
+package com.darkona.dropletsofthirst.item;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;

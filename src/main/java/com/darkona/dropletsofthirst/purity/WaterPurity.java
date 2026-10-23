@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.content.purity;
+package com.darkona.dropletsofthirst.purity;
 
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.api.event.PurityEffectEvent;
@@ -7,8 +7,7 @@ import com.darkona.dropletsofthirst.data.DropletsDataMaps.BiomeWater;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.DimensionWater;
 import com.darkona.dropletsofthirst.data.DropletsTags;
 import com.darkona.dropletsofthirst.thirst.EffectInit;
-import com.darkona.dropletsofthirst.content.registry.ItemInit;
-import com.darkona.dropletsofthirst.content.registry.ThirstComponent;
+import com.darkona.dropletsofthirst.item.ItemInit;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.thirst.RegisterThirstValueEvent;
 import com.darkona.dropletsofthirst.foundation.config.ClientConfig;

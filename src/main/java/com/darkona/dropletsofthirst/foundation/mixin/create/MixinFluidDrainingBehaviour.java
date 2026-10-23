@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.foundation.mixin.create;
 
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.simibubi.create.content.fluids.transfer.FluidDrainingBehaviour;
 import com.simibubi.create.foundation.fluid.FluidHelper;

@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.content.purity;
+package com.darkona.dropletsofthirst.purity;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

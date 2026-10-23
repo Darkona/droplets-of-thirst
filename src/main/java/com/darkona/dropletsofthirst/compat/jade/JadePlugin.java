@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.compat.jade;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

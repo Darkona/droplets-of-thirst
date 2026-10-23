@@ -1,9 +1,9 @@
-package com.darkona.dropletsofthirst.content.registry;
+package com.darkona.dropletsofthirst.purity;
 
+import com.darkona.dropletsofthirst.legacy.LegacyIds;
 import com.mojang.serialization.Codec;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.foundation.config.PurityConfig;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;

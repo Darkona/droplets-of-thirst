@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.foundation.network.message;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.foundation.config.SyncedValues;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.registries.Registries;
