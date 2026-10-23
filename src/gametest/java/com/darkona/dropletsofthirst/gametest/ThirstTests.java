@@ -1,5 +1,7 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.purity.PurityEffects;
+import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.api.ThirstValues;
@@ -288,7 +290,7 @@ public class ThirstTests
         helper.assertValueEqual(PurityConfig.EFFECTS.size(), PurityLevel.values().length, "effect lists");
         for (PurityLevel level : PurityLevel.values())
         {
-            WaterPurity.PurityEffect[] table = WaterPurity.effectTable(level.level());
+            PurityEffects.Effect[] table = PurityEffects.table(level.level());
             double[] expected = chances[level.level()];
             helper.assertValueEqual(table.length, expected.length, "effects of " + level.id());
             for (int i = 0; i < table.length; i++)
@@ -308,8 +310,8 @@ public class ThirstTests
         BlockPos low = helper.absolutePos(BlockPos.ZERO).atY(level.getSeaLevel());
         BlockPos high = low.above(200);
         var plains = level.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(Biomes.PLAINS);
-        float atSea = ThirstHelper.biomeClimate(level, plains, low, 1.0F, false);
-        float onTop = ThirstHelper.biomeClimate(level, plains, high, 1.0F, false);
+        float atSea = ExhaustionFactors.biomeClimate(level, plains, low, 1.0F, false);
+        float onTop = ExhaustionFactors.biomeClimate(level, plains, high, 1.0F, false);
         helper.assertTrue(onTop < atSea, "climate multiplier 200 blocks above sea level " + onTop + ", not below " + atSea);
         helper.succeed();
     }
@@ -323,7 +325,7 @@ public class ThirstTests
         player.moveTo(0.5, 64, 0.5);
         DimensionWater water = end.dimensionTypeRegistration().getData(DropletsDataMaps.DIMENSION_WATER);
         helper.assertTrue(water != null && water.thirstMultiplier().isPresent(), "the End has no thirst_multiplier");
-        float climate = ThirstHelper.getExhaustionBiomeModifier(player);
+        float climate = ExhaustionFactors.getExhaustionBiomeModifier(player);
         helper.assertValueEqual(climate, water.thirstMultiplier().get(), "climate multiplier in the End");
         helper.assertTrue(climate < 1.0F, "climate multiplier in the End " + climate + ", not below 1");
         helper.succeed();

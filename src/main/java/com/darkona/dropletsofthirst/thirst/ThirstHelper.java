@@ -2,23 +2,15 @@ package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.api.DrinkValueProvider;
 import com.darkona.dropletsofthirst.api.ThirstValues;
-import com.darkona.dropletsofthirst.compat.coldsweat.ColdSweatCompat;
-import com.darkona.dropletsofthirst.compat.sereneseasons.SereneSeasonsCompat;
 import com.darkona.dropletsofthirst.purity.ContainerWithPurity;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps.DimensionWater;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.DrinkValues;
 import com.darkona.dropletsofthirst.data.DropletsTags;
-import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.darkona.dropletsofthirst.config.ConfigCheck;
-import com.darkona.dropletsofthirst.config.GameplayConfig;
 import com.darkona.dropletsofthirst.config.ItemsConfig;
-import com.darkona.dropletsofthirst.config.PurityConfig;
 import com.darkona.dropletsofthirst.config.SyncedValues;
-import com.darkona.dropletsofthirst.mixin.BiomeAccessor;
 import com.mojang.logging.LogUtils;
-import dev.darkona.jdlib.core.config.NumberRows;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,28 +26,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
@@ -64,9 +49,6 @@ import org.slf4j.Logger;
 public class ThirstHelper
 {
     private static final Logger LOGGER = LogUtils.getLogger();
-    private static final NumberRows TEMPERATURE_CURVE = new NumberRows(2);
-    private static final NumberRows HUMIDITY_CURVE = new NumberRows(2);
-    private static final NumberRows BODY_TEMPERATURE_CURVE = new NumberRows(2);
 
     private record CodeDrink(ItemLike item, int[] values) {}
     private record CodeProvider(ItemLike item, DrinkValueProvider provider) {}
@@ -121,8 +103,6 @@ public class ThirstHelper
     private static volatile List<String> unknownConfigIds = List.of();
     private static volatile RecipeInference.Inputs inferenceInputs = RecipeInference.Inputs.EMPTY;
     private static volatile RecipeInference.Result estimates = RecipeInference.Result.EMPTY;
-    private static @Nullable RegistryAccess fireProtectionAccess;
-    private static @Nullable Holder<Enchantment> fireProtectionHolder;
 
     @SuppressWarnings("deprecation")
     public static void rebuild(@Nullable RecipeManager recipes, @Nullable HolderLookup.Provider registries)
@@ -463,88 +443,5 @@ public class ThirstHelper
     public static int getPurity(ItemStack item)
     {
         return WaterPurity.getPurity(item);
-    }
-
-    public static float getExhaustionFireProtModifier(Player player)
-    {
-        Holder<Enchantment> fireProtection = fireProtection(player.level());
-        if(fireProtection == null)
-            return 1.0f;
-        int levels = 0;
-        for(ItemStack armor : player.getArmorSlots())
-            levels += armor.getEnchantmentLevel(fireProtection);
-        return Math.max(0.0f, 1.0f - Math.min(levels, GameplayConfig.FIRE_PROTECTION_MAX_LEVELS.get()) * GameplayConfig.FIRE_PROTECTION_PER_LEVEL.get().floatValue());
-    }
-
-    private static @Nullable Holder<Enchantment> fireProtection(Level level)
-    {
-        RegistryAccess access = level.registryAccess();
-        if(access != fireProtectionAccess)
-        {
-            fireProtectionHolder = access.registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.FIRE_PROTECTION).orElse(null);
-            fireProtectionAccess = access;
-        }
-        return fireProtectionHolder;
-    }
-
-    public static float getExhaustionFireResistanceModifier(Player player){
-        if(player.hasEffect(MobEffects.FIRE_RESISTANCE)){
-            return (float) GameplayConfig.FIRE_RESISTANCE_PERCENT.get() /100;
-        }else return 1.0f;
-    }
-
-    public static float getExhaustionBiomeModifier(Player player)
-    {
-        Level level = player.level();
-        DimensionWater dimension = level.dimensionTypeRegistration().getData(DropletsDataMaps.DIMENSION_WATER);
-        if (dimension != null && dimension.thirstMultiplier().isPresent())
-            return dimension.thirstMultiplier().get();
-        if (level.dimensionType().ultraWarm())
-            return GameplayConfig.NETHER_MULTIPLIER.get().floatValue();
-
-        float multiplier = GameplayConfig.DEPLETION_MULTIPLIER.get().floatValue();
-        if (ColdSweatCompat.LOADED && CompatConfig.COLD_SWEAT_BODY_TEMPERATURE.get())
-            return multiplier * (float) NumberRows.curve(BODY_TEMPERATURE_CURVE.get(CompatConfig.COLD_SWEAT_BODY_TEMPERATURE_CURVE.get()), ColdSweatCompat.bodyTemperature(player));
-
-        BlockPos pos = player.getOnPos();
-        return biomeClimate(level, level.getBiome(pos), pos, multiplier, SereneSeasonsCompat.ACTIVE);
-    }
-
-    public static float biomeClimate(Level level, Holder<Biome> biomeHolder, BlockPos pos, float multiplier, boolean seasons)
-    {
-        Biome biome = biomeHolder.value();
-        float base = ((BiomeAccessor) (Object) biome).droplets_of_thirst$getTemperature(pos);
-        float temperature = seasons ? SereneSeasonsCompat.temperature(level, biomeHolder, pos, base) : base;
-        float season = seasons ? SereneSeasonsCompat.seasonMultiplier(level, biomeHolder) : 1.0F;
-        float downfall = biome.getModifiedClimateSettings().downfall();
-        if (GameplayConfig.CLIMATE_FORMULA.get() == GameplayConfig.ClimateFormula.CURVE)
-            return season * multiplier * (float) (NumberRows.curve(TEMPERATURE_CURVE.get(GameplayConfig.TEMPERATURE_CURVE.get()), temperature)
-                    * NumberRows.curve(HUMIDITY_CURVE.get(GameplayConfig.HUMIDITY_CURVE.get()), downfall));
-
-        float humidity = downfall + 0.6f;
-        if(humidity <= 0.6)
-            humidity += 0.5;
-
-        float temp = temperature + 0.2f;
-        if(temp <= 0)
-            temp = (float) Math.exp(temp);
-        else if(temp > 1)
-            temp /= 2;
-
-        float thirstModifier = multiplier * (temp / humidity);
-        if(thirstModifier < 1)
-            thirstModifier = 1 - (1 - thirstModifier) * GameplayConfig.LEGACY_HARSHNESS.get().floatValue();
-        return season * thirstModifier;
-    }
-
-    public static boolean isHotClimate(Player player)
-    {
-        Level level = player.level();
-        if (level.dimensionType().ultraWarm())
-            return true;
-        if (level.getBiome(player.getOnPos()).value().getBaseTemperature() >= PurityConfig.HOT_DIRTY_WATER_MIN_BIOME_TEMPERATURE.get())
-            return true;
-        return ColdSweatCompat.LOADED && PurityConfig.HOT_DIRTY_WATER_COLD_SWEAT.get()
-                && ColdSweatCompat.bodyTemperature(player) > PurityConfig.HOT_DIRTY_WATER_COLD_SWEAT_MIN_BODY_TEMP.get();
     }
 }

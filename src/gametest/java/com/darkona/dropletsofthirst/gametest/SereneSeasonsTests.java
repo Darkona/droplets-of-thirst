@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.compat.coldsweat.ColdSweatCompat;
 import com.darkona.dropletsofthirst.compat.sereneseasons.SereneSeasonsCompat;
@@ -35,7 +36,7 @@ public class SereneSeasonsTests
         try
         {
             data.seasonCycleTicks = SeasonTime.ZERO.getSubSeasonDuration() * season.ordinal();
-            return ThirstHelper.biomeClimate(helper.getLevel(), biome, helper.absolutePos(BlockPos.ZERO), 1.0F, true);
+            return ExhaustionFactors.biomeClimate(helper.getLevel(), biome, helper.absolutePos(BlockPos.ZERO), 1.0F, true);
         }
         finally
         {
@@ -45,7 +46,7 @@ public class SereneSeasonsTests
 
     private static float withoutSeasons(GameTestHelper helper, Holder<Biome> biome)
     {
-        return ThirstHelper.biomeClimate(helper.getLevel(), biome, helper.absolutePos(BlockPos.ZERO), 1.0F, false);
+        return ExhaustionFactors.biomeClimate(helper.getLevel(), biome, helper.absolutePos(BlockPos.ZERO), 1.0F, false);
     }
 
     @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)

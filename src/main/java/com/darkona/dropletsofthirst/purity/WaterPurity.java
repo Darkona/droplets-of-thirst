@@ -1,20 +1,16 @@
 package com.darkona.dropletsofthirst.purity;
 
 import com.darkona.dropletsofthirst.api.PurityLevel;
-import com.darkona.dropletsofthirst.api.event.PurityEffectEvent;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.BiomeWater;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.DimensionWater;
 import com.darkona.dropletsofthirst.data.DropletsTags;
-import com.darkona.dropletsofthirst.thirst.EffectInit;
 import com.darkona.dropletsofthirst.item.ItemInit;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.thirst.RegisterThirstValueEvent;
 import com.darkona.dropletsofthirst.config.ClientConfig;
 import com.darkona.dropletsofthirst.config.PurityConfig;
 import com.darkona.dropletsofthirst.config.SyncedValues;
 import dev.darkona.jdlib.core.config.NumberRows;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -26,23 +22,18 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -62,7 +53,6 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
@@ -425,70 +415,5 @@ public class WaterPurity
     public static int drinkPurity(ItemStack item)
     {
         return isWaterFilledContainer(item) ? getPurity(item) : ThirstHelper.getDrinkPurity(item);
-    }
-
-    public record PurityEffect(Holder<MobEffect> effect, int duration, int amplifier, float chance, boolean blocksHydration) {}
-
-    private record EffectTables(List<List<? extends String>> source, PurityEffect[][] byPurity) {}
-
-    private static volatile EffectTables effectTables = new EffectTables(List.of(), new PurityEffect[0][]);
-
-    public static boolean givePurityEffects(Player player, int purity)
-    {
-        if (!enabled() || purity < MIN_PURITY || purity > MAX_PURITY)
-            return true;
-        boolean hydrate = true;
-        List<MobEffectInstance> effects = new ArrayList<>();
-        float roll = player.getRandom().nextFloat();
-        for (PurityEffect effect : effectTable(purity))
-        {
-            if (roll >= effect.chance())
-                continue;
-            effects.add(new MobEffectInstance(effect.effect(), effect.duration(), effect.amplifier()));
-            hydrate &= !effect.blocksHydration();
-        }
-        if (PurityConfig.HOT_DIRTY_WATER.get() && purity <= PurityConfig.HOT_DIRTY_WATER_MAX_PURITY.get() && player instanceof ServerPlayer && ThirstHelper.isHotClimate(player))
-            effects.add(new MobEffectInstance(EffectInit.DEHYDRATION, PurityConfig.HOT_DIRTY_WATER_DURATION.get(), PurityConfig.HOT_DIRTY_WATER_AMPLIFIER.get()));
-        PurityEffectEvent event = NeoForge.EVENT_BUS.post(new PurityEffectEvent(player, purity, effects, hydrate || PurityConfig.QUENCH_WHEN_DEBUFFED.get()));
-        if (event.isCanceled())
-            return true;
-        if (player instanceof ServerPlayer)
-            for (MobEffectInstance effect : event.getEffects())
-                player.addEffect(effect);
-        return event.hydrates();
-    }
-
-    public static PurityEffect[] effectTable(int purity)
-    {
-        EffectTables cached = effectTables;
-        List<List<? extends String>> source = cached.source();
-        boolean stale = source.size() != PurityConfig.EFFECTS.size();
-        for (int i = 0; !stale && i < source.size(); i++)
-            stale = source.get(i) != PurityConfig.EFFECTS.get(i).get();
-        if (stale)
-        {
-            List<List<? extends String>> lists = new ArrayList<>();
-            PurityEffect[][] byPurity = new PurityEffect[PurityConfig.EFFECTS.size()][];
-            for (int i = 0; i < byPurity.length; i++)
-            {
-                List<? extends String> list = PurityConfig.EFFECTS.get(i).get();
-                lists.add(list);
-                byPurity[i] = list.stream().map(WaterPurity::parseEffect).filter(Objects::nonNull).toArray(PurityEffect[]::new);
-            }
-            effectTables = cached = new EffectTables(lists, byPurity);
-        }
-        return cached.byPurity()[purity];
-    }
-
-    private static @Nullable PurityEffect parseEffect(String entry)
-    {
-        if (!PurityConfig.isValidEffect(entry))
-            return null;
-        String[] parts = entry.split(",");
-        Holder<MobEffect> effect = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.parse(parts[0].trim())).orElse(null);
-        if (effect == null)
-            return null;
-        return new PurityEffect(effect, Integer.parseInt(parts[1].trim()), Integer.parseInt(parts[2].trim()),
-                (float) (Double.parseDouble(parts[3].trim()) / 100.0), parts.length == 5 && parts[4].trim().equals("true"));
     }
 }

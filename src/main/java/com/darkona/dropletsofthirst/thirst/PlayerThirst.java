@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.thirst;
 
+import com.darkona.dropletsofthirst.purity.PurityEffects;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.DropletsAPI;
 import com.darkona.dropletsofthirst.api.DropletsView;
@@ -240,7 +241,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
         DrinkEvent.Pre pre = NeoForge.EVENT_BUS.post(new DrinkEvent.Pre(player, item, thirst, quenched, purity));
         if (pre.isCanceled())
             return false;
-        boolean hydrated = WaterPurity.givePurityEffects(player, pre.getPurity())
+        boolean hydrated = PurityEffects.give(player, pre.getPurity())
                 && player.getData(ModAttachment.PLAYER_THIRST).hydrate(player, pre.getThirst(), pre.getQuenched(), overflows, ThirstChangeEvent.Cause.DRINK);
         NeoForge.EVENT_BUS.post(new DrinkEvent.Post(player, item, pre.getThirst(), pre.getQuenched(), pre.getPurity(), hydrated));
         return hydrated;

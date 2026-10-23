@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.compat.coldsweat.ColdSweatCompat;
@@ -151,8 +152,8 @@ public class ColdSweatTests
             helper.assertTrue(Math.abs(ColdSweatCompat.bodyTemperature(player) - after) < 0.001, "the waterskin cooled as well as its own temperature");
 
             double expected = GameplayConfig.DEPLETION_MULTIPLIER.get() * NumberRows.curve(NumberRows.parse(CompatConfig.COLD_SWEAT_BODY_TEMPERATURE_CURVE.get(), 2), after);
-            helper.assertTrue(Math.abs(ThirstHelper.getExhaustionBiomeModifier(player) - expected) < 0.001,
-                    "climate multiplier " + ThirstHelper.getExhaustionBiomeModifier(player) + " at body temperature " + after + ", expected " + expected);
+            helper.assertTrue(Math.abs(ExhaustionFactors.getExhaustionBiomeModifier(player) - expected) < 0.001,
+                    "climate multiplier " + ExhaustionFactors.getExhaustionBiomeModifier(player) + " at body temperature " + after + ", expected " + expected);
         }
         finally
         {
