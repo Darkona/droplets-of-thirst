@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.gametest;
 
-import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
+import com.darkona.dropletsofthirst.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import net.minecraft.gametest.framework.GameTestHelper;
 import dev.darkona.jdlib.testkit.TestPlayers;
 import net.minecraft.server.level.ServerPlayer;

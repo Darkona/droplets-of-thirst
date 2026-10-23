@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.content.purity;
 
-import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
+import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.longs.Long2ByteMap;

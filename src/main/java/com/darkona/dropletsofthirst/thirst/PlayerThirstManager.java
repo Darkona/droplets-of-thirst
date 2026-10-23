@@ -1,12 +1,10 @@
-package com.darkona.dropletsofthirst.content.thirst;
+package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.DrinkValues;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.core.ThirstConstants;
-import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
 import com.darkona.dropletsofthirst.foundation.config.ClientConfig;
 import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
 import com.darkona.dropletsofthirst.foundation.network.message.ThirstValuesSyncMessage;
@@ -98,7 +96,7 @@ public class PlayerThirstManager {
     public static void syncThirst(PlayerTickEvent.Post event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             PlayerThirst thirst = serverPlayer.getData(ModAttachment.PLAYER_THIRST);
-            if ((serverPlayer.tickCount + serverPlayer.getId()) % ThirstConstants.SAFETY_RESYNC_TICKS == 0)
+            if ((serverPlayer.tickCount + serverPlayer.getId()) % PlayerThirst.SAFETY_RESYNC_TICKS == 0)
                 thirst.updateThirstData(serverPlayer);
             thirst.syncIfChanged(serverPlayer);
         }

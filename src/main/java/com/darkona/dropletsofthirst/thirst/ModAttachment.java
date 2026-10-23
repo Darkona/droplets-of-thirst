@@ -1,9 +1,8 @@
-package com.darkona.dropletsofthirst.foundation.common.capability;
+package com.darkona.dropletsofthirst.thirst;
 
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.content.purity.PouredWater;
-import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;

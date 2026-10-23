@@ -6,7 +6,7 @@ import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.DrinkValues;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.content.registry.ThirstComponent;
-import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.foundation.network.message.PlayerThirstSyncMessage;
 import com.darkona.dropletsofthirst.foundation.network.message.ThirstValuesSyncMessage;
 import com.google.gson.JsonParser;

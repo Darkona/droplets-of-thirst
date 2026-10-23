@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.foundation.common.event;
+package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.content.purity.ContainerWithPurity;
 import net.minecraft.world.item.Item;

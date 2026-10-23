@@ -1,12 +1,11 @@
 package com.darkona.dropletsofthirst.foundation.network.message;
 
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.content.thirst.VampireThirst;
-import com.darkona.dropletsofthirst.core.ThirstConstants;
-import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
+import com.darkona.dropletsofthirst.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.thirst.VampireThirst;
+import com.darkona.dropletsofthirst.thirst.ModAttachment;
+import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -18,8 +17,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -39,7 +38,7 @@ public record DrinkByHandMessage() implements CustomPacketPayload
 
             PlayerThirst thirst = player.getData(ModAttachment.PLAYER_THIRST);
             int tick = player.server.getTickCount();
-            if (thirst.getThirst() >= ThirstConstants.MAX_THIRST || !thirst.canDrinkByHand(tick) || VampireThirst.isVampire(player))
+            if (thirst.getThirst() >= PlayerThirst.MAX_THIRST || !thirst.canDrinkByHand(tick) || VampireThirst.isVampire(player))
                 return;
 
             if (!player.getMainHandItem().isEmpty() || GameplayConfig.HAND_DRINKING_BOTH_HANDS.get() && !player.getOffhandItem().isEmpty())

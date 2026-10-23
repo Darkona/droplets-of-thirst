@@ -1,15 +1,21 @@
 package com.darkona.dropletsofthirst.foundation.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.compat.appleskin.AppleSkinCompat;
-import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.core.ThirstConstants;
-import com.darkona.dropletsofthirst.foundation.common.capability.IThirst;
-import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
+import com.darkona.dropletsofthirst.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.thirst.ThirstHelper;
+import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import com.darkona.dropletsofthirst.foundation.config.ClientConfig;
 import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
+import com.mojang.blaze3d.systems.RenderSystem;
+import dev.darkona.jdlib.api.hud.HudFrame;
+import dev.darkona.jdlib.api.hud.HudGate;
+import dev.darkona.jdlib.api.hud.HudSide;
+import dev.darkona.jdlib.api.hud.JDHudBars;
+import dev.darkona.jdlib.api.hud.VanillaLayer;
+import dev.darkona.jdlib.core.hud.ConsumablePreview;
+import dev.darkona.jdlib.core.hud.VanillaIconMotion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -18,13 +24,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
-import dev.darkona.jdlib.api.hud.HudFrame;
-import dev.darkona.jdlib.api.hud.HudGate;
-import dev.darkona.jdlib.api.hud.HudSide;
-import dev.darkona.jdlib.api.hud.JDHudBars;
-import dev.darkona.jdlib.api.hud.VanillaLayer;
-import dev.darkona.jdlib.core.hud.ConsumablePreview;
-import dev.darkona.jdlib.core.hud.VanillaIconMotion;
 import org.jetbrains.annotations.Nullable;
 
 public final class ThirstBarRenderer
@@ -53,7 +52,7 @@ public final class ThirstBarRenderer
     {
         Minecraft minecraft = Minecraft.getInstance();
         Player player = frame.player();
-        IThirst thirst = player.getData(ModAttachment.PLAYER_THIRST);
+        PlayerThirst thirst = player.getData(ModAttachment.PLAYER_THIRST);
         if (player.isAlive() && !thirst.getShouldTickThirst() || shouldHideBar(minecraft, player, thirst))
             return 0;
 
@@ -72,12 +71,12 @@ public final class ThirstBarRenderer
         int level = thirst.getThirst();
         int quenched = thirst.getQuenched();
         boolean shake = quenched <= 0 && VanillaIconMotion.jitters(ticks, level);
-        int wave = ClientConfig.BUFF_WAVE.get() && ThirstBarStyles.waves(player) ? VanillaIconMotion.raisedIcon(ticks, ThirstConstants.MAX_THIRST) : -1;
+        int wave = ClientConfig.BUFF_WAVE.get() && ThirstBarStyles.waves(player) ? VanillaIconMotion.raisedIcon(ticks, PlayerThirst.MAX_THIRST) : -1;
         boolean showQuenched = ClientConfig.SHOW_QUENCHED_OVERLAY.get() && AppleSkinCompat.quenchedOverlay();
 
         ThirstValues gain = ClientConfig.SHOW_DRINK_PREVIEW.get() ? heldDrink(player) : null;
         if (gain != null)
-            PREVIEW.show(level, quenched, ThirstConstants.MAX_THIRST, gain.thirst(), gain.quenched());
+            PREVIEW.show(level, quenched, PlayerThirst.MAX_THIRST, gain.thirst(), gain.quenched());
         else
             PREVIEW.clear();
         float flash = gain != null ? ConsumablePreview.pulse(ticks) : 0;
@@ -164,7 +163,7 @@ public final class ThirstBarRenderer
         return ThirstHelper.drinkValuesOf(stack);
     }
 
-    private static boolean shouldHideBar(Minecraft minecraft, Player player, IThirst thirst)
+    private static boolean shouldHideBar(Minecraft minecraft, Player player, PlayerThirst thirst)
     {
         if (!ClientConfig.HIDE_BAR_WHEN_FULL.get())
             return false;

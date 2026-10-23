@@ -8,7 +8,7 @@ import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.content.registry.ItemInit;
 import com.darkona.dropletsofthirst.content.registry.ThirstComponent;
-import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.foundation.config.PurityConfig;
 import com.darkona.dropletsofthirst.foundation.tab.ThirstTab;
 import com.google.gson.JsonElement;

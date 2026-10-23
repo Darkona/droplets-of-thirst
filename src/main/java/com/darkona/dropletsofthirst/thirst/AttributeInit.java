@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.content.registry;
+package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import net.minecraft.core.registries.Registries;

@@ -1,7 +1,6 @@
-package com.darkona.dropletsofthirst.content.thirst;
+package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.api.ExhaustionModifier;
-import com.darkona.dropletsofthirst.content.registry.EffectInit;
 import dev.darkona.jdlib.core.config.NumberRows;
 import dev.darkona.jdlib.core.registry.PriorityList;
 import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;

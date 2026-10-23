@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.content.thirst;
+package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.foundation.config.ItemsConfig;
 import com.mojang.logging.LogUtils;

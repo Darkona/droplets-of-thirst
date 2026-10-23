@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.foundation.gui;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.content.registry.EffectInit;
+import com.darkona.dropletsofthirst.thirst.EffectInit;
 import com.darkona.dropletsofthirst.foundation.config.ClientConfig;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;

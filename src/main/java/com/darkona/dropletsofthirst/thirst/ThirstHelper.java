@@ -1,17 +1,15 @@
-package com.darkona.dropletsofthirst.content.thirst;
+package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.api.DrinkValueProvider;
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.compat.coldsweat.ColdSweatCompat;
 import com.darkona.dropletsofthirst.compat.sereneseasons.SereneSeasonsCompat;
+import com.darkona.dropletsofthirst.content.purity.ContainerWithPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.DimensionWater;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.DrinkValues;
 import com.darkona.dropletsofthirst.data.DropletsTags;
-import com.darkona.dropletsofthirst.content.purity.ContainerWithPurity;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.core.ThirstConstants;
-import com.darkona.dropletsofthirst.foundation.common.event.RegisterThirstValueEvent;
 import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
 import com.darkona.dropletsofthirst.foundation.config.ConfigCheck;
 import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
@@ -104,7 +102,7 @@ public class ThirstHelper
 
     public static void registerDrink(ItemLike item, int thirst, int quenched, int purity)
     {
-        CODE_DRINKS.add(new CodeDrink(Objects.requireNonNull(item), new int[]{Mth.clamp(thirst, -ThirstConstants.MAX_THIRST, ThirstConstants.MAX_THIRST), Math.max(quenched, -ThirstConstants.MAX_THIRST), Mth.clamp(purity, -1, WaterPurity.MAX_PURITY)}));
+        CODE_DRINKS.add(new CodeDrink(Objects.requireNonNull(item), new int[]{Mth.clamp(thirst, -PlayerThirst.MAX_THIRST, PlayerThirst.MAX_THIRST), Math.max(quenched, -PlayerThirst.MAX_THIRST), Mth.clamp(purity, -1, WaterPurity.MAX_PURITY)}));
     }
 
     public static void registerProvider(ItemLike item, DrinkValueProvider provider)

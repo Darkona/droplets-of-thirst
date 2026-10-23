@@ -1,5 +1,6 @@
-package com.darkona.dropletsofthirst.content.thirst;
+package com.darkona.dropletsofthirst.thirst;
 
+import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.DropletsAPI;
 import com.darkona.dropletsofthirst.api.DropletsView;
 import com.darkona.dropletsofthirst.api.ThirstValues;
@@ -8,40 +9,38 @@ import com.darkona.dropletsofthirst.api.event.DrinkEvent;
 import com.darkona.dropletsofthirst.api.event.EatEvent;
 import com.darkona.dropletsofthirst.api.event.OverhydrationEvent;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
-import com.darkona.dropletsofthirst.data.DropletsTags;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.data.DropletsTags;
 import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
-import com.darkona.dropletsofthirst.content.registry.AttributeInit;
-import com.darkona.dropletsofthirst.content.registry.EffectInit;
-import com.darkona.dropletsofthirst.foundation.common.capability.IThirst;
-import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
-import com.darkona.dropletsofthirst.foundation.common.damagesource.ModDamageSource;
 import com.darkona.dropletsofthirst.foundation.network.message.PlayerThirstSyncMessage;
+import dev.darkona.jdlib.core.stat.FractionalCarry;
+import dev.darkona.jdlib.core.stat.ShownFields;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.FakePlayer;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import net.neoforged.neoforge.network.PacketDistributor;
-import dev.darkona.jdlib.core.stat.FractionalCarry;
-import dev.darkona.jdlib.core.stat.ShownFields;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
-import static com.darkona.dropletsofthirst.core.ThirstConstants.*;
-
-public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<CompoundTag>
+public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
 {
     public static final int SYNC_ENABLED = 1;
     public static final int SYNC_SPRINT_BLOCKED = 2;
@@ -186,9 +185,7 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
         return CHANGED;
     }
 
-    @Override
     public void setShouldTickThirst(boolean value){shouldTickThirst = value;}
-    @Override
     public boolean getShouldTickThirst(){return shouldTickThirst;}
 
     public static void consume(ItemStack item, Player player)
@@ -377,7 +374,7 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
                 {
                     DehydrationDamageEvent event = NeoForge.EVENT_BUS.post(new DehydrationDamageEvent(player, damage));
                     if (!event.isCanceled() && event.getAmount() > 0)
-                        player.hurt(ModDamageSource.getDamageSource(player.level(),ModDamageSource.DIE_OF_THIRST_KEY), event.getAmount());
+                        player.hurt(PlayerThirst.getDamageSource(player.level(),PlayerThirst.DIE_OF_THIRST_KEY), event.getAmount());
                 }
 
                 damageTimer = 0;
@@ -526,13 +523,11 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
         handDrinkReadyTick = serverTick + cooldownTicks;
     }
 
-    @Override
     public void setJustHealed()
     {
         justHealed = true;
     }
 
-    @Override
     public void ExhaustionRecalculate(){exhaustionRecalculate = true;}
 
     public void addExhaustion(Player player, float amount)
@@ -589,5 +584,25 @@ public class PlayerThirst implements IThirst, DropletsView, INBTSerializable<Com
         exhaustion = nbt.getFloat("exhaustion");
         shouldTickThirst = !nbt.contains("enable") || nbt.getBoolean("enable");
         overflow = nbt.getFloat("overflow");
+    }
+
+    public static final int MAX_THIRST = 20;
+    public static final int RESPAWN_THIRST = 20;
+    public static final int RESPAWN_QUENCHED = 5;
+
+    public static final float HUNGER_EXHAUSTION_PER_LEVEL = 0.005F;
+
+    public static final int MODIFIER_INTERVAL_TICKS = 20;
+    public static final int EXHAUSTION_SYNC_STEPS = 10;
+    public static final int SAFETY_RESYNC_TICKS = 200;
+
+    public static final int OVERHYDRATION_NAUSEA_TICKS = 200;
+
+    public static final int SPRINT_MIN_THIRST = 6;
+
+    public static final ResourceKey<DamageType> DIE_OF_THIRST_KEY = ResourceKey.create(Registries.DAMAGE_TYPE, DropletsOfThirst.asResource("dehydrate"));
+
+    public static DamageSource getDamageSource(Level level, ResourceKey<DamageType> type) {
+        return new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(type), null, null);
     }
 }

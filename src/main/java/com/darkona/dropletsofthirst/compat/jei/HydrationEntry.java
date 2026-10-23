@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.compat.jei;
 
 import com.darkona.dropletsofthirst.api.ThirstValues;
-import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
+import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

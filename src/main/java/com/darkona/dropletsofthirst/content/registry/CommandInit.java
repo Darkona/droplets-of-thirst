@@ -1,17 +1,16 @@
 package com.darkona.dropletsofthirst.content.registry;
 
+import com.darkona.dropletsofthirst.thirst.AttributeInit;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
+import com.darkona.dropletsofthirst.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.thirst.RecipeInference;
+import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.DimensionWater;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.content.thirst.ExhaustionFactors;
-import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.content.thirst.RecipeInference;
-import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.core.ThirstConstants;
-import com.darkona.dropletsofthirst.foundation.common.capability.IThirst;
-import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
+import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import com.darkona.dropletsofthirst.foundation.config.ConfigCheck;
 import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
 import com.darkona.dropletsofthirst.foundation.dev.ItemDump;
@@ -60,7 +59,7 @@ public class CommandInit {
                 .then(Commands.literal("query").then(Commands.argument("Player", EntityArgument.player())
                         .executes(context -> {
                                     ServerPlayer player = EntityArgument.getPlayer(context,"Player");
-                                    IThirst thirst = player.getData(ModAttachment.PLAYER_THIRST);
+                                    PlayerThirst thirst = player.getData(ModAttachment.PLAYER_THIRST);
                                     int value = thirst.getThirst();
                                     int quenched = thirst.getQuenched();
                                     context.getSource().sendSuccess(() -> Component.translatable("command.droplets_of_thirst.query", value, quenched, player.getDisplayName()), false);
@@ -68,8 +67,8 @@ public class CommandInit {
                                 }
                         )))
                 .then(Commands.literal("set").then(Commands.argument("Player", EntityArgument.player())
-                        .then(Commands.argument("thirst", IntegerArgumentType.integer(0, ThirstConstants.MAX_THIRST))
-                                .then(Commands.argument("quenched", IntegerArgumentType.integer(0, ThirstConstants.MAX_THIRST))
+                        .then(Commands.argument("thirst", IntegerArgumentType.integer(0, PlayerThirst.MAX_THIRST))
+                                .then(Commands.argument("quenched", IntegerArgumentType.integer(0, PlayerThirst.MAX_THIRST))
                                         .executes(context -> {
                                             ServerPlayer player = EntityArgument.getPlayer(context,"Player");
                                             PlayerThirst thirst = player.getData(ModAttachment.PLAYER_THIRST);
@@ -86,7 +85,7 @@ public class CommandInit {
                                     Collection<ServerPlayer> players = EntityArgument.getPlayers(context,"Player");
                                     boolean shouldTick = BoolArgumentType.getBool(context,"bool");
                                     for(ServerPlayer player:players){
-                                        IThirst thirstData = player.getData(ModAttachment.PLAYER_THIRST);
+                                        PlayerThirst thirstData = player.getData(ModAttachment.PLAYER_THIRST);
                                         thirstData.setShouldTickThirst(shouldTick);
                                         thirstData.updateThirstData(player);
                                     }

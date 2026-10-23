@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.content;
+package com.darkona.dropletsofthirst;
 
 import com.darkona.dropletsofthirst.api.DrinkValueProvider;
 import com.darkona.dropletsofthirst.api.DropletsView;
@@ -7,10 +7,10 @@ import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import com.darkona.dropletsofthirst.api.spi.DropletsService;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.content.thirst.ExhaustionFactors;
-import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
+import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
+import com.darkona.dropletsofthirst.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.thirst.ThirstHelper;
+import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import com.darkona.dropletsofthirst.foundation.gui.ThirstBarStyles;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;

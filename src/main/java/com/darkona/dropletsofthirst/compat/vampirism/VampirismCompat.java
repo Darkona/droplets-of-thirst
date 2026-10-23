@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.compat.vampirism;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
 import com.darkona.dropletsofthirst.foundation.gui.ThirstBarStyles;
 import net.minecraft.world.entity.player.Player;

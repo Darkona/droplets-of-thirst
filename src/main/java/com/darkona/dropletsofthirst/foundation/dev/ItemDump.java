@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.foundation.dev;
 
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
+import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
