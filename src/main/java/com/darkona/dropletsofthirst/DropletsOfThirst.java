@@ -12,6 +12,7 @@ import com.darkona.dropletsofthirst.compat.supernatural.SupernaturalCompat;
 import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.PurityEnabledLootCondition;
 import com.darkona.dropletsofthirst.thirst.AttributeInit;
 import com.darkona.dropletsofthirst.config.ConditionInit;
 import com.darkona.dropletsofthirst.thirst.EffectInit;
@@ -84,7 +85,7 @@ public class DropletsOfThirst
         EffectInit.register(modBus);
         AttributeInit.register(modBus);
         ConditionInit.CONDITION_CODECS.register(modBus);
-        ConditionInit.LOOT_CONDITIONS.register(modBus);
+        PurityEnabledLootCondition.LOOT_CONDITIONS.register(modBus);
         LegacyIds.register(modBus);
 
         if(CreateCompat.LOADED)
