@@ -1,6 +1,5 @@
 package com.darkona.dropletsofthirst.thirst;
 
-import com.darkona.dropletsofthirst.client.ClientEvents;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
@@ -60,21 +59,6 @@ public class PlayerThirstManager {
             if (player.getFoodData().getFoodLevel() > food)
                 PlayerThirst.eat(player, ItemStack.EMPTY, values.thirst(), values.quenched());
         }));
-    }
-
-    @SubscribeEvent
-    public static void drinkByHand(PlayerInteractEvent.RightClickBlock event) {
-        drinkByHandIfAllowed(event);
-    }
-
-    @SubscribeEvent
-    public static void drinkByHand(PlayerInteractEvent.RightClickEmpty event) {
-        drinkByHandIfAllowed(event);
-    }
-
-    private static void drinkByHandIfAllowed(PlayerInteractEvent event) {
-        if (event.getHand() == InteractionHand.MAIN_HAND && event.getEntity().level().isClientSide && event.getEntity().getData(ModAttachment.PLAYER_THIRST).handDrinkingAllowed())
-            ClientEvents.drinkByHand();
     }
 
     @SubscribeEvent

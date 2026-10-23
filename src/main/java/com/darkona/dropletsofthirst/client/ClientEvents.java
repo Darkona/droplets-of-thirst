@@ -10,12 +10,14 @@ import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.ClipContext;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber(modid = DropletsOfThirst.ID, value = Dist.CLIENT)
@@ -36,7 +38,25 @@ public final class ClientEvents
             ThirstHelper.clearServerTables();
     }
 
-    public static void drinkByHand()
+    @SubscribeEvent
+    public static void drinkByHand(PlayerInteractEvent.RightClickBlock event)
+    {
+        drinkByHandIfAllowed(event);
+    }
+
+    @SubscribeEvent
+    public static void drinkByHand(PlayerInteractEvent.RightClickEmpty event)
+    {
+        drinkByHandIfAllowed(event);
+    }
+
+    private static void drinkByHandIfAllowed(PlayerInteractEvent event)
+    {
+        if (event.getHand() == InteractionHand.MAIN_HAND && event.getEntity().level().isClientSide && event.getEntity().getData(ModAttachment.PLAYER_THIRST).handDrinkingAllowed())
+            drinkByHand();
+    }
+
+    private static void drinkByHand()
     {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null || !player.isCrouching() || !player.getMainHandItem().isEmpty()
