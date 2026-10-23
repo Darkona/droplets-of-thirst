@@ -38,12 +38,12 @@ public final class ExhaustionFactors
     private static @Nullable Holder<Enchantment> fireProtectionHolder;
     private static final PriorityList<ResourceLocation, ExhaustionModifier> MODIFIERS = new PriorityList<>(PriorityList.Order.LOWEST_FIRST, PriorityList.Ties.BY_ID);
 
+    private ExhaustionFactors() {}
+
     public static void register(ResourceLocation id, ExhaustionModifier modifier)
     {
         MODIFIERS.put(id, 0, modifier);
     }
-
-    private ExhaustionFactors() {}
 
     public static float compute(Player player, @Nullable float[] breakdown)
     {
@@ -92,7 +92,7 @@ public final class ExhaustionFactors
                 ? GameplayConfig.UNDERWATER_BREATHING_MULTIPLIER.get().floatValue() : 1.0F;
     }
 
-    public static float getExhaustionFireProtModifier(Player player)
+    private static float getExhaustionFireProtModifier(Player player)
     {
         Holder<Enchantment> fireProtection = fireProtection(player.level());
         if(fireProtection == null)
@@ -114,7 +114,7 @@ public final class ExhaustionFactors
         return fireProtectionHolder;
     }
 
-    public static float getExhaustionFireResistanceModifier(Player player){
+    private static float getExhaustionFireResistanceModifier(Player player){
         if(player.hasEffect(MobEffects.FIRE_RESISTANCE)){
             return (float) GameplayConfig.FIRE_RESISTANCE_PERCENT.get() /100;
         }else return 1.0f;

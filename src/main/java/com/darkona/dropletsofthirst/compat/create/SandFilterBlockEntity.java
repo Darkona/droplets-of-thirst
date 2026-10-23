@@ -96,7 +96,7 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
             return;
 
         if(water.is(FluidTags.WATER))
-            WaterPurity.addPurity(water, filteredPurity(WaterPurity.getPurity(water)));
+            WaterPurity.addPurity(water, CreateCompat.sandFilterPurity(WaterPurity.getPurity(water)));
 
         int accepted = purified.fill(water, IFluidHandler.FluidAction.SIMULATE);
         if(accepted <= 0)
@@ -104,11 +104,6 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
 
         int drained = dirty.drain(accepted, IFluidHandler.FluidAction.EXECUTE).getAmount();
         purified.fill(water.copyWithAmount(drained), IFluidHandler.FluidAction.EXECUTE);
-    }
-
-    public static int filteredPurity(int purity)
-    {
-        return CreateCompat.sandFilterPurity(purity);
     }
 
     private void passOn(int rate)

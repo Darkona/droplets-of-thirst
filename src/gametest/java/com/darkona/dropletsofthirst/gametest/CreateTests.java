@@ -4,6 +4,7 @@ import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.compat.create.CreateRegistry;
 import com.darkona.dropletsofthirst.compat.create.SandFilterBlock;
+import com.darkona.dropletsofthirst.compat.create.CreateCompat;
 import com.darkona.dropletsofthirst.compat.create.SandFilterBlockEntity;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
@@ -114,7 +115,7 @@ public class CreateTests
         helper.getLevel().setBlockAndUpdate(bottom, filter);
         IFluidHandler in = helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, top, Direction.UP);
         in.fill(water(0, 1000), IFluidHandler.FluidAction.EXECUTE);
-        int expected = SandFilterBlockEntity.filteredPurity(SandFilterBlockEntity.filteredPurity(0));
+        int expected = CreateCompat.sandFilterPurity(CreateCompat.sandFilterPurity(0));
         helper.succeedWhen(() -> {
             FluidStack out = helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, bottom, Direction.DOWN).getFluidInTank(0);
             helper.assertValueEqual(out.getAmount(), 1000, "water out of the second filter");
@@ -131,7 +132,7 @@ public class CreateTests
         BlockState filter = CreateRegistry.SAND_FILTER_BLOCK.get().defaultBlockState();
         helper.getLevel().setBlockAndUpdate(first, filter);
         helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, first, Direction.UP).fill(water(0, 200), IFluidHandler.FluidAction.EXECUTE);
-        int twice = SandFilterBlockEntity.filteredPurity(SandFilterBlockEntity.filteredPurity(0));
+        int twice = CreateCompat.sandFilterPurity(CreateCompat.sandFilterPurity(0));
         helper.startSequence()
                 .thenExecuteAfter(40, () -> {
                     helper.assertValueEqual(purified(helper, first, Direction.DOWN).getAmount(), 200, "water waiting in a filter with nothing in front");
@@ -171,12 +172,12 @@ public class CreateTests
         try
         {
             CompatConfig.SAND_FILTER_MAX_PURITY.set(1);
-            helper.assertValueEqual(SandFilterBlockEntity.filteredPurity(0), 1, "contaminated water with sandFilterMaxPurity 1");
-            helper.assertValueEqual(SandFilterBlockEntity.filteredPurity(1), 1, "dirty water with sandFilterMaxPurity 1");
-            helper.assertValueEqual(SandFilterBlockEntity.filteredPurity(3), 3, "acceptable water is never made dirtier");
+            helper.assertValueEqual(CreateCompat.sandFilterPurity(0), 1, "contaminated water with sandFilterMaxPurity 1");
+            helper.assertValueEqual(CreateCompat.sandFilterPurity(1), 1, "dirty water with sandFilterMaxPurity 1");
+            helper.assertValueEqual(CreateCompat.sandFilterPurity(3), 3, "acceptable water is never made dirtier");
             CompatConfig.SAND_FILTER_MAX_PURITY.set(max);
             helper.assertValueEqual(max, PurityLevel.PURE.level(), "default sandFilterMaxPurity");
-            helper.assertValueEqual(SandFilterBlockEntity.filteredPurity(PurityLevel.CLEAN.level()), PurityLevel.PURE.level(), "clean water through a filter");
+            helper.assertValueEqual(CreateCompat.sandFilterPurity(PurityLevel.CLEAN.level()), PurityLevel.PURE.level(), "clean water through a filter");
         }
         finally
         {
@@ -198,7 +199,7 @@ public class CreateTests
             filter.tick();
         FluidStack out = helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, pos, Direction.DOWN).getFluidInTank(0);
         helper.assertValueEqual(out.getAmount(), amount, "water out of a filter fed less than its rate");
-        helper.assertValueEqual(WaterPurity.getPurity(out), SandFilterBlockEntity.filteredPurity(0), "purity of the water out");
+        helper.assertValueEqual(WaterPurity.getPurity(out), CreateCompat.sandFilterPurity(0), "purity of the water out");
         helper.assertValueEqual(helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, pos, Direction.UP).getFluidInTank(0).getAmount(), 0, "water left in the dirty tank");
         helper.succeed();
     }
