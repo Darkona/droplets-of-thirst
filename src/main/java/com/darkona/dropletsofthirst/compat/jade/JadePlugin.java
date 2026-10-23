@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.compat.jade;
 
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -72,7 +73,7 @@ public class JadePlugin implements IWailaPlugin
                 return;
             BlockState state = accessor.getBlockState();
             if (state.is(Blocks.WATER_CAULDRON))
-                add(tooltip, WaterPurity.cauldronPurity(accessor.getLevel(), accessor.getPosition()));
+                add(tooltip, CauldronPurity.at(accessor.getLevel(), accessor.getPosition()));
             else
                 for (int purity : accessor.getServerData().getIntArray(KEY))
                     add(tooltip, WaterPurity.sanitizePurity(purity));

@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.mixin;
 
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.BlockPos;
@@ -21,15 +21,6 @@ public abstract class MixinAbstractCauldronBlock
     @WrapOperation(method = "useItemOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/cauldron/CauldronInteraction;interact(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/ItemInteractionResult;"))
     private ItemInteractionResult droplets_of_thirst$cauldronPurity(CauldronInteraction interaction, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, ItemStack stack, Operation<ItemInteractionResult> original)
     {
-        if (!WaterPurity.takingFromCauldron(state, level, pos))
-            return original.call(interaction, state, level, pos, player, hand, stack);
-        try
-        {
-            return original.call(interaction, state, level, pos, player, hand, stack);
-        }
-        finally
-        {
-            WaterPurity.doneTakingFromCauldron();
-        }
+        return CauldronPurity.interact(state, level, pos, () -> original.call(interaction, state, level, pos, player, hand, stack));
     }
 }

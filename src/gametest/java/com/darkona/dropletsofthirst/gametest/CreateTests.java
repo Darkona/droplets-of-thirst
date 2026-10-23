@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.compat.create.CreateRegistry;
 import com.darkona.dropletsofthirst.compat.create.SandFilterBlock;
@@ -54,7 +55,7 @@ public class CreateTests
         helper.getLevel().setBlockAndUpdate(cauldron, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3));
         FluidStack drained = drainThroughPipe(helper, cauldron.above());
         helper.assertFalse(drained.isEmpty(), "the pipe drained nothing from the cauldron");
-        helper.assertValueEqual(WaterPurity.getPurity(drained), WaterPurity.HEATED_CAULDRON_PURITY, "purity of water drained from a cauldron on a campfire");
+        helper.assertValueEqual(WaterPurity.getPurity(drained), CauldronPurity.HEATED_CAULDRON_PURITY, "purity of water drained from a cauldron on a campfire");
         helper.succeed();
     }
 

@@ -1,5 +1,7 @@
 package com.darkona.dropletsofthirst.command;
 
+import com.darkona.dropletsofthirst.network.DrinkByHandMessage;
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.thirst.AttributeInit;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
@@ -168,7 +170,7 @@ public class CommandInit {
             return 0;
         }
         Level level = player.level();
-        BlockHitResult hit = WaterPurity.pickFluid(player, ClipContext.Fluid.ANY);
+        BlockHitResult hit = DrinkByHandMessage.pickFluid(player, ClipContext.Fluid.ANY);
         BlockPos pos = hit.getType() == HitResult.Type.BLOCK ? hit.getBlockPos() : player.blockPosition();
         FluidState fluid = level.getFluidState(pos);
         List<String> trace = new ArrayList<>();
@@ -179,7 +181,7 @@ public class CommandInit {
         {
             purity = WaterPurity.getBlockPurity(level, pos);
             trace.add("not water: " + (level.getBlockState(pos).is(Blocks.WATER_CAULDRON)
-                    ? (purity == WaterPurity.HEATED_CAULDRON_PURITY ? "cauldron on a heat source" : "cauldron") : "defaultPurity"));
+                    ? (purity == CauldronPurity.HEATED_CAULDRON_PURITY ? "cauldron on a heat source" : "cauldron") : "defaultPurity"));
         }
         String biome = level.getBiome(pos).unwrapKey().map(key -> key.location().toString()).orElse("?");
         StringBuilder text = new StringBuilder("Purity at ").append(pos.toShortString()).append(" (").append(biome).append("): ")

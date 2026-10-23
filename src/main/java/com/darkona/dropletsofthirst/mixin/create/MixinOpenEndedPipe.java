@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.mixin.create;
 
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.purity.PouredWater;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.config.CompatConfig;
@@ -38,7 +39,7 @@ public abstract class MixinOpenEndedPipe
         if (fluid.is(FluidTags.WATER))
             purity.set(WaterPurity.getWaterPurity(level, pos, fluid.isSource()));
         else if (state.is(Blocks.WATER_CAULDRON))
-            purity.set(WaterPurity.cauldronPurity(level, pos));
+            purity.set(CauldronPurity.at(level, pos));
     }
 
     @ModifyReturnValue(method = "removeFluidFromSpace", at = @At("RETURN"), remap = false)

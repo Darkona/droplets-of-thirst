@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
@@ -89,7 +90,7 @@ public class MinersDelightTests
         ItemStack cup = player.getMainHandItem();
         helper.assertTrue(cup.is(item("water_cup")), "the copper cup was not filled at the cauldron: " + cup);
         helper.assertTrue(WaterPurity.hasPurity(cup), "a cup filled from a cauldron has no purity");
-        helper.assertValueEqual(WaterPurity.getPurity(cup), WaterPurity.cauldronPurity(helper.getLevel(), pos), "purity of a cup filled from a cauldron");
+        helper.assertValueEqual(WaterPurity.getPurity(cup), CauldronPurity.at(helper.getLevel(), pos), "purity of a cup filled from a cauldron");
         helper.assertTrue(CauldronInteraction.WATER.map().containsKey(item("copper_cup")), "no cauldron interaction for the copper cup");
         helper.succeed();
     }

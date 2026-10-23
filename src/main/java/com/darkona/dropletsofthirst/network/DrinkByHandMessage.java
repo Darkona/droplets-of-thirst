@@ -17,10 +17,12 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +47,7 @@ public record DrinkByHandMessage() implements CustomPacketPayload
                 return;
 
             ServerLevel level = player.serverLevel();
-            BlockHitResult hit = WaterPurity.pickFluid(player, ClipContext.Fluid.ANY);
+            BlockHitResult hit = pickFluid(player, ClipContext.Fluid.ANY);
             BlockPos pos = hit.getBlockPos();
             if (hit.getType() != HitResult.Type.BLOCK || !level.getFluidState(pos).is(FluidTags.WATER) || !level.mayInteract(player, pos))
                 return;
@@ -59,6 +61,13 @@ public record DrinkByHandMessage() implements CustomPacketPayload
             }
             PlayerThirst.drink(player, ItemStack.EMPTY, GameplayConfig.HAND_DRINKING_THIRST.get(), GameplayConfig.HAND_DRINKING_QUENCHED.get(), WaterPurity.getBlockPurity(level, pos));
         });
+    }
+
+    public static BlockHitResult pickFluid(Player player, ClipContext.Fluid fluid)
+    {
+        Vec3 eye = player.getEyePosition();
+        Vec3 end = eye.add(player.getViewVector(1.0F).scale(player.blockInteractionRange()));
+        return player.level().clip(new ClipContext(eye, end, ClipContext.Block.OUTLINE, fluid, player));
     }
 
     @Override

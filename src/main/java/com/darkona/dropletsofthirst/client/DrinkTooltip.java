@@ -2,6 +2,7 @@ package com.darkona.dropletsofthirst.client;
 
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.compat.appleskin.AppleSkinCompat;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.config.ClientConfig;
 import com.mojang.datafixers.util.Either;
@@ -13,6 +14,7 @@ import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import org.jetbrains.annotations.Nullable;
 
 public final class DrinkTooltip implements TooltipComponent, ClientTooltipComponent
@@ -52,6 +54,16 @@ public final class DrinkTooltip implements TooltipComponent, ClientTooltipCompon
     public static void registerFactory(RegisterClientTooltipComponentFactoriesEvent event)
     {
         event.register(DrinkTooltip.class, tooltip -> tooltip);
+    }
+
+    public static void renderPurityTooltip(ItemTooltipEvent event)
+    {
+        if (WaterPurity.enabled() && WaterPurity.isWaterFilledContainer(event.getItemStack()) && (event.getFlags().hasShiftDown() || !ClientConfig.ONLY_SHOW_PURITY_WHEN_SHIFTING.get()))
+        {
+            int purity = WaterPurity.getPurity(event.getItemStack());
+            if (purity >= WaterPurity.MIN_PURITY && purity <= WaterPurity.MAX_PURITY)
+                event.getToolTip().add(WaterPurity.purityLine(purity));
+        }
     }
 
     public static void gather(RenderTooltipEvent.GatherComponents event)

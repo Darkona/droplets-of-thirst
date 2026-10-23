@@ -4,7 +4,6 @@ import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.item.ItemInit;
 import com.darkona.dropletsofthirst.network.DrinkByHandMessage;
 import com.darkona.dropletsofthirst.purity.PurityTint;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import net.minecraft.client.Minecraft;
@@ -62,7 +61,7 @@ public final class ClientEvents
         if (player == null || !player.isCrouching() || !player.getMainHandItem().isEmpty()
                 || player.getData(ModAttachment.PLAYER_THIRST).needsBothHandsToDrink() && !player.getOffhandItem().isEmpty())
             return;
-        if (player.level().getFluidState(WaterPurity.pickFluid(player, ClipContext.Fluid.ANY).getBlockPos()).is(FluidTags.WATER))
+        if (player.level().getFluidState(DrinkByHandMessage.pickFluid(player, ClipContext.Fluid.ANY).getBlockPos()).is(FluidTags.WATER))
             PacketDistributor.sendToServer(DrinkByHandMessage.INSTANCE);
     }
 }

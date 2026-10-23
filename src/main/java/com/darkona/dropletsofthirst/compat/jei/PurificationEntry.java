@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.compat.jei;
 
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.compat.create.CreateCompat;
 import com.darkona.dropletsofthirst.data.DropletsTags;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
@@ -29,10 +30,10 @@ public record PurificationEntry(String method, List<ItemStack> inputs, List<Item
             return List.of();
         List<PurificationEntry> entries = new ArrayList<>();
         ItemStack cauldron = new ItemStack(Items.CAULDRON);
-        entries.add(containers("cauldron", WaterPurity.CAULDRON_PURITY, cauldron, List.of()));
+        entries.add(containers("cauldron", CauldronPurity.CAULDRON_PURITY, cauldron, List.of()));
         List<ItemStack> heat = heatSources();
         if (!heat.isEmpty())
-            entries.add(containers("heated_cauldron", WaterPurity.HEATED_CAULDRON_PURITY, cauldron, heat));
+            entries.add(containers("heated_cauldron", CauldronPurity.HEATED_CAULDRON_PURITY, cauldron, heat));
         Item filter = CreateCompat.sandFilter();
         if (filter != Items.AIR)
             for (int purity = WaterPurity.MIN_PURITY; purity < WaterPurity.MAX_PURITY; purity++)

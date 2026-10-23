@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.mixin;
 
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -39,13 +40,13 @@ public abstract class MixinCauldronWrapper
     private boolean droplets_of_thirst$acceptOwnPurity(PatchedDataComponentMap components, Operation<Boolean> original, @Local(argsOnly = true) FluidStack resource)
     {
         return original.call(components) || components.size() == 1 && WaterPurity.hasPurity(resource) && resource.is(FluidTags.WATER)
-                && WaterPurity.getPurity(resource) == WaterPurity.cauldronPurity(level, pos);
+                && WaterPurity.getPurity(resource) == CauldronPurity.at(level, pos);
     }
 
     private FluidStack withPurity(FluidStack fluid)
     {
         if (!fluid.isEmpty() && fluid.is(FluidTags.WATER))
-            WaterPurity.addPurity(fluid, WaterPurity.cauldronPurity(level, pos));
+            WaterPurity.addPurity(fluid, CauldronPurity.at(level, pos));
         return fluid;
     }
 }

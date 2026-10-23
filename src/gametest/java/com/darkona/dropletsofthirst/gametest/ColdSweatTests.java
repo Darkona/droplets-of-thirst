@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.ThirstValues;
@@ -79,7 +80,7 @@ public class ColdSweatTests
         player.gameMode.useItemOn(player, helper.getLevel(), empties, InteractionHand.MAIN_HAND, new BlockHitResult(Vec3.atCenterOf(cauldron), Direction.UP, cauldron, false));
         ItemStack filled = filledWaterskin(player);
         helper.assertTrue(!filled.isEmpty(), "no waterskin was filled from the cauldron");
-        helper.assertValueEqual(WaterPurity.getPurity(filled), WaterPurity.HEATED_CAULDRON_PURITY, "purity of a waterskin filled from a cauldron on a campfire");
+        helper.assertValueEqual(WaterPurity.getPurity(filled), CauldronPurity.HEATED_CAULDRON_PURITY, "purity of a waterskin filled from a cauldron on a campfire");
         helper.succeedWhen(() -> helper.assertFalse(WaterPurity.hasPurity(empties), "the empty waterskins kept a purity"));
     }
 

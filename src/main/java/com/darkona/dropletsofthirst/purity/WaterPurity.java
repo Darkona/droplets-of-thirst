@@ -7,7 +7,6 @@ import com.darkona.dropletsofthirst.data.DropletsDataMaps.DimensionWater;
 import com.darkona.dropletsofthirst.data.DropletsTags;
 import com.darkona.dropletsofthirst.item.ItemInit;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.config.ClientConfig;
 import com.darkona.dropletsofthirst.config.PurityConfig;
 import com.darkona.dropletsofthirst.config.SyncedValues;
 import dev.darkona.jdlib.core.config.NumberRows;
@@ -17,10 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
@@ -28,32 +25,16 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.PlainTextContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.world.ItemInteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LayeredCauldronBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,33 +46,10 @@ public class WaterPurity
     private static volatile List<ContainerWithPurity> dataContainers = List.of();
     public static final int MIN_PURITY = PurityLevel.MIN;
     public static final int MAX_PURITY = PurityLevel.MAX;
-    public static final int CAULDRON_PURITY = PurityLevel.MURKY.level();
-    public static final int HEATED_CAULDRON_PURITY = PurityLevel.CLEAN.level();
 
     public static void init()
     {
         registerContainers();
-    }
-
-    public static void registerCauldronInteractions()
-    {
-        CauldronInteraction.WATER.map().put(ItemInit.TERRACOTTA_BOWL.get(), fillFromCauldron(() -> new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()), SoundEvents.BUCKET_FILL));
-    }
-
-    public static CauldronInteraction fillFromCauldron(Supplier<ItemStack> filled, SoundEvent sound)
-    {
-        return (state, level, pos, player, hand, stack) -> {
-            if (!level.isClientSide())
-            {
-                player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, filled.get()));
-                player.awardStat(Stats.USE_CAULDRON);
-                player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-                LayeredCauldronBlock.lowerFillLevel(state, level, pos);
-                level.playSound(null, pos, sound, SoundSource.BLOCKS, 1.0F, 1.0F);
-                level.gameEvent(null, GameEvent.FLUID_PICKUP, pos);
-            }
-            return ItemInteractionResult.sidedSuccess(level.isClientSide());
-        };
     }
 
     private static void registerContainers()
@@ -146,23 +104,6 @@ public class WaterPurity
         for (ContainerWithPurity container : second)
             byFilled.putIfAbsent(container.getFilledItem(), container);
         return Map.copyOf(byFilled);
-    }
-
-    public static BlockHitResult pickFluid(Player player, ClipContext.Fluid fluid)
-    {
-        Vec3 eye = player.getEyePosition();
-        Vec3 end = eye.add(player.getViewVector(1.0F).scale(player.blockInteractionRange()));
-        return player.level().clip(new ClipContext(eye, end, ClipContext.Block.OUTLINE, fluid, player));
-    }
-
-    public static void renderPurityTooltip(ItemTooltipEvent event)
-    {
-        if(enabled() && isWaterFilledContainer(event.getItemStack()) && (event.getFlags().hasShiftDown() || !ClientConfig.ONLY_SHOW_PURITY_WHEN_SHIFTING.get()))
-        {
-            int purity = getPurity(event.getItemStack());
-            if(purity >= MIN_PURITY && purity <= MAX_PURITY)
-                event.getToolTip().add(purityLine(purity));
-        }
     }
 
     public static boolean isWaterFilledContainer(ItemStack item)
@@ -266,7 +207,7 @@ public class WaterPurity
         FluidState fluid = level.getFluidState(pos);
         if (fluid.is(FluidTags.WATER))
             return getWaterPurity(level, pos, fluid.isSource());
-        return level.getBlockState(pos).is(Blocks.WATER_CAULDRON) ? cauldronPurity(level, pos) : defaultPurity();
+        return level.getBlockState(pos).is(Blocks.WATER_CAULDRON) ? CauldronPurity.at(level, pos) : defaultPurity();
     }
 
     public static int takenWaterPurity(Level level, BlockPos pos)
@@ -275,37 +216,9 @@ public class WaterPurity
         if (fluid.is(FluidTags.WATER))
             return getWaterPurity(level, pos, fluid.isSource());
         if (level.getBlockState(pos).is(Blocks.WATER_CAULDRON))
-            return cauldronPurity(level, pos);
+            return CauldronPurity.at(level, pos);
         int poured = PouredWater.pickedUp(level, pos);
         return poured >= MIN_PURITY ? poured : getWaterPurity(level, pos, true);
-    }
-
-    private static int takingFromCauldron = -1;
-
-    public static boolean takingFromCauldron(BlockState state, Level level, BlockPos pos)
-    {
-        if (level.isClientSide() || !enabled() || !state.is(Blocks.WATER_CAULDRON))
-            return false;
-        takingFromCauldron = cauldronPurity(level, pos);
-        return true;
-    }
-
-    public static void doneTakingFromCauldron()
-    {
-        takingFromCauldron = -1;
-    }
-
-    public static void applyCauldronPurity(ItemStack filled)
-    {
-        if (takingFromCauldron >= MIN_PURITY && isWaterFilledContainer(filled) && !hasPurity(filled))
-            addPurity(filled, takingFromCauldron);
-    }
-
-    public static int cauldronPurity(BlockGetter level, BlockPos pos)
-    {
-        BlockState below = level.getBlockState(pos.below());
-        return below.is(DropletsTags.CAULDRON_HEAT_SOURCES) && below.getOptionalValue(BlockStateProperties.LIT).orElse(true)
-                ? HEATED_CAULDRON_PURITY : CAULDRON_PURITY;
     }
 
     public static int getWaterPurity(Level level, BlockPos pos, boolean source)

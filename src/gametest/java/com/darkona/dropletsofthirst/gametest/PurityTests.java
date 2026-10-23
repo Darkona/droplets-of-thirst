@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import net.minecraft.core.registries.Registries;
@@ -55,16 +56,16 @@ public class PurityTests
     @GameTest(template = "box")
     public static void cauldronPurityDependsOnHeat(GameTestHelper helper)
     {
-        helper.assertValueEqual(WaterPurity.CAULDRON_PURITY, PurityLevel.MURKY.level(), "cauldron purity");
-        helper.assertValueEqual(WaterPurity.HEATED_CAULDRON_PURITY, PurityLevel.CLEAN.level(), "heated cauldron purity");
+        helper.assertValueEqual(CauldronPurity.CAULDRON_PURITY, PurityLevel.MURKY.level(), "cauldron purity");
+        helper.assertValueEqual(CauldronPurity.HEATED_CAULDRON_PURITY, PurityLevel.CLEAN.level(), "heated cauldron purity");
         BlockPos pos = helper.absolutePos(new BlockPos(2, 2, 2));
         helper.getLevel().setBlockAndUpdate(pos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3));
         helper.getLevel().setBlockAndUpdate(pos.below(), Blocks.STONE.defaultBlockState());
-        helper.assertValueEqual(WaterPurity.getBlockPurity(helper.getLevel(), pos), WaterPurity.CAULDRON_PURITY, "cauldron on stone");
+        helper.assertValueEqual(WaterPurity.getBlockPurity(helper.getLevel(), pos), CauldronPurity.CAULDRON_PURITY, "cauldron on stone");
         helper.getLevel().setBlockAndUpdate(pos.below(), Blocks.CAMPFIRE.defaultBlockState());
-        helper.assertValueEqual(WaterPurity.getBlockPurity(helper.getLevel(), pos), WaterPurity.HEATED_CAULDRON_PURITY, "cauldron on a lit campfire");
+        helper.assertValueEqual(WaterPurity.getBlockPurity(helper.getLevel(), pos), CauldronPurity.HEATED_CAULDRON_PURITY, "cauldron on a lit campfire");
         helper.getLevel().setBlockAndUpdate(pos.below(), Blocks.CAMPFIRE.defaultBlockState().setValue(BlockStateProperties.LIT, false));
-        helper.assertValueEqual(WaterPurity.getBlockPurity(helper.getLevel(), pos), WaterPurity.CAULDRON_PURITY, "cauldron on an unlit campfire");
+        helper.assertValueEqual(WaterPurity.getBlockPurity(helper.getLevel(), pos), CauldronPurity.CAULDRON_PURITY, "cauldron on an unlit campfire");
         helper.succeed();
     }
 
@@ -83,16 +84,16 @@ public class PurityTests
                 water = item;
         helper.assertFalse(water.isEmpty(), "no water bottle in the inventory");
         helper.assertTrue(WaterPurity.hasPurity(water), "water bottle from a cauldron has no purity stored");
-        helper.assertValueEqual(WaterPurity.getPurity(water), WaterPurity.HEATED_CAULDRON_PURITY, "water bottle from a heated cauldron");
+        helper.assertValueEqual(WaterPurity.getPurity(water), CauldronPurity.HEATED_CAULDRON_PURITY, "water bottle from a heated cauldron");
 
         helper.getLevel().setBlockAndUpdate(pos.below(), Blocks.STONE.defaultBlockState());
         ItemStack bucket = useOnFullCauldron(helper, player, pos, new ItemStack(Items.BUCKET));
         helper.assertTrue(bucket.is(Items.WATER_BUCKET), "the bucket was not filled");
-        helper.assertValueEqual(WaterPurity.getPurity(bucket), WaterPurity.CAULDRON_PURITY, "water bucket from a cauldron");
+        helper.assertValueEqual(WaterPurity.getPurity(bucket), CauldronPurity.CAULDRON_PURITY, "water bucket from a cauldron");
 
         ItemStack bowl = useOnFullCauldron(helper, player, pos, new ItemStack(ItemInit.TERRACOTTA_BOWL.get()));
         helper.assertTrue(bowl.is(ItemInit.TERRACOTTA_WATER_BOWL.get()), "the terracotta bowl was not filled");
-        helper.assertValueEqual(WaterPurity.getPurity(bowl), WaterPurity.CAULDRON_PURITY, "terracotta water bowl from a cauldron");
+        helper.assertValueEqual(WaterPurity.getPurity(bowl), CauldronPurity.CAULDRON_PURITY, "terracotta water bowl from a cauldron");
         helper.succeed();
     }
 
@@ -104,7 +105,7 @@ public class PurityTests
         helper.getLevel().setBlockAndUpdate(pos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3));
         IFluidHandler handler = helper.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, pos, null);
         helper.assertTrue(handler != null, "a water cauldron has no fluid handler");
-        int heated = WaterPurity.HEATED_CAULDRON_PURITY;
+        int heated = CauldronPurity.HEATED_CAULDRON_PURITY;
 
         FluidStack inTank = handler.getFluidInTank(0);
         helper.assertTrue(WaterPurity.hasPurity(inTank), "tank contents have no purity");
@@ -112,7 +113,7 @@ public class PurityTests
         FluidStack simulated = handler.drain(1000, IFluidHandler.FluidAction.SIMULATE);
         helper.assertValueEqual(WaterPurity.getPurity(simulated), heated, "purity of a simulated drain");
 
-        FluidStack other = WaterPurity.addPurity(new FluidStack(Fluids.WATER, 1000), WaterPurity.CAULDRON_PURITY);
+        FluidStack other = WaterPurity.addPurity(new FluidStack(Fluids.WATER, 1000), CauldronPurity.CAULDRON_PURITY);
         helper.assertTrue(handler.drain(other, IFluidHandler.FluidAction.EXECUTE).isEmpty(), "drained water of another purity");
         FluidStack drained = handler.drain(inTank.copyWithAmount(1000), IFluidHandler.FluidAction.EXECUTE);
         helper.assertValueEqual(drained.getAmount(), 1000, "amount drained asking for the tank contents");

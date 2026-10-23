@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.mixin.cold_sweat;
 
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
@@ -48,7 +49,7 @@ public abstract class MixinWaterskinItem
         if (level.isClientSide())
             return filled;
         int purity = droplets_of_thirst$tankPurity >= 0 ? droplets_of_thirst$tankPurity
-                : level.getBlockState(pos).getBlock() instanceof AbstractCauldronBlock ? WaterPurity.cauldronPurity(level, pos)
+                : level.getBlockState(pos).getBlock() instanceof AbstractCauldronBlock ? CauldronPurity.at(level, pos)
                 : WaterPurity.getBlockPurity(level, pos);
         return WaterPurity.addPurity(filled, purity);
     }

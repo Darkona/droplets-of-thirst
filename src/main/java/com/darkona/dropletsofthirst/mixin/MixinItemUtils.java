@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.mixin;
 
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
@@ -15,6 +15,6 @@ public abstract class MixinItemUtils
     @Inject(method = "createFilledResult(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;Z)Lnet/minecraft/world/item/ItemStack;", at = @At("HEAD"))
     private static void droplets_of_thirst$cauldronPurity(ItemStack emptyStack, Player player, ItemStack filledStack, boolean preventDuplicates, CallbackInfoReturnable<ItemStack> cir)
     {
-        WaterPurity.applyCauldronPurity(filledStack);
+        CauldronPurity.applyTo(filledStack);
     }
 }

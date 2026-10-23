@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.compat.create.CreateCompat;
 import com.darkona.dropletsofthirst.compat.jei.HydrationEntry;
@@ -30,9 +31,9 @@ public class ViewerTests
         PurificationEntry heated = entry(helper, entries, "heated_cauldron");
         helper.assertValueEqual(cauldron.inputs().size(), cauldron.outputs().size(), "cauldron inputs and outputs cycle together");
         for (ItemStack output : cauldron.outputs())
-            helper.assertValueEqual(WaterPurity.getPurity(output), WaterPurity.CAULDRON_PURITY, "purity out of a cauldron");
+            helper.assertValueEqual(WaterPurity.getPurity(output), CauldronPurity.CAULDRON_PURITY, "purity out of a cauldron");
         for (ItemStack output : heated.outputs())
-            helper.assertValueEqual(WaterPurity.getPurity(output), WaterPurity.HEATED_CAULDRON_PURITY, "purity out of a heated cauldron");
+            helper.assertValueEqual(WaterPurity.getPurity(output), CauldronPurity.HEATED_CAULDRON_PURITY, "purity out of a heated cauldron");
         helper.assertTrue(heated.below().stream().anyMatch(stack -> stack.is(Items.CAMPFIRE)), "a campfire heats the cauldron");
         long filters = entries.stream().filter(entry -> entry.method().equals("sand_filter")).count();
         helper.assertValueEqual(filters > 0, CreateCompat.LOADED, "Sand Filter entries with Create installed");
