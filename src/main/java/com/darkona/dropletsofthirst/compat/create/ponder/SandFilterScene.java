@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.compat.create.ponder.scene;
+package com.darkona.dropletsofthirst.compat.create.ponder;
 
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import net.createmod.ponder.api.scene.SceneBuilder;

@@ -1,31 +1,31 @@
 package com.darkona.dropletsofthirst.compat.create;
 
 import com.darkona.dropletsofthirst.config.CompatConfig;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.SmartFluidTank;
 import com.simibubi.create.foundation.utility.CreateLang;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import java.util.List;
 import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.capabilities.BlockCapabilityCache;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGoggleInformation
 {
@@ -189,5 +189,62 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
                         .add(mb)
                         .style(ChatFormatting.DARK_GRAY))
                 .forGoggles(tooltip, 1);
+    }
+
+    static final class SandFilterTanksView implements IFluidHandler
+    {
+        private final SandFilterBlockEntity filter;
+
+        SandFilterTanksView(SandFilterBlockEntity filter)
+        {
+            this.filter = filter;
+        }
+
+        private IFluidHandler tank(int tank)
+        {
+            return (tank == 0 ? filter.dirtyTank : filter.purifiedTank).getPrimaryHandler();
+        }
+
+        @Override
+        public int getTanks()
+        {
+            return 2;
+        }
+
+        @Override
+        public @NotNull FluidStack getFluidInTank(int tank)
+        {
+            return tank == 0 || tank == 1 ? tank(tank).getFluidInTank(0) : FluidStack.EMPTY;
+        }
+
+        @Override
+        public int getTankCapacity(int tank)
+        {
+            return tank == 0 || tank == 1 ? tank(tank).getTankCapacity(0) : 0;
+        }
+
+        @Override
+        public boolean isFluidValid(int tank, @NotNull FluidStack stack)
+        {
+            return false;
+        }
+
+        @Override
+        public int fill(@NotNull FluidStack resource, @NotNull FluidAction action)
+        {
+            return 0;
+        }
+
+        @Override
+        public @NotNull FluidStack drain(@NotNull FluidStack resource, @NotNull FluidAction action)
+        {
+            return FluidStack.EMPTY;
+        }
+
+        @Override
+        public @NotNull FluidStack drain(int maxDrain, @NotNull FluidAction action)
+        {
+            return FluidStack.EMPTY;
+        }
     }
 }
