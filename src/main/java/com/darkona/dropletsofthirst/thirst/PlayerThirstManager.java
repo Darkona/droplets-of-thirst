@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.thirst;
 
-import com.darkona.dropletsofthirst.client.DrinkByHandClient;
+import com.darkona.dropletsofthirst.client.ClientEvents;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
@@ -74,7 +74,7 @@ public class PlayerThirstManager {
 
     private static void drinkByHandIfAllowed(PlayerInteractEvent event) {
         if (event.getHand() == InteractionHand.MAIN_HAND && event.getEntity().level().isClientSide && event.getEntity().getData(ModAttachment.PLAYER_THIRST).handDrinkingAllowed())
-            DrinkByHandClient.drinkByHand();
+            ClientEvents.drinkByHand();
     }
 
     @SubscribeEvent
