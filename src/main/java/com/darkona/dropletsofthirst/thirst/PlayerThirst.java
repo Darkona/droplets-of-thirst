@@ -12,7 +12,7 @@ import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.data.DropletsTags;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
-import com.darkona.dropletsofthirst.foundation.network.message.PlayerThirstSyncMessage;
+import com.darkona.dropletsofthirst.network.PlayerThirstSyncMessage;
 import dev.darkona.jdlib.core.stat.FractionalCarry;
 import dev.darkona.jdlib.core.stat.ShownFields;
 import net.minecraft.core.Holder;

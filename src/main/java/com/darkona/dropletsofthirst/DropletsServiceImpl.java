@@ -11,7 +11,7 @@ import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.thirst.ModAttachment;
-import com.darkona.dropletsofthirst.foundation.gui.ThirstBarStyles;
+import com.darkona.dropletsofthirst.client.ThirstBarStyles;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

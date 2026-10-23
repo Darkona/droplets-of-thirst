@@ -14,7 +14,7 @@ import com.darkona.dropletsofthirst.thirst.PlayerThirstManager;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
 import com.darkona.dropletsofthirst.config.PurityConfig;
-import com.darkona.dropletsofthirst.foundation.network.message.PlayerThirstSyncMessage;
+import com.darkona.dropletsofthirst.network.PlayerThirstSyncMessage;
 import com.mojang.authlib.GameProfile;
 import java.util.UUID;
 import net.minecraft.ChatFormatting;

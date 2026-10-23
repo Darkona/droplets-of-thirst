@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.foundation.network;
+package com.darkona.dropletsofthirst.client;
 
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import net.neoforged.api.distmarker.Dist;

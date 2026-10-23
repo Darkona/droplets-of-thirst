@@ -3,7 +3,7 @@ package com.darkona.dropletsofthirst.compat.vampirism;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.config.CompatConfig;
-import com.darkona.dropletsofthirst.foundation.gui.ThirstBarStyles;
+import com.darkona.dropletsofthirst.client.ThirstBarStyles;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import dev.darkona.jdlib.api.compat.Bridges;

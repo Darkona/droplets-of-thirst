@@ -1,8 +1,5 @@
-package com.darkona.dropletsofthirst.foundation.network;
+package com.darkona.dropletsofthirst.network;
 
-import com.darkona.dropletsofthirst.foundation.network.message.DrinkByHandMessage;
-import com.darkona.dropletsofthirst.foundation.network.message.PlayerThirstSyncMessage;
-import com.darkona.dropletsofthirst.foundation.network.message.ThirstValuesSyncMessage;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 

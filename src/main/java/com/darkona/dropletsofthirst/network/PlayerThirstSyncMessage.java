@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.foundation.network.message;
+package com.darkona.dropletsofthirst.network;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;

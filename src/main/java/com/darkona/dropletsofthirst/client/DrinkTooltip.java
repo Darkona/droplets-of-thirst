@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.foundation.gui;
+package com.darkona.dropletsofthirst.client;
 
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.compat.appleskin.AppleSkinCompat;

@@ -1,7 +1,8 @@
-package com.darkona.dropletsofthirst.thirst;
+package com.darkona.dropletsofthirst.client;
 
+import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.foundation.network.message.DrinkByHandMessage;
+import com.darkona.dropletsofthirst.network.DrinkByHandMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.tags.FluidTags;

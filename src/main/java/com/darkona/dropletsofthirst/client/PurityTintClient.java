@@ -1,5 +1,6 @@
-package com.darkona.dropletsofthirst.purity;
+package com.darkona.dropletsofthirst.client;
 
+import com.darkona.dropletsofthirst.purity.PurityTint;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.item.ItemInit;
 import net.neoforged.api.distmarker.Dist;
