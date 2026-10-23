@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.foundation.config;
+package com.darkona.dropletsofthirst.config;
 
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import net.minecraft.resources.ResourceLocation;

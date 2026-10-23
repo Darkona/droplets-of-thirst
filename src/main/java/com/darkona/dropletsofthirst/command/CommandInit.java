@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.content.registry;
+package com.darkona.dropletsofthirst.command;
 
 import com.darkona.dropletsofthirst.thirst.AttributeInit;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
@@ -11,9 +11,8 @@ import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.DimensionWater;
 import com.darkona.dropletsofthirst.thirst.ModAttachment;
-import com.darkona.dropletsofthirst.foundation.config.ConfigCheck;
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
-import com.darkona.dropletsofthirst.foundation.dev.ItemDump;
+import com.darkona.dropletsofthirst.config.ConfigCheck;
+import com.darkona.dropletsofthirst.config.GameplayConfig;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;

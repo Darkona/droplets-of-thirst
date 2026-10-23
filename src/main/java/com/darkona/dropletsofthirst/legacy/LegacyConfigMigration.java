@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.legacy;
 
-import com.darkona.dropletsofthirst.foundation.config.PurityConfig;
+import com.darkona.dropletsofthirst.config.PurityConfig;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import com.electronwill.nightconfig.core.Config;

@@ -3,7 +3,7 @@ package com.darkona.dropletsofthirst.foundation.gui;
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.compat.appleskin.AppleSkinCompat;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.foundation.config.ClientConfig;
+import com.darkona.dropletsofthirst.config.ClientConfig;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;

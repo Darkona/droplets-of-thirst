@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.foundation.config;
+package com.darkona.dropletsofthirst.config;
 
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import dev.darkona.jdlib.core.config.NumberRows;

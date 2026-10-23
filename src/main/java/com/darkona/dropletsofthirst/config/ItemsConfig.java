@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.foundation.config;
+package com.darkona.dropletsofthirst.config;
 
 import com.mojang.logging.LogUtils;
 import net.neoforged.neoforge.common.ModConfigSpec;

@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.foundation.config;
+package com.darkona.dropletsofthirst.config;
 
 import dev.darkona.jdlib.core.config.NumberRows;
 import net.neoforged.neoforge.common.ModConfigSpec;

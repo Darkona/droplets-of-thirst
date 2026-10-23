@@ -5,7 +5,7 @@ import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.VampireThirst;
 import com.darkona.dropletsofthirst.thirst.ModAttachment;
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
+import com.darkona.dropletsofthirst.config.GameplayConfig;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;

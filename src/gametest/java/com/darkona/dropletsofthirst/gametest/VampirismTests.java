@@ -10,7 +10,7 @@ import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.thirst.EffectInit;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
+import com.darkona.dropletsofthirst.config.GameplayConfig;
 import com.darkona.dropletsofthirst.foundation.gui.ThirstBarStyles;
 import de.teamlapen.vampirism.api.VReference;
 import de.teamlapen.vampirism.core.ModItems;

@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
+import com.darkona.dropletsofthirst.config.GameplayConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;

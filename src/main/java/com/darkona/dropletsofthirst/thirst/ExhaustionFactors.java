@@ -3,7 +3,7 @@ package com.darkona.dropletsofthirst.thirst;
 import com.darkona.dropletsofthirst.api.ExhaustionModifier;
 import dev.darkona.jdlib.core.config.NumberRows;
 import dev.darkona.jdlib.core.registry.PriorityList;
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
+import com.darkona.dropletsofthirst.config.GameplayConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;

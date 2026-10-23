@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.foundation.mixin;
 
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
+import com.darkona.dropletsofthirst.config.GameplayConfig;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

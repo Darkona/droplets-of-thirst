@@ -9,7 +9,7 @@ import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
 import com.darkona.dropletsofthirst.data.DropletsTags;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
+import com.darkona.dropletsofthirst.config.GameplayConfig;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;

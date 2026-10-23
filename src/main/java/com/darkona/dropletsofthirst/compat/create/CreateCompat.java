@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.compat.create;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
+import com.darkona.dropletsofthirst.config.CompatConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;

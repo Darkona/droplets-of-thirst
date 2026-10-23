@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.compat.appleskin;
 
-import com.darkona.dropletsofthirst.foundation.config.ClientConfig;
+import com.darkona.dropletsofthirst.config.ClientConfig;
 import dev.darkona.jdlib.api.hud.AppleSkinOptions;
 import dev.darkona.jdlib.api.hud.HudCompat;
 import net.minecraft.client.gui.screens.Screen;

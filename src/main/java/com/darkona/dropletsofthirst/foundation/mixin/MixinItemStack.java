@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.foundation.mixin;
 
 import com.darkona.dropletsofthirst.purity.ThirstComponent;
-import com.darkona.dropletsofthirst.foundation.config.SyncedValues;
+import com.darkona.dropletsofthirst.config.SyncedValues;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentMap;

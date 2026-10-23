@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.compat.sereneseasons;
 
-import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
+import com.darkona.dropletsofthirst.config.CompatConfig;
 import dev.darkona.jdlib.api.compat.Bridges;
 import dev.darkona.jdlib.api.compat.climate.Season;
 import dev.darkona.jdlib.api.compat.climate.Seasons;

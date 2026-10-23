@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.foundation.mixin;
 
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.foundation.config.SyncedValues;
+import com.darkona.dropletsofthirst.config.SyncedValues;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BottleItem;

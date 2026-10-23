@@ -1,4 +1,5 @@
-package com.darkona.dropletsofthirst.foundation.config;
+package com.darkona.dropletsofthirst.config;
+
 
 public final class SyncedValues
 {

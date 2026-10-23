@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.thirst;
 
-import com.darkona.dropletsofthirst.foundation.config.ItemsConfig;
+import com.darkona.dropletsofthirst.config.ItemsConfig;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;

@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.foundation.dev;
+package com.darkona.dropletsofthirst.command;
 
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
