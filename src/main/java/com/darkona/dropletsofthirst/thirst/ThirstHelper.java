@@ -16,7 +16,7 @@ import com.darkona.dropletsofthirst.config.GameplayConfig;
 import com.darkona.dropletsofthirst.config.ItemsConfig;
 import com.darkona.dropletsofthirst.config.PurityConfig;
 import com.darkona.dropletsofthirst.config.SyncedValues;
-import com.darkona.dropletsofthirst.foundation.mixin.BiomeAccessor;
+import com.darkona.dropletsofthirst.mixin.BiomeAccessor;
 import com.mojang.logging.LogUtils;
 import dev.darkona.jdlib.core.config.NumberRows;
 import java.util.ArrayList;
