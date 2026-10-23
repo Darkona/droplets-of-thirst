@@ -14,7 +14,7 @@ import dev.darkona.jdlib.api.hud.HudGate;
 import dev.darkona.jdlib.api.hud.HudSide;
 import dev.darkona.jdlib.api.hud.JDHudBars;
 import dev.darkona.jdlib.api.hud.VanillaLayer;
-import dev.darkona.jdlib.core.Colors;
+import dev.darkona.jdlib.core.color.Colors;
 import dev.darkona.jdlib.core.hud.ConsumablePreview;
 import dev.darkona.jdlib.core.hud.VanillaIconMotion;
 import net.minecraft.client.Minecraft;
