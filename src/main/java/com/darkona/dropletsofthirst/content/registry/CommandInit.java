@@ -1,32 +1,39 @@
 package com.darkona.dropletsofthirst.content.registry;
 
+import com.darkona.dropletsofthirst.DropletsOfThirst;
+import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
+import com.darkona.dropletsofthirst.data.DropletsDataMaps;
+import com.darkona.dropletsofthirst.data.DropletsDataMaps.DimensionWater;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.thirst.ExhaustionFactors;
+import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.content.thirst.RecipeInference;
+import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
+import com.darkona.dropletsofthirst.core.ThirstConstants;
+import com.darkona.dropletsofthirst.foundation.common.capability.IThirst;
+import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
+import com.darkona.dropletsofthirst.foundation.config.ConfigCheck;
+import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
+import com.darkona.dropletsofthirst.foundation.dev.ItemDump;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.content.data.DimensionWater;
-import com.darkona.dropletsofthirst.content.data.DropletsDataMaps;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
-import com.darkona.dropletsofthirst.content.thirst.ExhaustionFactors;
-import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.content.thirst.RecipeInference;
-import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.foundation.config.ConfigCheck;
-import com.darkona.dropletsofthirst.foundation.dev.ItemDump;
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
-import com.darkona.dropletsofthirst.core.ThirstConstants;
-import com.darkona.dropletsofthirst.foundation.common.capability.IThirst;
-import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.item.ItemArgument;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentUtils;
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.FluidTags;
@@ -41,15 +48,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 @EventBusSubscriber(modid = DropletsOfThirst.ID)
 public class CommandInit {

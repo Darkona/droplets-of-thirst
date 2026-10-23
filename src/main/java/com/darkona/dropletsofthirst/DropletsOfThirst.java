@@ -10,7 +10,7 @@ import com.darkona.dropletsofthirst.compat.create.ponder.ThirstPonderPlugin;
 import com.darkona.dropletsofthirst.compat.supernatural.SupernaturalCompat;
 import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
 import com.darkona.dropletsofthirst.content.DropletsServiceImpl;
-import com.darkona.dropletsofthirst.content.data.DropletsDataMaps;
+import com.darkona.dropletsofthirst.data.DropletsDataMaps;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.content.registry.AttributeInit;
 import com.darkona.dropletsofthirst.content.registry.ConditionInit;

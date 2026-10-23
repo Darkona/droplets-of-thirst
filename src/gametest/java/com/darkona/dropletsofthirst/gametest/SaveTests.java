@@ -3,7 +3,7 @@ package com.darkona.dropletsofthirst.gametest;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
-import com.darkona.dropletsofthirst.content.data.DrinkValues;
+import com.darkona.dropletsofthirst.data.DropletsDataMaps.DrinkValues;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.content.registry.ThirstComponent;
 import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
@@ -27,7 +27,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.neoforged.neoforge.network.connection.ConnectionType;
-
 import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 

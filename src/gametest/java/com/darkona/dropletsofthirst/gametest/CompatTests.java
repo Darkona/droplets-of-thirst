@@ -6,7 +6,7 @@ import com.darkona.dropletsofthirst.compat.sereneseasons.SereneSeasonsCompat;
 import com.darkona.dropletsofthirst.compat.supernatural.SupernaturalCompat;
 import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
 import com.darkona.dropletsofthirst.content.thirst.ExhaustionFactors;
-import com.darkona.dropletsofthirst.content.data.DropletsTags;
+import com.darkona.dropletsofthirst.data.DropletsTags;
 import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;

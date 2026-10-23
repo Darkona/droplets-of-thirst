@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.content.thirst;
 
 import com.darkona.dropletsofthirst.compat.supernatural.SupernaturalCompat;
 import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
-import com.darkona.dropletsofthirst.content.data.DropletsTags;
+import com.darkona.dropletsofthirst.data.DropletsTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
