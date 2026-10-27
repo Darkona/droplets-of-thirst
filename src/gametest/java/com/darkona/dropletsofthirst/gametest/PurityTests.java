@@ -1,14 +1,14 @@
 package com.darkona.dropletsofthirst.gametest;
 
-import com.darkona.dropletsofthirst.purity.CauldronPurity;
+import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
-import com.darkona.dropletsofthirst.purity.PurityTint;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.PurityTint;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import com.darkona.dropletsofthirst.index.DropletsItems;

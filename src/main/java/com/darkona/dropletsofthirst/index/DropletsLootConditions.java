@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.index;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.purity.PurityEnabledLootCondition;
+import com.darkona.dropletsofthirst.content.purity.PurityEnabledLootCondition;
 import java.util.function.Supplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;

@@ -1,13 +1,13 @@
 package com.darkona.dropletsofthirst.gametest;
 
-import com.darkona.dropletsofthirst.purity.CauldronPurity;
-import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
+import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
+import com.darkona.dropletsofthirst.content.thirst.ExhaustionFactors;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.compat.coldsweat.ColdSweatCompat;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.thirst.ThirstHelper;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import dev.darkona.jdlib.core.config.NumberRows;
 import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.darkona.dropletsofthirst.config.GameplayConfig;

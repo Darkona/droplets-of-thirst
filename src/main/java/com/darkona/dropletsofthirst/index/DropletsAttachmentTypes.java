@@ -1,9 +1,9 @@
 package com.darkona.dropletsofthirst.index;
 
 
-import com.darkona.dropletsofthirst.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.purity.PouredWater;
+import com.darkona.dropletsofthirst.content.purity.PouredWater;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;

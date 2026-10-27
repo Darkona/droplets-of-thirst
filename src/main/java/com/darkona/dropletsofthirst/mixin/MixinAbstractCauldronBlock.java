@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.mixin;
 
-import com.darkona.dropletsofthirst.purity.CauldronPurity;
+import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.core.BlockPos;

@@ -1,10 +1,9 @@
 package com.darkona.dropletsofthirst.gametest;
 
-import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
+import com.darkona.dropletsofthirst.content.thirst.ExhaustionFactors;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.compat.coldsweat.ColdSweatCompat;
 import com.darkona.dropletsofthirst.compat.sereneseasons.SereneSeasonsCompat;
-import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.config.CompatConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.index;
 
-import com.darkona.dropletsofthirst.item.TerracottaBowlItem;
-import com.darkona.dropletsofthirst.item.DrinkableItem;
+import com.darkona.dropletsofthirst.content.thirst.TerracottaBowlItem;
+import com.darkona.dropletsofthirst.content.thirst.DrinkableItem;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;

@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.mixin.travelersbackpack;
 
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;

@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.compat.supernatural;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.client.ThirstBarStyles;
+import com.darkona.dropletsofthirst.content.thirst.ThirstBarStyles;
 import net.minecraft.world.entity.player.Player;
 import dev.darkona.jdlib.api.compat.Bridges;
 

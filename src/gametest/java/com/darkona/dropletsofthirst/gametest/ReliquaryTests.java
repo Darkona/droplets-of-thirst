@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.gametest;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.config.CompatConfig;
-import com.darkona.dropletsofthirst.thirst.ThirstHelper;
+import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;

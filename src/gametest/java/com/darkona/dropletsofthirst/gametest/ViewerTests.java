@@ -1,11 +1,11 @@
 package com.darkona.dropletsofthirst.gametest;
 
-import com.darkona.dropletsofthirst.purity.CauldronPurity;
+import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.compat.create.CreateCompat;
 import com.darkona.dropletsofthirst.compat.jei.HydrationEntry;
 import com.darkona.dropletsofthirst.compat.jei.PurificationEntry;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.index.DropletsItems;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTest;

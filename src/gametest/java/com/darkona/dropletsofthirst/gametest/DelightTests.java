@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.gametest;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.lance5057.extradelight.util.BottleFluidRegistry;
 import net.minecraft.core.BlockPos;

@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.compat.create;
 
 import com.darkona.dropletsofthirst.config.CompatConfig;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;

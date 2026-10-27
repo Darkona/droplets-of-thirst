@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.compat.coldsweat;
 
 import com.darkona.dropletsofthirst.api.event.DrinkEvent;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.config.CompatConfig;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

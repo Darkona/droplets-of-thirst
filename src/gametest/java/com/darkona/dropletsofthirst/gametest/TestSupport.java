@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.gametest;
 
-import com.darkona.dropletsofthirst.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import net.minecraft.gametest.framework.GameTestHelper;
 import dev.darkona.jdlib.testkit.TestPlayers;

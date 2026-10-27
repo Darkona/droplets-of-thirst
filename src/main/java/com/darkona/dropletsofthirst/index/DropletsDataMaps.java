@@ -1,8 +1,8 @@
 package com.darkona.dropletsofthirst.index;
 
-import com.darkona.dropletsofthirst.purity.DimensionWater;
-import com.darkona.dropletsofthirst.purity.BiomeWater;
-import com.darkona.dropletsofthirst.thirst.DrinkValues;
+import com.darkona.dropletsofthirst.content.purity.DimensionWater;
+import com.darkona.dropletsofthirst.content.purity.BiomeWater;
+import com.darkona.dropletsofthirst.content.thirst.DrinkValues;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;

@@ -1,8 +1,8 @@
 package com.darkona.dropletsofthirst.mixin.create;
 
-import com.darkona.dropletsofthirst.purity.CauldronPurity;
-import com.darkona.dropletsofthirst.purity.PouredWater;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
+import com.darkona.dropletsofthirst.content.purity.PouredWater;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Share;

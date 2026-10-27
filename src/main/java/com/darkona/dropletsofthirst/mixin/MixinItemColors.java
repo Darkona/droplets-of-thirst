@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.mixin;
 
-import com.darkona.dropletsofthirst.purity.PurityTint;
+import com.darkona.dropletsofthirst.content.purity.PurityTint;
 import com.darkona.dropletsofthirst.config.ClientConfig;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.color.item.ItemColors;

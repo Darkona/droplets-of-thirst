@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.config;
 
-import com.darkona.dropletsofthirst.thirst.ThirstHelper;
+import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import dev.darkona.jdlib.core.config.NumberRows;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.registries.BuiltInRegistries;

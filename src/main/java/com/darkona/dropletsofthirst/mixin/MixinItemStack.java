@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.mixin;
 
 import com.darkona.dropletsofthirst.config.SyncedValues;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;

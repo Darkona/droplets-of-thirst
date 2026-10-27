@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.mixin.extradelight;
 
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.lance5057.extradelight.util.BottleFluidRegistry;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;

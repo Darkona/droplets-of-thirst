@@ -1,19 +1,19 @@
 package com.darkona.dropletsofthirst.gametest;
 
-import com.darkona.dropletsofthirst.purity.PurityEffects;
-import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
+import com.darkona.dropletsofthirst.content.purity.PurityEffects;
+import com.darkona.dropletsofthirst.content.thirst.ExhaustionFactors;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import com.darkona.dropletsofthirst.index.DropletsDataMaps;
-import com.darkona.dropletsofthirst.purity.DimensionWater;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.DimensionWater;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.index.DropletsMobEffects;
 import com.darkona.dropletsofthirst.index.DropletsItems;
-import com.darkona.dropletsofthirst.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.thirst.PlayerThirstManager;
-import com.darkona.dropletsofthirst.thirst.ThirstHelper;
+import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.content.thirst.PlayerThirstManager;
+import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
 import com.darkona.dropletsofthirst.config.PurityConfig;
 import com.darkona.dropletsofthirst.network.PlayerThirstSyncMessage;

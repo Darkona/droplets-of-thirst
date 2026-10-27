@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.mixin.cold_sweat;
 
-import com.darkona.dropletsofthirst.purity.CauldronPurity;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

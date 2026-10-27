@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.index;
 
-import com.darkona.dropletsofthirst.thirst.QuenchnessEffect;
-import com.darkona.dropletsofthirst.thirst.DehydrationEffect;
+import com.darkona.dropletsofthirst.content.thirst.QuenchnessEffect;
+import com.darkona.dropletsofthirst.content.thirst.DehydrationEffect;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffect;

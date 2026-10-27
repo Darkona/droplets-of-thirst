@@ -1,8 +1,8 @@
 package com.darkona.dropletsofthirst.gametest;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.command.ItemDump;
+import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
+import com.darkona.dropletsofthirst.infrastructure.command.ItemDump;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.Items;

@@ -1,17 +1,13 @@
 package com.darkona.dropletsofthirst;
 
+import com.darkona.dropletsofthirst.impl.DropletsServiceImpl;
 import com.darkona.dropletsofthirst.api.DropletsAPI;
-import com.darkona.dropletsofthirst.client.DrinkTooltip;
-import com.darkona.dropletsofthirst.client.ThirstBarRenderer;
-import com.darkona.dropletsofthirst.client.ThirstBarStyles;
 import com.darkona.dropletsofthirst.compat.coldsweat.ColdSweatCompat;
 import com.darkona.dropletsofthirst.compat.create.CreateCompat;
 import com.darkona.dropletsofthirst.compat.create.CreateRegistry;
 import com.darkona.dropletsofthirst.compat.create.SandFilterBlockEntity;
-import com.darkona.dropletsofthirst.compat.create.ponder.ThirstPonderPlugin;
 import com.darkona.dropletsofthirst.compat.delight.DelightCompat;
 import com.darkona.dropletsofthirst.compat.reliquary.ReliquaryCompat;
-import com.darkona.dropletsofthirst.compat.supernatural.SupernaturalCompat;
 import com.darkona.dropletsofthirst.compat.travelersbackpack.TravelersBackpackCompat;
 import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
 import com.darkona.dropletsofthirst.config.DropletsConfig;
@@ -23,27 +19,22 @@ import com.darkona.dropletsofthirst.index.DropletsPotions;
 import com.darkona.dropletsofthirst.index.DropletsCreativeModeTabs;
 import com.darkona.dropletsofthirst.index.DropletsLegacyAliases;
 import com.darkona.dropletsofthirst.network.DropletsPackets;
-import com.darkona.dropletsofthirst.purity.CauldronPurity;
+import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.index.DropletsDataComponents;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.index.DropletsAttributes;
 import com.darkona.dropletsofthirst.index.DropletsMobEffects;
 import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
-import com.darkona.dropletsofthirst.thirst.PlayerThirstManager;
-import net.createmod.ponder.foundation.PonderIndex;
+import com.darkona.dropletsofthirst.content.thirst.PlayerThirstManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
 @Mod(DropletsOfThirst.ID)
@@ -67,7 +58,6 @@ public class DropletsOfThirst
         DropletsLegacyAliases.register(modBus);
         DropletsPackets.register(modBus);
         modBus.addListener(this::commonSetup);
-        modBus.addListener(this::clientSetup);
         modBus.addListener(PlayerThirstManager::onConfigReloaded);
         modBus.addListener(DropletsOfThirst::addPacks);
         TravelersBackpackCompat.init(modBus);
@@ -75,18 +65,6 @@ public class DropletsOfThirst
         ReliquaryCompat.init();
         VampirismCompat.init();
         DelightCompat.init();
-
-        if(FMLEnvironment.dist.isClient())
-        {
-            ThirstBarRenderer.registerLayer();
-            ThirstBarStyles.registerBuiltIns();
-            VampirismCompat.initClient();
-            SupernaturalCompat.initClient();
-            modBus.addListener(DrinkTooltip::registerFactory);
-            NeoForge.EVENT_BUS.addListener(EventPriority.LOW, DrinkTooltip::gather);
-            NeoForge.EVENT_BUS.addListener(DrinkTooltip::renderPurityTooltip);
-            NeoForge.EVENT_BUS.addListener(PlayerThirstManager::estimatedTooltip);
-        }
 
         if(CreateCompat.LOADED)
         {
@@ -101,18 +79,6 @@ public class DropletsOfThirst
     {
         WaterPurity.init();
         event.enqueueWork(CauldronPurity::registerInteractions);
-    }
-
-    private void clientSetup(final FMLClientSetupEvent event)
-    {
-        if(CreateCompat.LOADED){
-            event.enqueueWork(()-> new Object()
-            {
-                public void registerPonderPlugin(){
-                    PonderIndex.addPlugin(new ThirstPonderPlugin());
-                }
-            }.registerPonderPlugin());
-        }
     }
 
     private static void addPacks(AddPackFindersEvent event)

@@ -3,7 +3,7 @@ package com.darkona.dropletsofthirst.index;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.config.PurityConfig;
-import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.mojang.serialization.Codec;
 import java.util.function.Consumer;
 import java.util.function.Function;
