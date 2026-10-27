@@ -58,6 +58,14 @@ class ArchTest {
     }
 
     @Test
+    void theClientCodeOfAFeatureLivesInItsClientSubpackage() {
+        classes().that().resideInAnyPackage(MOD + ".content..", MOD + ".core..").and(USES_CLIENT)
+                .should().resideInAPackage("..client..")
+                .because("renderers, tooltips and client event handlers go in the client subpackage of the feature, next to what they draw")
+                .check(CLASSES);
+    }
+
+    @Test
     void serverCodeDoesNotNameClientCode() {
         noClasses().that().resideInAPackage(MOD + "..").and(not(USES_CLIENT))
                 .and().doNotHaveFullyQualifiedName(MOD + ".DropletsClient").and().resideOutsideOfPackage(MOD + ".index.client..")

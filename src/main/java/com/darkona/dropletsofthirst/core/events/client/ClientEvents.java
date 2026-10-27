@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.core.events;
+package com.darkona.dropletsofthirst.core.events.client;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.network.DrinkByHandMessage;

@@ -1,5 +1,8 @@
-package com.darkona.dropletsofthirst.content.thirst;
+package com.darkona.dropletsofthirst.content.thirst.client;
 
+import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.content.thirst.ThirstBarStyles;
+import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.compat.appleskin.AppleSkinCompat;
