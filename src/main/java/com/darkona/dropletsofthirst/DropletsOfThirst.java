@@ -14,18 +14,13 @@ import com.darkona.dropletsofthirst.compat.reliquary.ReliquaryCompat;
 import com.darkona.dropletsofthirst.compat.supernatural.SupernaturalCompat;
 import com.darkona.dropletsofthirst.compat.travelersbackpack.TravelersBackpackCompat;
 import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
-import com.darkona.dropletsofthirst.config.ClientConfig;
-import com.darkona.dropletsofthirst.config.CompatConfig;
+import com.darkona.dropletsofthirst.config.DropletsConfig;
 import com.darkona.dropletsofthirst.index.DropletsConditions;
-import com.darkona.dropletsofthirst.config.GameplayConfig;
-import com.darkona.dropletsofthirst.config.ItemsConfig;
-import com.darkona.dropletsofthirst.config.PurityConfig;
 import com.darkona.dropletsofthirst.index.DropletsDataMaps;
 import com.darkona.dropletsofthirst.index.DropletsItems;
 import com.darkona.dropletsofthirst.index.DropletsLootConditions;
 import com.darkona.dropletsofthirst.index.DropletsPotions;
 import com.darkona.dropletsofthirst.index.DropletsCreativeModeTabs;
-import com.darkona.dropletsofthirst.legacy.LegacyConfigMigration;
 import com.darkona.dropletsofthirst.index.DropletsLegacyAliases;
 import com.darkona.dropletsofthirst.network.DropletsPackets;
 import com.darkona.dropletsofthirst.purity.CauldronPurity;
@@ -45,7 +40,6 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
@@ -100,12 +94,7 @@ public class DropletsOfThirst
             modBus.addListener(SandFilterBlockEntity::registerCapabilities);
         }
 
-        LegacyConfigMigration.run();
-        modContainer.registerConfig(ModConfig.Type.COMMON, GameplayConfig.SPEC, ID + "/gameplay.toml");
-        modContainer.registerConfig(ModConfig.Type.COMMON, PurityConfig.SPEC, ID + "/purity.toml");
-        modContainer.registerConfig(ModConfig.Type.COMMON, ItemsConfig.SPEC, ID + "/items.toml");
-        modContainer.registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, ID + "/compat.toml");
-        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, ID + "/client.toml");
+        DropletsConfig.register(modContainer);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
