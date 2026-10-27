@@ -1,8 +1,6 @@
-package com.darkona.dropletsofthirst.network;
+package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;

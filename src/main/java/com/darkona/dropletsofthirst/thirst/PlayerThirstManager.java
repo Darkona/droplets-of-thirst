@@ -7,7 +7,6 @@ import com.darkona.dropletsofthirst.data.DropletsDataMaps;
 import com.darkona.dropletsofthirst.data.DropletsDataMaps.DrinkValues;
 import com.darkona.dropletsofthirst.config.ClientConfig;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
-import com.darkona.dropletsofthirst.network.ThirstValuesSyncMessage;
 import java.util.List;
 import java.util.stream.Stream;
 import net.minecraft.ChatFormatting;

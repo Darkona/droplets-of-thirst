@@ -25,7 +25,7 @@ import com.darkona.dropletsofthirst.item.ItemInit;
 import com.darkona.dropletsofthirst.item.ThirstTab;
 import com.darkona.dropletsofthirst.legacy.LegacyConfigMigration;
 import com.darkona.dropletsofthirst.legacy.LegacyIds;
-import com.darkona.dropletsofthirst.network.ThirstModPacketHandler;
+import com.darkona.dropletsofthirst.thirst.ThirstModPacketHandler;
 import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.purity.PurityEnabledLootCondition;
 import com.darkona.dropletsofthirst.purity.ThirstComponent;

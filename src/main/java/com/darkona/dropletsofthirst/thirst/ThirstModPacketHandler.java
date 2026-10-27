@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.network;
+package com.darkona.dropletsofthirst.thirst;
 
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;

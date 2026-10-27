@@ -1,10 +1,7 @@
-package com.darkona.dropletsofthirst.network;
+package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.thirst.VampireThirst;
-import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;

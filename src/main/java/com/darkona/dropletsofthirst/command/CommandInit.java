@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.command;
 
-import com.darkona.dropletsofthirst.network.DrinkByHandMessage;
+import com.darkona.dropletsofthirst.thirst.DrinkByHandMessage;
 import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.thirst.AttributeInit;
 import com.darkona.dropletsofthirst.DropletsOfThirst;

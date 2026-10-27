@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.client;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.item.ItemInit;
-import com.darkona.dropletsofthirst.network.DrinkByHandMessage;
+import com.darkona.dropletsofthirst.thirst.DrinkByHandMessage;
 import com.darkona.dropletsofthirst.purity.PurityTint;
 import com.darkona.dropletsofthirst.thirst.ModAttachment;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;

@@ -1,7 +1,6 @@
-package com.darkona.dropletsofthirst.network;
+package com.darkona.dropletsofthirst.thirst;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.config.SyncedValues;
 import io.netty.buffer.ByteBuf;
