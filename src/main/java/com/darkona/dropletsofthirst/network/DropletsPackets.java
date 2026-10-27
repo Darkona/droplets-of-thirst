@@ -1,9 +1,9 @@
-package com.darkona.dropletsofthirst.thirst;
+package com.darkona.dropletsofthirst.network;
 
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
-public class ThirstModPacketHandler
+public class DropletsPackets
 {
     private static final String PROTOCOL_VERSION = "0.1.12";
 

@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.thirst;
 
+import com.darkona.dropletsofthirst.network.PlayerThirstSyncMessage;
 import com.darkona.dropletsofthirst.purity.PurityEffects;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.DropletsAPI;

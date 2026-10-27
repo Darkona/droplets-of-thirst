@@ -1,5 +1,8 @@
-package com.darkona.dropletsofthirst.thirst;
+package com.darkona.dropletsofthirst.network;
 
+import com.darkona.dropletsofthirst.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.thirst.ModAttachment;
+import com.darkona.dropletsofthirst.thirst.VampireThirst;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
