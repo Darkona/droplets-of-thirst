@@ -7,11 +7,11 @@ import com.darkona.dropletsofthirst.api.event.DrinkEvent;
 import com.darkona.dropletsofthirst.compat.jei.PurificationEntry;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.item.ItemInit;
-import com.darkona.dropletsofthirst.purity.ThirstComponent;
+import com.darkona.dropletsofthirst.index.DropletsItems;
+import com.darkona.dropletsofthirst.index.DropletsDataComponents;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.config.PurityConfig;
-import com.darkona.dropletsofthirst.item.ThirstTab;
+import com.darkona.dropletsofthirst.index.DropletsCreativeModeTabs;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -101,7 +101,7 @@ public class PurityOffTests
             helper.getLevel().setBlockAndUpdate(water, Blocks.WATER.defaultBlockState());
             ServerPlayer player = player(helper);
             player.moveTo(water.getX() + 0.5, water.getY() + 1, water.getZ() + 0.5, 0.0F, 90.0F);
-            for (Item empty : new Item[]{Items.GLASS_BOTTLE, ItemInit.TERRACOTTA_BOWL.get(), Items.BUCKET})
+            for (Item empty : new Item[]{Items.GLASS_BOTTLE, DropletsItems.TERRACOTTA_BOWL.get(), Items.BUCKET})
             {
                 ItemStack stack = new ItemStack(empty);
                 player.setItemInHand(InteractionHand.MAIN_HAND, stack);
@@ -131,7 +131,7 @@ public class PurityOffTests
             BlockPos pos = helper.absolutePos(new BlockPos(2, 2, 2));
             helper.getLevel().setBlockAndUpdate(pos.below(), Blocks.CAMPFIRE.defaultBlockState());
             Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-            for (Item empty : new Item[]{Items.BUCKET, ItemInit.TERRACOTTA_BOWL.get()})
+            for (Item empty : new Item[]{Items.BUCKET, DropletsItems.TERRACOTTA_BOWL.get()})
             {
                 helper.getLevel().setBlockAndUpdate(pos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3));
                 ItemStack stack = new ItemStack(empty);
@@ -159,7 +159,7 @@ public class PurityOffTests
             PlayerThirst thirst = thirst(player);
             thirst.setThirst(4);
             ItemStack dirty = PotionContents.createItemStack(Items.POTION, Potions.WATER);
-            dirty.set(ThirstComponent.PURITY, 0);
+            dirty.set(DropletsDataComponents.PURITY, 0);
             PlayerThirst.consume(dirty, player);
             helper.assertTrue(player.getActiveEffects().isEmpty(), "dirty water gave effects with purity off: " + player.getActiveEffects());
             helper.assertTrue(thirst.getThirst() > 4, "dirty water did not restore thirst with purity off");
@@ -202,9 +202,9 @@ public class PurityOffTests
     @GameTest(template = "empty")
     public static void creativeTabHasOneOfEachWater(GameTestHelper helper)
     {
-        helper.assertValueEqual(waterStacks(ThirstTab.DisplayItems()), 3 * PurityLevel.values().length, "water stacks in the tab with purity on (three containers, six purities)");
+        helper.assertValueEqual(waterStacks(DropletsCreativeModeTabs.DisplayItems()), 3 * PurityLevel.values().length, "water stacks in the tab with purity on (three containers, six purities)");
         withPurityOff(() -> {
-            Collection<ItemStack> items = ThirstTab.DisplayItems();
+            Collection<ItemStack> items = DropletsCreativeModeTabs.DisplayItems();
             helper.assertValueEqual(waterStacks(items), 3, "water stacks in the tab with purity off");
             for (ItemStack stack : items)
                 helper.assertFalse(WaterPurity.hasPurity(stack), stack + " in the tab has a purity with purity off");

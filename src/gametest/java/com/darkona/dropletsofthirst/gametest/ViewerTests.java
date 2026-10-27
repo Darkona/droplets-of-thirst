@@ -6,7 +6,7 @@ import com.darkona.dropletsofthirst.compat.create.CreateCompat;
 import com.darkona.dropletsofthirst.compat.jei.HydrationEntry;
 import com.darkona.dropletsofthirst.compat.jei.PurificationEntry;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.item.ItemInit;
+import com.darkona.dropletsofthirst.index.DropletsItems;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -59,7 +59,7 @@ public class ViewerTests
         helper.assertTrue(bottle.stack().getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).is(Potions.WATER), "the potion entry is not a water bottle");
         helper.assertValueEqual(bottle.values().thirst(), 4, "water bottle thirst on the hydration page");
         helper.assertValueEqual(bottle.values().quenched(), 5, "water bottle quenched on the hydration page");
-        helper.assertTrue(entries.stream().anyMatch(entry -> entry.stack().is(ItemInit.TERRACOTTA_WATER_BOWL.get())), "no terracotta water bowl on the hydration page");
+        helper.assertTrue(entries.stream().anyMatch(entry -> entry.stack().is(DropletsItems.TERRACOTTA_WATER_BOWL.get())), "no terracotta water bowl on the hydration page");
         for (HydrationEntry entry : entries)
             helper.assertTrue(entry.values().thirst() != 0 || entry.values().quenched() != 0, entry.stack() + " does nothing and is on the hydration page");
         helper.succeed();

@@ -1,11 +1,12 @@
 package com.darkona.dropletsofthirst.thirst;
 
+import com.darkona.dropletsofthirst.index.DropletsMobEffects;
 import com.darkona.dropletsofthirst.compat.coldsweat.ColdSweatCompat;
 import com.darkona.dropletsofthirst.compat.sereneseasons.SereneSeasonsCompat;
 import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.darkona.dropletsofthirst.config.PurityConfig;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps.DimensionWater;
+import com.darkona.dropletsofthirst.index.DropletsDataMaps;
+import com.darkona.dropletsofthirst.purity.DimensionWater;
 import com.darkona.dropletsofthirst.mixin.BiomeAccessor;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -61,7 +62,7 @@ public final class ExhaustionFactors
         float altitude = (float) NumberRows.band(ALTITUDE.get(GameplayConfig.ALTITUDE_MULTIPLIERS.get()), player.getBlockY() - level.getSeaLevel(), 1.0);
         float water = player.isUnderWater() ? GameplayConfig.UNDERWATER_MULTIPLIER.get().floatValue() * underwaterBreathing(player)
                 : player.isInWater() ? GameplayConfig.IN_WATER_MULTIPLIER.get().floatValue() : 1.0F;
-        MobEffectInstance hydratedEffect = player.getEffect(EffectInit.HYDRATED);
+        MobEffectInstance hydratedEffect = player.getEffect(DropletsMobEffects.HYDRATED);
         float hydrated = hydratedEffect == null ? 1.0F : (float) Math.pow(GameplayConfig.HYDRATED_MULTIPLIER.get(), hydratedEffect.getAmplifier() + 1);
 
         if (breakdown != null)

@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.mixin.cold_sweat;
 
-import com.darkona.dropletsofthirst.purity.ThirstComponent;
+import com.darkona.dropletsofthirst.index.DropletsDataComponents;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.momosoftworks.coldsweat.common.item.FilledWaterskinItem;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +14,7 @@ public abstract class MixinFilledWaterskinItem
     private ItemStack droplets_of_thirst$dropPurity(ItemStack empty)
     {
         if (!(empty.getItem() instanceof FilledWaterskinItem))
-            empty.remove(ThirstComponent.PURITY);
+            empty.remove(DropletsDataComponents.PURITY);
         return empty;
     }
 }

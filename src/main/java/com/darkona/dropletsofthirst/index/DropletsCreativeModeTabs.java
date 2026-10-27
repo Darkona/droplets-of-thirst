@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.item;
+package com.darkona.dropletsofthirst.index;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ThirstTab
+public class DropletsCreativeModeTabs
 {
     private static final DeferredRegister<CreativeModeTab> TAB_REGISTER =
             DeferredRegister.create(Registries.CREATIVE_MODE_TAB, DropletsOfThirst.ID);
@@ -26,7 +26,7 @@ public class ThirstTab
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> THIRST_TAB = TAB_REGISTER.register(DropletsOfThirst.ID,
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup." + DropletsOfThirst.ID))
-                    .icon(ItemInit.TERRACOTTA_WATER_BOWL.get()::getDefaultInstance)
+                    .icon(DropletsItems.TERRACOTTA_WATER_BOWL.get()::getDefaultInstance)
                     .displayItems((displayParameters, output) -> output.acceptAll(DisplayItems()))
                     .build());
 
@@ -39,9 +39,9 @@ public class ThirstTab
 
         addPurities(list, new ItemStack(Items.WATER_BUCKET));
         addPurities(list, PotionContents.createItemStack(Items.POTION, Potions.WATER));
-        list.add(ItemInit.CLAY_BOWL.get().getDefaultInstance());
-        list.add(ItemInit.TERRACOTTA_BOWL.get().getDefaultInstance());
-        addPurities(list, new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()));
+        list.add(DropletsItems.CLAY_BOWL.get().getDefaultInstance());
+        list.add(DropletsItems.TERRACOTTA_BOWL.get().getDefaultInstance());
+        addPurities(list, new ItemStack(DropletsItems.TERRACOTTA_WATER_BOWL.get()));
 
         return list;
     }

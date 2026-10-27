@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.purity;
 
 import com.darkona.dropletsofthirst.api.event.PurityEffectEvent;
 import com.darkona.dropletsofthirst.config.PurityConfig;
-import com.darkona.dropletsofthirst.thirst.EffectInit;
+import com.darkona.dropletsofthirst.index.DropletsMobEffects;
 import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -43,7 +43,7 @@ public final class PurityEffects
             hydrate &= !effect.blocksHydration();
         }
         if (PurityConfig.HOT_DIRTY_WATER.get() && purity <= PurityConfig.HOT_DIRTY_WATER_MAX_PURITY.get() && player instanceof ServerPlayer && ExhaustionFactors.isHotClimate(player))
-            effects.add(new MobEffectInstance(EffectInit.DEHYDRATION, PurityConfig.HOT_DIRTY_WATER_DURATION.get(), PurityConfig.HOT_DIRTY_WATER_AMPLIFIER.get()));
+            effects.add(new MobEffectInstance(DropletsMobEffects.DEHYDRATION, PurityConfig.HOT_DIRTY_WATER_DURATION.get(), PurityConfig.HOT_DIRTY_WATER_AMPLIFIER.get()));
         PurityEffectEvent event = NeoForge.EVENT_BUS.post(new PurityEffectEvent(player, purity, effects, hydrate || PurityConfig.QUENCH_WHEN_DEBUFFED.get()));
         if (event.isCanceled())
             return true;

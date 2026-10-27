@@ -1,0 +1,47 @@
+package com.darkona.dropletsofthirst.index;
+
+import com.darkona.dropletsofthirst.purity.DimensionWater;
+import com.darkona.dropletsofthirst.purity.BiomeWater;
+import com.darkona.dropletsofthirst.thirst.DrinkValues;
+import com.darkona.dropletsofthirst.DropletsOfThirst;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.datamaps.DataMapType;
+import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
+
+public final class DropletsDataMaps
+{
+    public static final DataMapType<Item, DrinkValues> DRINKS = DataMapType
+            .builder(DropletsOfThirst.asResource("drinks"), Registries.ITEM, DrinkValues.CODEC)
+            .synced(DrinkValues.CODEC, false)
+            .build();
+    public static final DataMapType<Block, DrinkValues> HYDRATING_BLOCKS = DataMapType
+            .builder(DropletsOfThirst.asResource("hydrating_blocks"), Registries.BLOCK, DrinkValues.CODEC)
+            .build();
+    public static final DataMapType<Biome, BiomeWater> BIOME_WATER = DataMapType
+            .builder(DropletsOfThirst.asResource("biome_water"), Registries.BIOME, BiomeWater.CODEC)
+            .build();
+    public static final DataMapType<DimensionType, DimensionWater> DIMENSION_WATER = DataMapType
+            .builder(DropletsOfThirst.asResource("dimension_water"), Registries.DIMENSION_TYPE, DimensionWater.CODEC)
+            .build();
+
+    private DropletsDataMaps() {}
+
+    public static void register(IEventBus modBus)
+    {
+        modBus.addListener(DropletsDataMaps::registerTypes);
+    }
+
+    private static void registerTypes(RegisterDataMapTypesEvent event)
+    {
+        event.register(DRINKS);
+        event.register(HYDRATING_BLOCKS);
+        event.register(BIOME_WATER);
+        event.register(DIMENSION_WATER);
+    }
+
+}

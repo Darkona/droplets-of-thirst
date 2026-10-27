@@ -1,10 +1,10 @@
 package com.darkona.dropletsofthirst.client;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.item.ItemInit;
+import com.darkona.dropletsofthirst.index.DropletsItems;
 import com.darkona.dropletsofthirst.network.DrinkByHandMessage;
 import com.darkona.dropletsofthirst.purity.PurityTint;
-import com.darkona.dropletsofthirst.thirst.ModAttachment;
+import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -27,7 +27,7 @@ public final class ClientEvents
     @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event)
     {
-        event.register((stack, tintIndex) -> tintIndex == 1 ? PurityTint.VANILLA_WATER : -1, ItemInit.TERRACOTTA_WATER_BOWL.get());
+        event.register((stack, tintIndex) -> tintIndex == 1 ? PurityTint.VANILLA_WATER : -1, DropletsItems.TERRACOTTA_WATER_BOWL.get());
     }
 
     @SubscribeEvent
@@ -51,7 +51,7 @@ public final class ClientEvents
 
     private static void drinkByHandIfAllowed(PlayerInteractEvent event)
     {
-        if (event.getHand() == InteractionHand.MAIN_HAND && event.getEntity().level().isClientSide && event.getEntity().getData(ModAttachment.PLAYER_THIRST).handDrinkingAllowed())
+        if (event.getHand() == InteractionHand.MAIN_HAND && event.getEntity().level().isClientSide && event.getEntity().getData(DropletsAttachmentTypes.PLAYER_THIRST).handDrinkingAllowed())
             drinkByHand();
     }
 
@@ -59,7 +59,7 @@ public final class ClientEvents
     {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null || !player.isCrouching() || !player.getMainHandItem().isEmpty()
-                || player.getData(ModAttachment.PLAYER_THIRST).needsBothHandsToDrink() && !player.getOffhandItem().isEmpty())
+                || player.getData(DropletsAttachmentTypes.PLAYER_THIRST).needsBothHandsToDrink() && !player.getOffhandItem().isEmpty())
             return;
         if (player.level().getFluidState(DrinkByHandMessage.pickFluid(player, ClipContext.Fluid.ANY).getBlockPos()).is(FluidTags.WATER))
             PacketDistributor.sendToServer(DrinkByHandMessage.INSTANCE);

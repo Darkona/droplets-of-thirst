@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.mixin;
 
 import com.darkona.dropletsofthirst.config.GameplayConfig;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.thirst.ModAttachment;
+import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.entity.player.Player;
@@ -32,7 +32,7 @@ public abstract class MixinFoodData
     private void healWithSaturation(Player player, float amount, Operation<Void> original)
     {
         FoodData foodData = player.getFoodData();
-        PlayerThirst thirstData = player.getData(ModAttachment.PLAYER_THIRST);
+        PlayerThirst thirstData = player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
 
         float f = Math.min(foodData.getSaturationLevel(), 6.0F);
 
@@ -63,7 +63,7 @@ public abstract class MixinFoodData
     )
     private void healWithHunger(Player player, float amount, Operation<Void> original)
     {
-        PlayerThirst thirstData = player.getData(ModAttachment.PLAYER_THIRST);
+        PlayerThirst thirstData = player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
         boolean shouldHeal = !GameplayConfig.REGEN_HALTED_WHEN_THIRSTY.get() || thirstData.getThirst() >= GameplayConfig.HUNGER_REGEN_MIN_THIRST.get();
 
         if(shouldHeal)
@@ -78,7 +78,7 @@ public abstract class MixinFoodData
     @Inject(method = "tick",at = @At(value = "HEAD"))
     private void DealWithExhaustionBySaturation(Player player, CallbackInfo ci){
         if(exhaustionLevel>4.0F){
-           player.getData(ModAttachment.PLAYER_THIRST).ExhaustionRecalculate();
+           player.getData(DropletsAttachmentTypes.PLAYER_THIRST).ExhaustionRecalculate();
         }
     }
 }

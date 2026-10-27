@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.compat.jei;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.ThirstValues;
-import com.darkona.dropletsofthirst.item.ItemInit;
+import com.darkona.dropletsofthirst.index.DropletsItems;
 import com.darkona.dropletsofthirst.client.DrinkTooltip;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -22,7 +22,7 @@ final class HydrationCategory extends AbstractRecipeCategory<HydrationEntry>
 
     HydrationCategory(IGuiHelper gui)
     {
-        super(DropletsJeiPlugin.HYDRATION, Component.translatable(DropletsOfThirst.ID + ".jei.hydration"), gui.createDrawableItemLike(ItemInit.TERRACOTTA_WATER_BOWL.get()), WIDTH, 32);
+        super(DropletsJeiPlugin.HYDRATION, Component.translatable(DropletsOfThirst.ID + ".jei.hydration"), gui.createDrawableItemLike(DropletsItems.TERRACOTTA_WATER_BOWL.get()), WIDTH, 32);
     }
 
     @Override

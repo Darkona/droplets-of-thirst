@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.gametest;
 
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.thirst.ModAttachment;
+import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import net.minecraft.gametest.framework.GameTestHelper;
 import dev.darkona.jdlib.testkit.TestPlayers;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,6 +17,6 @@ final class TestSupport
 
     static PlayerThirst thirst(ServerPlayer player)
     {
-        return player.getData(ModAttachment.PLAYER_THIRST);
+        return player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
     }
 }

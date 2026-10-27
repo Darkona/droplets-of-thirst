@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.network;
 
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.thirst.ModAttachment;
+import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -32,7 +32,7 @@ public record PlayerThirstSyncMessage(int thirst, int quenched, float exhaustion
     {
         context.enqueueWork(() -> {
             Player player = context.player();
-            PlayerThirst cap = player.getData(ModAttachment.PLAYER_THIRST);
+            PlayerThirst cap = player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
             cap.setThirst(message.thirst);
             cap.setQuenched(message.quenched);
             cap.setExhaustion(message.exhaustion);

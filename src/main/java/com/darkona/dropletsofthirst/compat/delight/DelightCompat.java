@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.compat.delight;
 
-import com.darkona.dropletsofthirst.data.DropletsTags;
+import com.darkona.dropletsofthirst.index.DropletsTags;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.config.CompatConfig;
 import net.minecraft.core.BlockPos;

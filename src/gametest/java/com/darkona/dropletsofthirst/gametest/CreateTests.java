@@ -10,8 +10,8 @@ import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.darkona.dropletsofthirst.config.PurityConfig;
-import com.darkona.dropletsofthirst.item.ThirstTab;
-import com.darkona.dropletsofthirst.item.ItemInit;
+import com.darkona.dropletsofthirst.index.DropletsCreativeModeTabs;
+import com.darkona.dropletsofthirst.index.DropletsItems;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.fluids.spout.FillingBySpout;
 import com.simibubi.create.content.fluids.transfer.GenericItemEmptying;
@@ -225,7 +225,7 @@ public class CreateTests
     public static void sandFilterIsInCreateAndOwnCreativeTabs(GameTestHelper helper)
     {
         CreativeModeTab.ItemDisplayParameters parameters = new CreativeModeTab.ItemDisplayParameters(helper.getLevel().enabledFeatures(), true, helper.getLevel().registryAccess());
-        for (CreativeModeTab tab : new CreativeModeTab[]{AllCreativeModeTabs.BASE_CREATIVE_TAB.get(), ThirstTab.THIRST_TAB.get()})
+        for (CreativeModeTab tab : new CreativeModeTab[]{AllCreativeModeTabs.BASE_CREATIVE_TAB.get(), DropletsCreativeModeTabs.THIRST_TAB.get()})
         {
             tab.buildContents(parameters);
             helper.assertTrue(tab.getDisplayItems().stream().anyMatch(stack -> stack.is(CreateRegistry.SAND_FILTER_BLOCK.asItem())), "Sand Filter missing from " + tab.getDisplayName().getString());
@@ -270,7 +270,7 @@ public class CreateTests
     public static void fanWashingPurifiesUpToClean(GameTestHelper helper)
     {
         int clean = PurityLevel.CLEAN.level();
-        for (ItemStack container : List.of(PotionContents.createItemStack(Items.POTION, Potions.WATER), new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get())))
+        for (ItemStack container : List.of(PotionContents.createItemStack(Items.POTION, Potions.WATER), new ItemStack(DropletsItems.TERRACOTTA_WATER_BOWL.get())))
         {
             for (int purity = PurityLevel.MIN; purity < clean; purity++)
                 helper.assertValueEqual(fanned(helper, AllFanProcessingTypes.SPLASHING, container, purity), purity + 1, "purity " + purity + " " + container + " washed by a fan");
@@ -329,8 +329,8 @@ public class CreateTests
     @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)
     public static void spoutFillingKeepsPurity(GameTestHelper helper)
     {
-        ItemStack bowl = FillingBySpout.fillItem(helper.getLevel(), 250, new ItemStack(ItemInit.TERRACOTTA_BOWL.get()), water(0, 1000));
-        helper.assertTrue(bowl.is(ItemInit.TERRACOTTA_WATER_BOWL.get()), "a spout filled a terracotta bowl into " + bowl);
+        ItemStack bowl = FillingBySpout.fillItem(helper.getLevel(), 250, new ItemStack(DropletsItems.TERRACOTTA_BOWL.get()), water(0, 1000));
+        helper.assertTrue(bowl.is(DropletsItems.TERRACOTTA_WATER_BOWL.get()), "a spout filled a terracotta bowl into " + bowl);
         helper.assertValueEqual(WaterPurity.getPurity(bowl), 0, "purity of a terracotta bowl filled by a spout with contaminated water");
         ItemStack bottle = FillingBySpout.fillItem(helper.getLevel(), 250, new ItemStack(Items.GLASS_BOTTLE), water(1, 1000));
         helper.assertValueEqual(WaterPurity.getPurity(bottle), 1, "purity of a bottle filled by a spout with dirty water");
@@ -345,12 +345,12 @@ public class CreateTests
         helper.assertTrue(bottle.isEmpty(), "the last bottle was not used up");
         helper.assertValueEqual(WaterPurity.getPurity(fromBottle), 0, "purity of water emptied from the last contaminated bottle");
 
-        ItemStack bowl = WaterPurity.addPurity(new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()), 1);
+        ItemStack bowl = WaterPurity.addPurity(new ItemStack(DropletsItems.TERRACOTTA_WATER_BOWL.get()), 1);
         Pair<FluidStack, ItemStack> fromBowl = GenericItemEmptying.emptyItem(helper.getLevel(), bowl, true);
-        helper.assertTrue(fromBowl.getSecond().is(ItemInit.TERRACOTTA_BOWL.get()), "emptying a terracotta water bowl gave " + fromBowl.getSecond());
+        helper.assertTrue(fromBowl.getSecond().is(DropletsItems.TERRACOTTA_BOWL.get()), "emptying a terracotta water bowl gave " + fromBowl.getSecond());
         helper.assertValueEqual(fromBowl.getFirst().getAmount(), 250, "water emptied from a terracotta bowl");
         helper.assertValueEqual(WaterPurity.getPurity(fromBowl.getFirst()), 1, "purity of water emptied from a dirty terracotta bowl");
-        FluidStack plain = GenericItemEmptying.emptyItem(helper.getLevel(), new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()), true).getFirst();
+        FluidStack plain = GenericItemEmptying.emptyItem(helper.getLevel(), new ItemStack(DropletsItems.TERRACOTTA_WATER_BOWL.get()), true).getFirst();
         helper.assertFalse(WaterPurity.hasPurity(plain), "the emptying recipe kept the purity of an earlier bowl");
         helper.succeed();
     }

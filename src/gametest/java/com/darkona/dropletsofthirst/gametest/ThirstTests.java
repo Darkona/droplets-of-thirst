@@ -6,11 +6,11 @@ import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps.DimensionWater;
+import com.darkona.dropletsofthirst.index.DropletsDataMaps;
+import com.darkona.dropletsofthirst.purity.DimensionWater;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.thirst.EffectInit;
-import com.darkona.dropletsofthirst.item.ItemInit;
+import com.darkona.dropletsofthirst.index.DropletsMobEffects;
+import com.darkona.dropletsofthirst.index.DropletsItems;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.PlayerThirstManager;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
@@ -168,12 +168,12 @@ public class ThirstTests
     public static void drinkingABowlGivesTheEmptyBowlBack(GameTestHelper helper)
     {
         ServerPlayer player = player(helper);
-        ItemStack bowls = new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get(), 2);
+        ItemStack bowls = new ItemStack(DropletsItems.TERRACOTTA_WATER_BOWL.get(), 2);
         ItemStack left = bowls.finishUsingItem(helper.getLevel(), player);
-        helper.assertTrue(left.is(ItemInit.TERRACOTTA_WATER_BOWL.get()) && left.getCount() == 1, "water bowls left after drinking one of two");
-        helper.assertValueEqual(player.getInventory().countItem(ItemInit.TERRACOTTA_BOWL.get()), 1, "empty bowls in the inventory");
+        helper.assertTrue(left.is(DropletsItems.TERRACOTTA_WATER_BOWL.get()) && left.getCount() == 1, "water bowls left after drinking one of two");
+        helper.assertValueEqual(player.getInventory().countItem(DropletsItems.TERRACOTTA_BOWL.get()), 1, "empty bowls in the inventory");
         ItemStack last = left.finishUsingItem(helper.getLevel(), player);
-        helper.assertTrue(last.is(ItemInit.TERRACOTTA_BOWL.get()) && last.getCount() == 1, "drinking the last water bowl leaves the empty bowl in hand");
+        helper.assertTrue(last.is(DropletsItems.TERRACOTTA_BOWL.get()) && last.getCount() == 1, "drinking the last water bowl leaves the empty bowl in hand");
         helper.succeed();
     }
 
@@ -211,7 +211,7 @@ public class ThirstTests
         thirst.hydrate(player, -6, -6, true, ThirstChangeEvent.Cause.EAT);
         helper.assertValueEqual(thirst.getThirst(), 0, "thirst after salty food");
         helper.assertValueEqual(thirst.getQuenched(), 0, "quenched after salty food");
-        helper.assertFalse(player.hasEffect(EffectInit.OVERHYDRATED), "salty food overhydrated");
+        helper.assertFalse(player.hasEffect(DropletsMobEffects.OVERHYDRATED), "salty food overhydrated");
         helper.succeed();
     }
 
@@ -222,9 +222,9 @@ public class ThirstTests
         PlayerThirst thirst = thirst(player);
         thirst.change(player, 20, 20, ThirstChangeEvent.Cause.COMMAND);
         thirst.hydrate(player, 6, 8, true, ThirstChangeEvent.Cause.DRINK);
-        helper.assertFalse(player.hasEffect(EffectInit.OVERHYDRATED), "one bottle past full already overhydrated");
+        helper.assertFalse(player.hasEffect(DropletsMobEffects.OVERHYDRATED), "one bottle past full already overhydrated");
         thirst.hydrate(player, 6, 8, true, ThirstChangeEvent.Cause.DRINK);
-        MobEffectInstance effect = player.getEffect(EffectInit.OVERHYDRATED);
+        MobEffectInstance effect = player.getEffect(DropletsMobEffects.OVERHYDRATED);
         helper.assertTrue(effect != null && effect.getAmplifier() == 0, "two bottles past full give Overhydrated I");
         helper.assertTrue(player.hasEffect(MobEffects.CONFUSION), "Overhydrated comes with Nausea");
         helper.assertTrue(player.getEffect(MobEffects.CONFUSION).getDuration() >= 200, "Overhydrated brings at least 10 seconds of Nausea");
@@ -241,9 +241,9 @@ public class ThirstTests
         for (int i = 0; i < 4; i++)
             thirst.hydrate(player, 6, 8, true, ThirstChangeEvent.Cause.DRINK);
         player.removeTag(FROZEN_TAG);
-        helper.assertFalse(player.hasEffect(EffectInit.OVERHYDRATED), "cancelled drinks overhydrated");
+        helper.assertFalse(player.hasEffect(DropletsMobEffects.OVERHYDRATED), "cancelled drinks overhydrated");
         thirst.hydrate(player, 6, 8, true, ThirstChangeEvent.Cause.DRINK);
-        helper.assertFalse(player.hasEffect(EffectInit.OVERHYDRATED), "one bottle past full after cancelled drinks overhydrated");
+        helper.assertFalse(player.hasEffect(DropletsMobEffects.OVERHYDRATED), "one bottle past full after cancelled drinks overhydrated");
         helper.succeed();
     }
 
@@ -256,7 +256,7 @@ public class ThirstTests
         thirst.change(player, 20, 20, ThirstChangeEvent.Cause.COMMAND);
         for (int i = 0; i < 4; i++)
             thirst.hydrate(player, 6, 8, true, ThirstChangeEvent.Cause.DRINK);
-        helper.assertFalse(player.hasEffect(EffectInit.OVERHYDRATED), "an invulnerable player overhydrated");
+        helper.assertFalse(player.hasEffect(DropletsMobEffects.OVERHYDRATED), "an invulnerable player overhydrated");
         helper.succeed();
     }
 
@@ -405,7 +405,7 @@ public class ThirstTests
     {
         ServerPlayer player = player(helper);
         PlayerThirst thirst = thirst(player);
-        MobEffect dehydration = EffectInit.DEHYDRATION.get();
+        MobEffect dehydration = DropletsMobEffects.DEHYDRATION.get();
         float start = thirst.getExhaustion();
         dehydration.applyEffectTick(player, 0);
         helper.assertTrue(thirst.getExhaustion() > start, "Dehydration added no exhaustion to a survival player");

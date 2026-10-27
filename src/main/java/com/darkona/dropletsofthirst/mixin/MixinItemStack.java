@@ -1,10 +1,10 @@
 package com.darkona.dropletsofthirst.mixin;
 
-import com.darkona.dropletsofthirst.purity.ThirstComponent;
 import com.darkona.dropletsofthirst.config.SyncedValues;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -39,6 +39,6 @@ public abstract class MixinItemStack
     private void droplets_of_thirst$migrateLegacyPurity(Holder<Item> item, int count, DataComponentPatch components, CallbackInfo ci)
     {
         if (!components.isEmpty())
-            ThirstComponent.migrateLegacyPurity((ItemStack) (Object) this);
+            WaterPurity.migrateLegacyPurity((ItemStack) (Object) this);
     }
 }

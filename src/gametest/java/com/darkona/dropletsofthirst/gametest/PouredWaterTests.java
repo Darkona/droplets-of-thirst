@@ -4,7 +4,7 @@ import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.purity.PouredWater;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.thirst.ModAttachment;
+import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.dispenser.BlockSource;
@@ -51,7 +51,7 @@ public class PouredWaterTests
     private static boolean registered(GameTestHelper helper, BlockPos pos)
     {
         LevelChunk chunk = helper.getLevel().getChunkAt(pos);
-        PouredWater water = chunk.getExistingDataOrNull(ModAttachment.POURED_WATER.get());
+        PouredWater water = chunk.getExistingDataOrNull(DropletsAttachmentTypes.POURED_WATER.get());
         return water != null && water.entries().containsKey(pos.asLong());
     }
 
@@ -175,7 +175,7 @@ public class PouredWaterTests
         BlockPos pos = helper.absolutePos(new BlockPos(2, 2, 2));
         pour(helper, TestSupport.player(helper), pos, CONTAMINATED);
         LevelChunk chunk = helper.getLevel().getChunkAt(pos);
-        PouredWater water = chunk.getExistingDataOrNull(ModAttachment.POURED_WATER.get());
+        PouredWater water = chunk.getExistingDataOrNull(DropletsAttachmentTypes.POURED_WATER.get());
         helper.assertTrue(water != null && !water.isEmpty(), "no poured water in the chunk");
 
         Tag saved = PouredWater.CODEC.encodeStart(NbtOps.INSTANCE, water).getOrThrow();

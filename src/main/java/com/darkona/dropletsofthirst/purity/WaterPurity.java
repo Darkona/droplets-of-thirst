@@ -1,14 +1,14 @@
 package com.darkona.dropletsofthirst.purity;
 
 import com.darkona.dropletsofthirst.api.PurityLevel;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps.BiomeWater;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps.DimensionWater;
-import com.darkona.dropletsofthirst.data.DropletsTags;
-import com.darkona.dropletsofthirst.item.ItemInit;
-import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.config.PurityConfig;
 import com.darkona.dropletsofthirst.config.SyncedValues;
+import com.darkona.dropletsofthirst.index.DropletsDataComponents;
+import com.darkona.dropletsofthirst.index.DropletsDataMaps;
+import com.darkona.dropletsofthirst.index.DropletsItems;
+import com.darkona.dropletsofthirst.index.DropletsLegacyAliases;
+import com.darkona.dropletsofthirst.index.DropletsTags;
+import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import dev.darkona.jdlib.core.config.NumberRows;
 import java.util.Collection;
 import java.util.HashMap;
@@ -35,6 +35,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.FluidState;
+import net.neoforged.neoforge.common.MutableDataComponentHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,8 +58,8 @@ public class WaterPurity
         addContainer(new ContainerWithPurity(Items.GLASS_BOTTLE,
                 PotionContents.createItemStack(Items.POTION,Potions.WATER).getItem()).setEqualsFilled(itemStack ->
                 itemStack.is(Items.POTION) && isWater(itemStack.get(DataComponents.POTION_CONTENTS))));
-        addContainer(new ContainerWithPurity(ItemInit.TERRACOTTA_BOWL.get(),
-                ItemInit.TERRACOTTA_WATER_BOWL.get()));
+        addContainer(new ContainerWithPurity(DropletsItems.TERRACOTTA_BOWL.get(),
+                DropletsItems.TERRACOTTA_WATER_BOWL.get()));
         addContainer(new ContainerWithPurity(Items.BUCKET,
                 Items.WATER_BUCKET, false).canHarvestRunningWater(false));
     }
@@ -114,7 +115,7 @@ public class WaterPurity
 
     public static Integer getPurity(ItemStack item)
     {
-        Integer stored = item.get(ThirstComponent.PURITY);
+        Integer stored = item.get(DropletsDataComponents.PURITY);
         if (stored == null)
         {
             int fixed = ThirstHelper.getDrinkPurity(item);
@@ -126,7 +127,7 @@ public class WaterPurity
 
     public static Integer getPurity(FluidStack fluid)
     {
-        return sanitizePurity(fluid.get(ThirstComponent.PURITY));
+        return sanitizePurity(fluid.get(DropletsDataComponents.PURITY));
     }
 
     public static int sanitizePurity(@Nullable Integer purity)
@@ -180,25 +181,25 @@ public class WaterPurity
 
     public static boolean hasPurity(ItemStack item)
     {
-        return item.get(ThirstComponent.PURITY) != null && !item.is(DropletsTags.PURITY_OPT_OUT);
+        return item.get(DropletsDataComponents.PURITY) != null && !item.is(DropletsTags.PURITY_OPT_OUT);
     }
 
     public static boolean hasPurity(FluidStack fluid)
     {
-        return fluid.get(ThirstComponent.PURITY) != null;
+        return fluid.get(DropletsDataComponents.PURITY) != null;
     }
 
     public static ItemStack addPurity(ItemStack item, int purity)
     {
         if (enabled() && !item.is(DropletsTags.PURITY_OPT_OUT))
-            item.set(ThirstComponent.PURITY, sanitizePurity(purity));
+            item.set(DropletsDataComponents.PURITY, sanitizePurity(purity));
         return item;
     }
 
     public static FluidStack addPurity(FluidStack fluid, int purity)
     {
         if (enabled())
-            fluid.set(ThirstComponent.PURITY, sanitizePurity(purity));
+            fluid.set(DropletsDataComponents.PURITY, sanitizePurity(purity));
         return fluid;
     }
 
@@ -328,5 +329,14 @@ public class WaterPurity
     public static int drinkPurity(ItemStack item)
     {
         return isWaterFilledContainer(item) ? getPurity(item) : ThirstHelper.getDrinkPurity(item);
+    }
+
+    public static void migrateLegacyPurity(MutableDataComponentHolder stack)
+    {
+        if (!stack.has(DropletsDataComponents.LEGACY_PURITY))
+            return;
+        Integer legacy = stack.remove(DropletsDataComponents.LEGACY_PURITY);
+        if (legacy != null && !stack.has(DropletsDataComponents.PURITY))
+            stack.set(DropletsDataComponents.PURITY, DropletsDataComponents.bounded(DropletsLegacyAliases.purityFromLegacy(legacy)));
     }
 }

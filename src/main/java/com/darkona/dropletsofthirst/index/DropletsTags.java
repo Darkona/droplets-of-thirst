@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.data;
+package com.darkona.dropletsofthirst.index;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;

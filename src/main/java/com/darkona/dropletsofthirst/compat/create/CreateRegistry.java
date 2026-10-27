@@ -9,13 +9,13 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.item.ThirstTab;
+import com.darkona.dropletsofthirst.index.DropletsCreativeModeTabs;
 
 import static com.simibubi.create.foundation.data.ModelGen.customItemModel;
 
 public class CreateRegistry
 {
-    public static final NonNullSupplier<Registrate> REGISTRATE = NonNullSupplier.lazy(() ->Registrate.create(DropletsOfThirst.ID).defaultCreativeTab(ThirstTab.THIRST_TAB.getKey()));
+    public static final NonNullSupplier<Registrate> REGISTRATE = NonNullSupplier.lazy(() ->Registrate.create(DropletsOfThirst.ID).defaultCreativeTab(DropletsCreativeModeTabs.THIRST_TAB.getKey()));
 
     public static void register(){}
 

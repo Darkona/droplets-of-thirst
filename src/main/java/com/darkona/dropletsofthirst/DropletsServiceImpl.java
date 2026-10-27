@@ -10,7 +10,7 @@ import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.thirst.ExhaustionFactors;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.thirst.ModAttachment;
+import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import com.darkona.dropletsofthirst.client.ThirstBarStyles;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
@@ -37,7 +37,7 @@ public final class DropletsServiceImpl implements DropletsService
     private static @Nullable PlayerThirst server(Player player)
     {
         if (!player.level().isClientSide)
-            return player.getData(ModAttachment.PLAYER_THIRST);
+            return player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
         if (!warnedClientChange)
         {
             warnedClientChange = true;
@@ -49,7 +49,7 @@ public final class DropletsServiceImpl implements DropletsService
     @Override
     public DropletsView view(Player player)
     {
-        return player.getData(ModAttachment.PLAYER_THIRST);
+        return player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
     }
 
     @Override
@@ -162,7 +162,7 @@ public final class DropletsServiceImpl implements DropletsService
     @Override
     public void refreshExhaustionModifier(Player player)
     {
-        player.getData(ModAttachment.PLAYER_THIRST).invalidateModifier();
+        player.getData(DropletsAttachmentTypes.PLAYER_THIRST).invalidateModifier();
     }
 
     @Override

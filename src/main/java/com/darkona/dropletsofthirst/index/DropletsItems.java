@@ -1,5 +1,7 @@
-package com.darkona.dropletsofthirst.item;
+package com.darkona.dropletsofthirst.index;
 
+import com.darkona.dropletsofthirst.item.TerracottaBowlItem;
+import com.darkona.dropletsofthirst.item.DrinkableItem;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
@@ -7,8 +9,8 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 
-public class ItemInit {
-    public static final DeferredRegister.Items ITEMS;
+public class DropletsItems {
+    private static final DeferredRegister.Items ITEMS;
     public static final DeferredItem<Item> CLAY_BOWL;
     public static final DeferredItem<Item>  TERRACOTTA_BOWL;
     public static final DeferredItem<Item>  TERRACOTTA_WATER_BOWL;

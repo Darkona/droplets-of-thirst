@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.legacy;
+package com.darkona.dropletsofthirst.index;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
@@ -13,7 +13,7 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 import java.util.List;
 import java.util.Map;
 
-public final class LegacyIds
+public final class DropletsLegacyAliases
 {
     public static final String LEGACY_NAMESPACE = "thirst";
 
@@ -28,7 +28,7 @@ public final class LegacyIds
 
     private static final int[] LEGACY_PURITY = {PurityLevel.CONTAMINATED.level(), PurityLevel.DIRTY.level(), PurityLevel.ACCEPTABLE.level(), PurityLevel.PURE.level()};
 
-    private LegacyIds() {}
+    private DropletsLegacyAliases() {}
 
     public static int purityFromLegacy(int purity)
     {
@@ -37,7 +37,7 @@ public final class LegacyIds
 
     public static void register(IEventBus modBus)
     {
-        modBus.addListener(LegacyIds::addAliases);
+        modBus.addListener(DropletsLegacyAliases::addAliases);
     }
 
     private static void addAliases(RegisterEvent event)

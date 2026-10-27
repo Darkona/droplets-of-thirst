@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.purity;
 
-import com.darkona.dropletsofthirst.thirst.ModAttachment;
+import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.longs.Long2ByteMap;
@@ -60,7 +60,7 @@ public final class PouredWater
         LevelChunk chunk = level.getChunkSource().getChunkNow(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()));
         if (chunk == null)
             return;
-        chunk.getData(ModAttachment.POURED_WATER.get()).sources.put(pos.asLong(), (byte) WaterPurity.sanitizePurity(purity));
+        chunk.getData(DropletsAttachmentTypes.POURED_WATER.get()).sources.put(pos.asLong(), (byte) WaterPurity.sanitizePurity(purity));
         chunk.setUnsaved(true);
     }
 
@@ -79,7 +79,7 @@ public final class PouredWater
         if (level.isClientSide())
             return -1;
         LevelChunk chunk = chunk(level, pos);
-        PouredWater water = chunk == null ? null : chunk.getExistingDataOrNull(ModAttachment.POURED_WATER.get());
+        PouredWater water = chunk == null ? null : chunk.getExistingDataOrNull(DropletsAttachmentTypes.POURED_WATER.get());
         if (water == null || !water.sources.containsKey(pos.asLong()))
             return worstNeighbour(level, pos);
         int purity = water.sources.remove(pos.asLong());
@@ -111,7 +111,7 @@ public final class PouredWater
     private static int stored(Level level, BlockPos pos, boolean clean)
     {
         LevelChunk chunk = chunk(level, pos);
-        PouredWater water = chunk == null ? null : chunk.getExistingDataOrNull(ModAttachment.POURED_WATER.get());
+        PouredWater water = chunk == null ? null : chunk.getExistingDataOrNull(DropletsAttachmentTypes.POURED_WATER.get());
         if (water == null)
             return -1;
         long key = pos.asLong();

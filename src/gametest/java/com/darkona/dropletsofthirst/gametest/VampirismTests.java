@@ -7,7 +7,7 @@ import com.darkona.dropletsofthirst.api.event.DrinkEvent;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.thirst.EffectInit;
+import com.darkona.dropletsofthirst.index.DropletsMobEffects;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
@@ -74,7 +74,7 @@ public class VampirismTests
         ServerPlayer player = vampire(helper);
         PlayerThirst thirst = thirst(player);
         thirst.change(player, 10, 0, ThirstChangeEvent.Cause.COMMAND);
-        EffectInit.QUENCHNESS.value().applyEffectTick(player, 1);
+        DropletsMobEffects.QUENCHNESS.value().applyEffectTick(player, 1);
         helper.assertValueEqual(thirst.getThirst(), 10, "a vampire's thirst after a Quenchness tick");
         helper.assertValueEqual(thirst.getQuenched(), 0, "a vampire's quenched after a Quenchness tick");
         helper.succeed();

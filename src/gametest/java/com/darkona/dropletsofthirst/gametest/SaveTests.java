@@ -3,9 +3,9 @@ package com.darkona.dropletsofthirst.gametest;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps.DrinkValues;
+import com.darkona.dropletsofthirst.thirst.DrinkValues;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.purity.ThirstComponent;
+import com.darkona.dropletsofthirst.index.DropletsDataComponents;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.network.PlayerThirstSyncMessage;
 import com.darkona.dropletsofthirst.network.ThirstValuesSyncMessage;
@@ -72,7 +72,7 @@ public class SaveTests
         ItemStack bucket = WaterPurity.addPurity(new ItemStack(Items.WATER_BUCKET), 1);
         Tag saved = ItemStack.CODEC.encodeStart(ops, bucket).getOrThrow();
         ItemStack loaded = ItemStack.CODEC.parse(ops, saved).getOrThrow();
-        helper.assertValueEqual(loaded.get(ThirstComponent.PURITY), 1, "purity after a save");
+        helper.assertValueEqual(loaded.get(DropletsDataComponents.PURITY), 1, "purity after a save");
         helper.succeed();
     }
 
@@ -81,11 +81,11 @@ public class SaveTests
     {
         RegistryOps<Tag> ops = helper.getLevel().registryAccess().createSerializationContext(NbtOps.INSTANCE);
         ItemStack bucket = new ItemStack(Items.WATER_BUCKET);
-        bucket.set(ThirstComponent.PURITY, 7);
+        bucket.set(DropletsDataComponents.PURITY, 7);
         Tag saved = ItemStack.CODEC.encodeStart(ops, bucket).getOrThrow();
         ItemStack loaded = ItemStack.CODEC.parse(ops, saved).getOrThrow();
         helper.assertTrue(loaded.is(Items.WATER_BUCKET), "a bucket with purity 7 was lost on load");
-        helper.assertValueEqual(loaded.get(ThirstComponent.PURITY), WaterPurity.defaultPurity(), "purity 7 after a load");
+        helper.assertValueEqual(loaded.get(DropletsDataComponents.PURITY), WaterPurity.defaultPurity(), "purity 7 after a load");
         helper.succeed();
     }
 
@@ -103,16 +103,16 @@ public class SaveTests
             item.putInt("count", 1);
             item.put("components", components);
             ItemStack bucket = ItemStack.CODEC.parse(ops, item).getOrThrow();
-            helper.assertValueEqual(bucket.get(ThirstComponent.PURITY), expected[old], "item purity from Thirst Was Taken " + old);
-            helper.assertFalse(bucket.has(ThirstComponent.LEGACY_PURITY), "the old purity stayed on the item");
+            helper.assertValueEqual(bucket.get(DropletsDataComponents.PURITY), expected[old], "item purity from Thirst Was Taken " + old);
+            helper.assertFalse(bucket.has(DropletsDataComponents.LEGACY_PURITY), "the old purity stayed on the item");
 
             CompoundTag fluid = new CompoundTag();
             fluid.putString("id", "minecraft:water");
             fluid.putInt("amount", 1000);
             fluid.put("components", components.copy());
             FluidStack water = FluidStack.CODEC.parse(ops, fluid).getOrThrow();
-            helper.assertValueEqual(water.get(ThirstComponent.PURITY), expected[old], "fluid purity from Thirst Was Taken " + old);
-            helper.assertFalse(water.has(ThirstComponent.LEGACY_PURITY), "the old purity stayed on the fluid");
+            helper.assertValueEqual(water.get(DropletsDataComponents.PURITY), expected[old], "fluid purity from Thirst Was Taken " + old);
+            helper.assertFalse(water.has(DropletsDataComponents.LEGACY_PURITY), "the old purity stayed on the fluid");
         }
         helper.succeed();
     }
@@ -123,7 +123,7 @@ public class SaveTests
         RegistryFriendlyByteBuf buf = buffer(helper.getLevel().registryAccess());
         ItemStack.STREAM_CODEC.encode(buf, WaterPurity.addPurity(new ItemStack(Items.WATER_BUCKET), 1));
         ItemStack received = ItemStack.STREAM_CODEC.decode(buf);
-        helper.assertValueEqual(received.get(ThirstComponent.PURITY), 1, "purity after the network");
+        helper.assertValueEqual(received.get(DropletsDataComponents.PURITY), 1, "purity after the network");
         helper.succeed();
     }
 

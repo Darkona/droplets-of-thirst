@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.client;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.thirst.EffectInit;
+import com.darkona.dropletsofthirst.index.DropletsMobEffects;
 import com.darkona.dropletsofthirst.config.ClientConfig;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
@@ -67,13 +67,13 @@ public final class ThirstBarStyles
 
     public static void registerBuiltIns()
     {
-        registerWave(EffectInit.QUENCHNESS);
-        registerWave(EffectInit.HYDRATED);
-        register(DropletsOfThirst.asResource("dehydration"), player -> player.hasEffect(EffectInit.DEHYDRATION), color(ClientConfig.DEHYDRATION_COLOR), DEHYDRATION_PRIORITY);
-        register(DropletsOfThirst.asResource("overhydrated"), player -> player.hasEffect(EffectInit.OVERHYDRATED), color(ClientConfig.OVERHYDRATED_COLOR), OVERHYDRATED_PRIORITY);
+        registerWave(DropletsMobEffects.QUENCHNESS);
+        registerWave(DropletsMobEffects.HYDRATED);
+        register(DropletsOfThirst.asResource("dehydration"), player -> player.hasEffect(DropletsMobEffects.DEHYDRATION), color(ClientConfig.DEHYDRATION_COLOR), DEHYDRATION_PRIORITY);
+        register(DropletsOfThirst.asResource("overhydrated"), player -> player.hasEffect(DropletsMobEffects.OVERHYDRATED), color(ClientConfig.OVERHYDRATED_COLOR), OVERHYDRATED_PRIORITY);
         register(ResourceLocation.withDefaultNamespace("poison"), player -> player.hasEffect(MobEffects.POISON), color(ClientConfig.POISON_COLOR), POISON_PRIORITY);
-        register(DropletsOfThirst.asResource("quenchness"), player -> player.hasEffect(EffectInit.QUENCHNESS), color(ClientConfig.QUENCHNESS_COLOR), QUENCHNESS_PRIORITY);
-        register(DropletsOfThirst.asResource("hydrated"), player -> player.hasEffect(EffectInit.HYDRATED), color(ClientConfig.HYDRATED_COLOR), HYDRATED_PRIORITY);
+        register(DropletsOfThirst.asResource("quenchness"), player -> player.hasEffect(DropletsMobEffects.QUENCHNESS), color(ClientConfig.QUENCHNESS_COLOR), QUENCHNESS_PRIORITY);
+        register(DropletsOfThirst.asResource("hydrated"), player -> player.hasEffect(DropletsMobEffects.HYDRATED), color(ClientConfig.HYDRATED_COLOR), HYDRATED_PRIORITY);
     }
 
     private static IntSupplier color(ModConfigSpec.ConfigValue<String> value)

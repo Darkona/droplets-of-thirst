@@ -1,45 +1,39 @@
-package com.darkona.dropletsofthirst.purity;
+package com.darkona.dropletsofthirst.index;
 
-import com.darkona.dropletsofthirst.legacy.LegacyIds;
-import com.mojang.serialization.Codec;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.config.PurityConfig;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
+import com.mojang.serialization.Codec;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.neoforged.neoforge.common.MutableDataComponentHolder;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-import java.util.function.Consumer;
-import java.util.function.Function;
-
-public class ThirstComponent {
-    public static final DeferredRegister<DataComponentType<?>> DR = DeferredRegister
+public class DropletsDataComponents {
+    private static final DeferredRegister<DataComponentType<?>> DR = DeferredRegister
             .create(Registries.DATA_COMPONENT_TYPE, DropletsOfThirst.ID);
 
     private static final int UNLOADED_DEFAULT_PURITY = PurityLevel.ACCEPTABLE.level();
 
-    private ThirstComponent() {
+    private DropletsDataComponents() {
+    }
+
+    public static void register(IEventBus modBus) {
+        DR.register(modBus);
     }
 
     public static final DataComponentType<Integer> PURITY = register("purity",
-            builder -> builder.persistent(Codec.INT.xmap(ThirstComponent::bounded, Function.identity()))
-                    .networkSynchronized(ByteBufCodecs.VAR_INT.map(ThirstComponent::bounded, Function.identity())));
+            builder -> builder.persistent(Codec.INT.xmap(DropletsDataComponents::bounded, Function.identity()))
+                    .networkSynchronized(ByteBufCodecs.VAR_INT.map(DropletsDataComponents::bounded, Function.identity())));
 
     public static final DataComponentType<Integer> LEGACY_PURITY = register("legacy_purity",
             builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
 
-    public static void migrateLegacyPurity(MutableDataComponentHolder stack)
-    {
-        if (!stack.has(LEGACY_PURITY))
-            return;
-        Integer legacy = stack.remove(LEGACY_PURITY);
-        if (legacy != null && !stack.has(PURITY))
-            stack.set(PURITY, bounded(LegacyIds.purityFromLegacy(legacy)));
-    }
-
-    private static int bounded(int purity)
+    public static int bounded(int purity)
     {
         if (purity >= WaterPurity.MIN_PURITY && purity <= WaterPurity.MAX_PURITY)
             return purity;

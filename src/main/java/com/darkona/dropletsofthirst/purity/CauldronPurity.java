@@ -1,8 +1,8 @@
 package com.darkona.dropletsofthirst.purity;
 
 import com.darkona.dropletsofthirst.api.PurityLevel;
-import com.darkona.dropletsofthirst.data.DropletsTags;
-import com.darkona.dropletsofthirst.item.ItemInit;
+import com.darkona.dropletsofthirst.index.DropletsTags;
+import com.darkona.dropletsofthirst.index.DropletsItems;
 import java.util.function.Supplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.cauldron.CauldronInteraction;
@@ -32,7 +32,7 @@ public final class CauldronPurity
 
     public static void registerInteractions()
     {
-        CauldronInteraction.WATER.map().put(ItemInit.TERRACOTTA_BOWL.get(), fillFromCauldron(() -> new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()), SoundEvents.BUCKET_FILL));
+        CauldronInteraction.WATER.map().put(DropletsItems.TERRACOTTA_BOWL.get(), fillFromCauldron(() -> new ItemStack(DropletsItems.TERRACOTTA_WATER_BOWL.get()), SoundEvents.BUCKET_FILL));
     }
 
     private static CauldronInteraction fillFromCauldron(Supplier<ItemStack> filled, SoundEvent sound)

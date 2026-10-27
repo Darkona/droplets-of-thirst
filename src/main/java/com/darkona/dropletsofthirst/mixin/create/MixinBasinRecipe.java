@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.mixin.create;
 
-import com.darkona.dropletsofthirst.data.DropletsTags;
+import com.darkona.dropletsofthirst.index.DropletsTags;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

@@ -1,4 +1,4 @@
-package com.darkona.dropletsofthirst.thirst;
+package com.darkona.dropletsofthirst.index;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import net.minecraft.core.registries.Registries;
@@ -10,19 +10,19 @@ import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public final class AttributeInit
+public final class DropletsAttributes
 {
     private static final DeferredRegister<Attribute> ATTRIBUTES = DeferredRegister.create(Registries.ATTRIBUTE, DropletsOfThirst.ID);
 
     public static final DeferredHolder<Attribute, Attribute> THIRST_DRAIN = ATTRIBUTES.register("thirst_drain",
             () -> new RangedAttribute("attribute.name.droplets_of_thirst.thirst_drain", 1.0, 0.0, 10.0).setSyncable(true));
 
-    private AttributeInit() {}
+    private DropletsAttributes() {}
 
     public static void register(IEventBus modBus)
     {
         ATTRIBUTES.register(modBus);
-        modBus.addListener(AttributeInit::addToPlayers);
+        modBus.addListener(DropletsAttributes::addToPlayers);
     }
 
     private static void addToPlayers(EntityAttributeModificationEvent event)

@@ -5,7 +5,7 @@ import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.compat.appleskin.AppleSkinCompat;
 import com.darkona.dropletsofthirst.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.thirst.ModAttachment;
+import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import com.darkona.dropletsofthirst.config.ClientConfig;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -53,7 +53,7 @@ public final class ThirstBarRenderer
     {
         Minecraft minecraft = Minecraft.getInstance();
         Player player = frame.player();
-        PlayerThirst thirst = player.getData(ModAttachment.PLAYER_THIRST);
+        PlayerThirst thirst = player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
         if (player.isAlive() && !thirst.getShouldTickThirst() || shouldHideBar(minecraft, player, thirst))
             return 0;
 

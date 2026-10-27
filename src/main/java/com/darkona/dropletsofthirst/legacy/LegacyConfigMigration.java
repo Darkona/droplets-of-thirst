@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.legacy;
 
+import com.darkona.dropletsofthirst.index.DropletsLegacyAliases;
 import com.darkona.dropletsofthirst.config.PurityConfig;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.electronwill.nightconfig.core.CommentedConfig;
@@ -72,7 +73,7 @@ public final class LegacyConfigMigration
     public static void run()
     {
         Path dir = FMLPaths.CONFIGDIR.get().resolve(DropletsOfThirst.ID);
-        ConfigMigration.copyFolder(dir.resolveSibling(LegacyIds.LEGACY_NAMESPACE), dir, NAME);
+        ConfigMigration.copyFolder(dir.resolveSibling(DropletsLegacyAliases.LEGACY_NAMESPACE), dir, NAME);
         ConfigMigration.of(dir, NAME, MOVES)
                 .convert(LegacyConfigMigration::convert)
                 .derive("common", "purity", LegacyConfigMigration::moveEffectPercentages)
@@ -81,7 +82,7 @@ public final class LegacyConfigMigration
 
     private static Object convert(String newFile, String newPath, Object value)
     {
-        return value instanceof Number number && LEVEL_PATHS.contains(newPath) ? LegacyIds.purityFromLegacy(number.intValue()) : value;
+        return value instanceof Number number && LEVEL_PATHS.contains(newPath) ? DropletsLegacyAliases.purityFromLegacy(number.intValue()) : value;
     }
 
     private static void moveEffectPercentages(Config common, Supplier<CommentedConfig> purityFile)
@@ -90,7 +91,7 @@ public final class LegacyConfigMigration
         for (int purity = 0; purity < LEGACY_LEVELS.length; purity++)
         {
             String legacy = LEGACY_LEVELS[purity];
-            String level = PurityConfig.EFFECT_LEVELS[LegacyIds.purityFromLegacy(purity)];
+            String level = PurityConfig.EFFECT_LEVELS[DropletsLegacyAliases.purityFromLegacy(purity)];
             Number nausea = common.get(List.of("Purity-related Effects", legacy + "NauseaPercentage"));
             Number poison = common.get(List.of("Purity-related Effects", legacy + "PoisonPercentage"));
             if (nausea == null && poison == null)

@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.mixin;
 
-import com.darkona.dropletsofthirst.purity.ThirstComponent;
+import com.darkona.dropletsofthirst.purity.WaterPurity;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.world.level.material.Fluid;
@@ -17,6 +17,6 @@ public abstract class MixinFluidStack
     private void droplets_of_thirst$migrateLegacyPurity(Holder<Fluid> fluid, int amount, DataComponentPatch patch, CallbackInfo ci)
     {
         if (!patch.isEmpty())
-            ThirstComponent.migrateLegacyPurity((FluidStack) (Object) this);
+            WaterPurity.migrateLegacyPurity((FluidStack) (Object) this);
     }
 }

@@ -16,24 +16,24 @@ import com.darkona.dropletsofthirst.compat.travelersbackpack.TravelersBackpackCo
 import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
 import com.darkona.dropletsofthirst.config.ClientConfig;
 import com.darkona.dropletsofthirst.config.CompatConfig;
-import com.darkona.dropletsofthirst.config.ConditionInit;
+import com.darkona.dropletsofthirst.index.DropletsConditions;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
 import com.darkona.dropletsofthirst.config.ItemsConfig;
 import com.darkona.dropletsofthirst.config.PurityConfig;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps;
-import com.darkona.dropletsofthirst.item.ItemInit;
-import com.darkona.dropletsofthirst.item.ThirstTab;
+import com.darkona.dropletsofthirst.index.DropletsDataMaps;
+import com.darkona.dropletsofthirst.index.DropletsItems;
+import com.darkona.dropletsofthirst.index.DropletsLootConditions;
+import com.darkona.dropletsofthirst.index.DropletsPotions;
+import com.darkona.dropletsofthirst.index.DropletsCreativeModeTabs;
 import com.darkona.dropletsofthirst.legacy.LegacyConfigMigration;
-import com.darkona.dropletsofthirst.legacy.LegacyIds;
+import com.darkona.dropletsofthirst.index.DropletsLegacyAliases;
 import com.darkona.dropletsofthirst.network.DropletsPackets;
 import com.darkona.dropletsofthirst.purity.CauldronPurity;
-import com.darkona.dropletsofthirst.purity.PurityEnabledLootCondition;
-import com.darkona.dropletsofthirst.purity.ThirstComponent;
+import com.darkona.dropletsofthirst.index.DropletsDataComponents;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.thirst.AttributeInit;
-import com.darkona.dropletsofthirst.thirst.EffectInit;
-import com.darkona.dropletsofthirst.thirst.ModAttachment;
-import com.darkona.dropletsofthirst.thirst.PlayerThirst;
+import com.darkona.dropletsofthirst.index.DropletsAttributes;
+import com.darkona.dropletsofthirst.index.DropletsMobEffects;
+import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import com.darkona.dropletsofthirst.thirst.PlayerThirstManager;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.network.chat.Component;
@@ -60,19 +60,27 @@ public class DropletsOfThirst
     public DropletsOfThirst(IEventBus modBus, ModContainer modContainer)
     {
         DropletsAPI.setService(DropletsServiceImpl.INSTANCE);
+        DropletsAttachmentTypes.register(modBus);
+        DropletsDataComponents.register(modBus);
+        DropletsItems.register(modBus);
+        DropletsMobEffects.register(modBus);
+        DropletsPotions.register(modBus);
+        DropletsAttributes.register(modBus);
+        DropletsConditions.register(modBus);
+        DropletsLootConditions.register(modBus);
+        DropletsDataMaps.register(modBus);
+        DropletsCreativeModeTabs.register(modBus);
+        DropletsLegacyAliases.register(modBus);
+        DropletsPackets.register(modBus);
         modBus.addListener(this::commonSetup);
         modBus.addListener(this::clientSetup);
-        modBus.addListener(DropletsDataMaps::register);
         modBus.addListener(PlayerThirstManager::onConfigReloaded);
         modBus.addListener(DropletsOfThirst::addPacks);
-        modBus.addListener(DropletsPackets::register);
         TravelersBackpackCompat.init(modBus);
         ColdSweatCompat.init();
         ReliquaryCompat.init();
         VampirismCompat.init();
         DelightCompat.init();
-        ModAttachment.ATTACHMENT_TYPES.register(modBus);
-        ThirstComponent.DR.register(modBus);
 
         if(FMLEnvironment.dist.isClient())
         {
@@ -86,20 +94,12 @@ public class DropletsOfThirst
             NeoForge.EVENT_BUS.addListener(PlayerThirstManager::estimatedTooltip);
         }
 
-        ItemInit.register(modBus);
-        EffectInit.register(modBus);
-        AttributeInit.register(modBus);
-        ConditionInit.CONDITION_CODECS.register(modBus);
-        PurityEnabledLootCondition.LOOT_CONDITIONS.register(modBus);
-        LegacyIds.register(modBus);
-
         if(CreateCompat.LOADED)
         {
             CreateRegistry.register();
             modBus.addListener(SandFilterBlockEntity::registerCapabilities);
         }
 
-        ThirstTab.register(modBus);
         LegacyConfigMigration.run();
         modContainer.registerConfig(ModConfig.Type.COMMON, GameplayConfig.SPEC, ID + "/gameplay.toml");
         modContainer.registerConfig(ModConfig.Type.COMMON, PurityConfig.SPEC, ID + "/purity.toml");

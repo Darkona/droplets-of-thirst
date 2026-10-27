@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.purity;
 
 import com.darkona.dropletsofthirst.api.PurityLevel;
-import com.darkona.dropletsofthirst.item.ItemInit;
+import com.darkona.dropletsofthirst.index.DropletsItems;
 import net.minecraft.world.item.ItemStack;
 
 public final class PurityTint
@@ -24,7 +24,7 @@ public final class PurityTint
 
     public static int liquidLayer(ItemStack stack)
     {
-        return stack.is(ItemInit.TERRACOTTA_WATER_BOWL.get()) ? 1 : 0;
+        return stack.is(DropletsItems.TERRACOTTA_WATER_BOWL.get()) ? 1 : 0;
     }
 
     private PurityTint() {}

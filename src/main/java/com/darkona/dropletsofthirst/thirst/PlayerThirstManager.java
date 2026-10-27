@@ -1,11 +1,11 @@
 package com.darkona.dropletsofthirst.thirst;
 
+import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import com.darkona.dropletsofthirst.network.ThirstValuesSyncMessage;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps;
-import com.darkona.dropletsofthirst.data.DropletsDataMaps.DrinkValues;
+import com.darkona.dropletsofthirst.index.DropletsDataMaps;
 import com.darkona.dropletsofthirst.config.ClientConfig;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
 import java.util.List;
@@ -73,14 +73,14 @@ public class PlayerThirstManager {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Pre event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer && serverPlayer.isAlive()) {
-            serverPlayer.getData(ModAttachment.PLAYER_THIRST).tick(serverPlayer);
+            serverPlayer.getData(DropletsAttachmentTypes.PLAYER_THIRST).tick(serverPlayer);
         }
     }
 
     @SubscribeEvent
     public static void syncThirst(PlayerTickEvent.Post event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-            PlayerThirst thirst = serverPlayer.getData(ModAttachment.PLAYER_THIRST);
+            PlayerThirst thirst = serverPlayer.getData(DropletsAttachmentTypes.PLAYER_THIRST);
             if ((serverPlayer.tickCount + serverPlayer.getId()) % PlayerThirst.SAFETY_RESYNC_TICKS == 0)
                 thirst.updateThirstData(serverPlayer);
             thirst.syncIfChanged(serverPlayer);
@@ -89,14 +89,14 @@ public class PlayerThirstManager {
 
     @SubscribeEvent
     public static void onChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        PlayerThirst thirst = event.getEntity().getData(ModAttachment.PLAYER_THIRST);
+        PlayerThirst thirst = event.getEntity().getData(DropletsAttachmentTypes.PLAYER_THIRST);
         thirst.updateThirstData(event.getEntity());
         thirst.invalidateModifier();
     }
 
     @SubscribeEvent
     public static void onRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        PlayerThirst thirst = event.getEntity().getData(ModAttachment.PLAYER_THIRST);
+        PlayerThirst thirst = event.getEntity().getData(DropletsAttachmentTypes.PLAYER_THIRST);
         if (!event.isEndConquered()) {
             int respawnThirst = GameplayConfig.RESPAWN_THIRST.get();
             int respawnQuenched = GameplayConfig.RESPAWN_QUENCHED.get();
@@ -108,7 +108,7 @@ public class PlayerThirstManager {
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
         if (event.getEntity() instanceof ServerPlayer player && event.getSlot().getType() == EquipmentSlot.Type.HUMANOID_ARMOR)
-            player.getData(ModAttachment.PLAYER_THIRST).invalidateModifier();
+            player.getData(DropletsAttachmentTypes.PLAYER_THIRST).invalidateModifier();
     }
 
     @SubscribeEvent
@@ -128,7 +128,7 @@ public class PlayerThirstManager {
 
     private static void effectsChanged(MobEffectEvent event) {
         if (event.getEntity() instanceof ServerPlayer player)
-            player.getData(ModAttachment.PLAYER_THIRST).invalidateModifier();
+            player.getData(DropletsAttachmentTypes.PLAYER_THIRST).invalidateModifier();
     }
 
     @SubscribeEvent
@@ -155,7 +155,7 @@ public class PlayerThirstManager {
 
     private static void activity(ServerPlayer player, ModConfigSpec.DoubleValue value, float factor) {
         if (GameplayConfig.MODE.get() == GameplayConfig.Mode.OWN)
-            player.getData(ModAttachment.PLAYER_THIRST).addActivity(player, value.get().floatValue() * factor);
+            player.getData(DropletsAttachmentTypes.PLAYER_THIRST).addActivity(player, value.get().floatValue() * factor);
     }
 
     @SubscribeEvent
@@ -210,7 +210,7 @@ public class PlayerThirstManager {
             ThirstHelper.rebuild(server.getRecipeManager(), server.registryAccess());
             List<ServerPlayer> players = server.getPlayerList().getPlayers();
             for (ServerPlayer player : players) {
-                PlayerThirst thirst = player.getData(ModAttachment.PLAYER_THIRST);
+                PlayerThirst thirst = player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
                 thirst.invalidateModifier();
                 thirst.updateThirstData(player);
             }

@@ -2,9 +2,9 @@ package com.darkona.dropletsofthirst.compat.jei;
 
 import com.darkona.dropletsofthirst.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.compat.create.CreateCompat;
-import com.darkona.dropletsofthirst.data.DropletsTags;
+import com.darkona.dropletsofthirst.index.DropletsTags;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
-import com.darkona.dropletsofthirst.item.ItemInit;
+import com.darkona.dropletsofthirst.index.DropletsItems;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
@@ -60,7 +60,7 @@ public record PurificationEntry(String method, List<ItemStack> inputs, List<Item
 
     private static List<ItemStack> waterContainers()
     {
-        return List.of(PotionContents.createItemStack(Items.POTION, Potions.WATER), new ItemStack(Items.WATER_BUCKET), new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()));
+        return List.of(PotionContents.createItemStack(Items.POTION, Potions.WATER), new ItemStack(Items.WATER_BUCKET), new ItemStack(DropletsItems.TERRACOTTA_WATER_BOWL.get()));
     }
 
     private static List<ItemStack> heatSources()

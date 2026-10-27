@@ -11,8 +11,8 @@ import com.darkona.dropletsofthirst.purity.PurityTint;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
-import com.darkona.dropletsofthirst.item.ItemInit;
-import com.darkona.dropletsofthirst.purity.ThirstComponent;
+import com.darkona.dropletsofthirst.index.DropletsItems;
+import com.darkona.dropletsofthirst.index.DropletsDataComponents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
@@ -91,8 +91,8 @@ public class PurityTests
         helper.assertTrue(bucket.is(Items.WATER_BUCKET), "the bucket was not filled");
         helper.assertValueEqual(WaterPurity.getPurity(bucket), CauldronPurity.CAULDRON_PURITY, "water bucket from a cauldron");
 
-        ItemStack bowl = useOnFullCauldron(helper, player, pos, new ItemStack(ItemInit.TERRACOTTA_BOWL.get()));
-        helper.assertTrue(bowl.is(ItemInit.TERRACOTTA_WATER_BOWL.get()), "the terracotta bowl was not filled");
+        ItemStack bowl = useOnFullCauldron(helper, player, pos, new ItemStack(DropletsItems.TERRACOTTA_BOWL.get()));
+        helper.assertTrue(bowl.is(DropletsItems.TERRACOTTA_WATER_BOWL.get()), "the terracotta bowl was not filled");
         helper.assertValueEqual(WaterPurity.getPurity(bowl), CauldronPurity.CAULDRON_PURITY, "terracotta water bowl from a cauldron");
         helper.succeed();
     }
@@ -175,8 +175,8 @@ public class PurityTests
         helper.assertTrue(WaterPurity.hasPurity(bottle), "water bottle from the world has no purity");
         helper.assertValueEqual(WaterPurity.getPurity(bottle), still, "purity of a water bottle from still water");
 
-        ItemStack bowl = useFromAbove(player, new ItemStack(ItemInit.TERRACOTTA_BOWL.get()));
-        helper.assertTrue(bowl.is(ItemInit.TERRACOTTA_WATER_BOWL.get()), "the terracotta bowl was not filled");
+        ItemStack bowl = useFromAbove(player, new ItemStack(DropletsItems.TERRACOTTA_BOWL.get()));
+        helper.assertTrue(bowl.is(DropletsItems.TERRACOTTA_WATER_BOWL.get()), "the terracotta bowl was not filled");
         helper.assertValueEqual(WaterPurity.getPurity(bowl), still, "purity of a terracotta water bowl from still water");
         helper.assertTrue(WaterPurity.hasPurity(bowl), "terracotta water bowl from the world has no purity");
 
@@ -207,7 +207,7 @@ public class PurityTests
             for (RecipeHolder<? extends AbstractCookingRecipe> holder : helper.getLevel().getRecipeManager().getAllRecipesFor(type))
                 if (holder.id().getNamespace().equals(DropletsOfThirst.ID))
                 {
-                    Integer purity = holder.value().getResultItem(helper.getLevel().registryAccess()).get(ThirstComponent.PURITY);
+                    Integer purity = holder.value().getResultItem(helper.getLevel().registryAccess()).get(DropletsDataComponents.PURITY);
                     if (purity != null)
                         max = Math.max(max, purity);
                 }
@@ -292,7 +292,7 @@ public class PurityTests
         for (int level = PurityLevel.MIN; level <= PurityLevel.MAX; level++)
         {
             ItemStack bottle = WaterPurity.addPurity(PotionContents.createItemStack(Items.POTION, Potions.WATER), level);
-            ItemStack bowl = WaterPurity.addPurity(new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get()), level);
+            ItemStack bowl = WaterPurity.addPurity(new ItemStack(DropletsItems.TERRACOTTA_WATER_BOWL.get()), level);
             int expected = PurityTint.colorOf(level);
             check(helper, "bottle tint at level " + level, PurityTint.color(bottle, 0, vanilla), expected);
             check(helper, "bowl tint at level " + level, PurityTint.color(bowl, 1, vanilla), expected);

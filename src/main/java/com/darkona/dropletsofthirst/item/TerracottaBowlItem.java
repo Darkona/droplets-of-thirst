@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.item;
 
+import com.darkona.dropletsofthirst.index.DropletsItems;
 import com.darkona.dropletsofthirst.purity.WaterPurity;
 import com.darkona.dropletsofthirst.config.SyncedValues;
 import net.minecraft.core.BlockPos;
@@ -41,7 +42,7 @@ public class TerracottaBowlItem extends Item
         level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BUCKET_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
         level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
         player.awardStat(Stats.ITEM_USED.get(this));
-        ItemStack water = new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get());
+        ItemStack water = new ItemStack(DropletsItems.TERRACOTTA_WATER_BOWL.get());
         if (!level.isClientSide() && WaterPurity.enabled())
             WaterPurity.addPurity(water, WaterPurity.takenWaterPurity(level, pos));
         return InteractionResultHolder.sidedSuccess(ItemUtils.createFilledResult(bowl, player, water), level.isClientSide());
