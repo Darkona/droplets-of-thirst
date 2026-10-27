@@ -37,6 +37,11 @@ public final class PurityConfig
 
     public static final ModConfigSpec SPEC;
 
+    public static boolean loaded()
+    {
+        return SPEC.isLoaded();
+    }
+
     private static final String LEVELS = String.join(", ", Arrays.stream(PurityLevel.values()).map(level -> level.level() + " " + level.id()).toList());
 
     static

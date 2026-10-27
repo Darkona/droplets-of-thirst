@@ -6,6 +6,7 @@ import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.createmod.ponder.api.registration.PonderPlugin;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
 import net.minecraft.resources.ResourceLocation;
@@ -13,6 +14,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class ThirstPonderPlugin implements PonderPlugin {
     public static final ResourceLocation PURIFICATION = DropletsOfThirst.asResource("purification");
+
+    public static void register() {
+        PonderIndex.addPlugin(new ThirstPonderPlugin());
+    }
 
     @Override
     public @NotNull String getModId() {

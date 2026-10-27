@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.content.thirst;
 
+import java.util.function.Supplier;
 import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import com.darkona.dropletsofthirst.network.ThirstValuesSyncMessage;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
@@ -24,7 +25,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.config.ModConfigEvent;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
@@ -153,7 +153,7 @@ public class PlayerThirstManager {
             activity(player, GameplayConfig.DAMAGE_MULTIPLIER, event.getSource().getFoodExhaustion());
     }
 
-    private static void activity(ServerPlayer player, ModConfigSpec.DoubleValue value, float factor) {
+    private static void activity(ServerPlayer player, Supplier<Double> value, float factor) {
         if (GameplayConfig.MODE.get() == GameplayConfig.Mode.OWN)
             player.getData(DropletsAttachmentTypes.PLAYER_THIRST).addActivity(player, value.get().floatValue() * factor);
     }

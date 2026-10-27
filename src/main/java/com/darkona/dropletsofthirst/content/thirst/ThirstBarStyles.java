@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.Nullable;
 
 import dev.darkona.jdlib.api.hud.HudStyles;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public final class ThirstBarStyles
 {
@@ -76,7 +76,7 @@ public final class ThirstBarStyles
         register(DropletsOfThirst.asResource("hydrated"), player -> player.hasEffect(DropletsMobEffects.HYDRATED), color(ClientConfig.HYDRATED_COLOR), HYDRATED_PRIORITY);
     }
 
-    private static IntSupplier color(ModConfigSpec.ConfigValue<String> value)
+    private static IntSupplier color(Supplier<String> value)
     {
         return new IntSupplier()
         {

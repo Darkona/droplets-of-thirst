@@ -148,6 +148,9 @@ dependencies {
     gametestImplementation 'dev.darkona.jdlib:jdlib-testkit'
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation('com.tngtech.archunit:archunit-junit5:1.5.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
 
     compileOnly("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
     compileOnly("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}") { transitive = false }
@@ -325,4 +328,5 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.named('test') {
     useJUnitPlatform()
+    systemProperty 'droplets.classes', sourceSets.main.java.destinationDirectory.get().asFile.absolutePath
 }

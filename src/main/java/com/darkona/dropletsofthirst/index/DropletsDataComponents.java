@@ -37,7 +37,7 @@ public class DropletsDataComponents {
     {
         if (purity >= WaterPurity.MIN_PURITY && purity <= WaterPurity.MAX_PURITY)
             return purity;
-        return PurityConfig.SPEC.isLoaded() ? WaterPurity.defaultPurity() : UNLOADED_DEFAULT_PURITY;
+        return PurityConfig.loaded() ? WaterPurity.defaultPurity() : UNLOADED_DEFAULT_PURITY;
     }
 
     private static <T> DataComponentType<T> register(String name, Consumer<DataComponentType.Builder<T>> customizer) {

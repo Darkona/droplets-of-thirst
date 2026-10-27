@@ -10,7 +10,6 @@ import com.darkona.dropletsofthirst.content.thirst.PlayerThirstManager;
 import com.darkona.dropletsofthirst.content.thirst.ThirstBarRenderer;
 import com.darkona.dropletsofthirst.content.thirst.ThirstBarStyles;
 import com.darkona.dropletsofthirst.index.DropletsItems;
-import net.createmod.ponder.foundation.PonderIndex;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -51,13 +50,7 @@ public class DropletsClient
     {
         if (CreateCompat.LOADED)
         {
-            event.enqueueWork(() -> new Object()
-            {
-                public void registerPonderPlugin()
-                {
-                    PonderIndex.addPlugin(new ThirstPonderPlugin());
-                }
-            }.registerPonderPlugin());
+            event.enqueueWork(() -> ThirstPonderPlugin.register());
         }
     }
 }
