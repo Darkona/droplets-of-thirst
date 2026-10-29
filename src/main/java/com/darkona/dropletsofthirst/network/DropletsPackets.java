@@ -6,7 +6,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 public class DropletsPackets
 {
-    private static final String PROTOCOL_VERSION = "0.1.12";
+    private static final String PROTOCOL_VERSION = "0.1.13";
 
     public static void register(IEventBus modBus) {
         modBus.addListener(DropletsPackets::registerPayloads);
@@ -28,6 +28,11 @@ public class DropletsPackets
                 PlayerThirstSyncMessage.TYPE,
                 PlayerThirstSyncMessage.STREAM_CODEC,
                 PlayerThirstSyncMessage::clientHandle
+        );
+        registrar.playToClient(
+                HandDrankMessage.TYPE,
+                HandDrankMessage.STREAM_CODEC,
+                HandDrankMessage::clientHandle
         );
     }
 }

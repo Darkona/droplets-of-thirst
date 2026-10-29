@@ -8,7 +8,6 @@ import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerLevel;
@@ -23,6 +22,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -57,7 +57,7 @@ public record DrinkByHandMessage() implements CustomPacketPayload
             if (GameplayConfig.HAND_DRINKING_EFFECTS.get())
             {
                 player.swing(InteractionHand.MAIN_HAND, true);
-                level.sendParticles(ParticleTypes.SPLASH, hit.getLocation().x, hit.getLocation().y, hit.getLocation().z, 6, 0.15, 0.05, 0.15, 0.1);
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new HandDrankMessage(player.getId()));
             }
             PlayerThirst.drink(player, ItemStack.EMPTY, GameplayConfig.HAND_DRINKING_THIRST.get(), GameplayConfig.HAND_DRINKING_QUENCHED.get(), WaterPurity.getBlockPurity(level, pos));
         });
