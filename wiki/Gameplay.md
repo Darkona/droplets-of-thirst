@@ -108,7 +108,7 @@ Water taken from the world gets its purity from where it is:
 - **Running water** is one level better than still water.
 - **Height** helps: water 30 blocks above sea level is one level better, 60 blocks two, 100 blocks three. Deep underground works the same way: 16, 48 and 80 blocks below sea level.
 
-`/droplets_of_thirst debug purity` (operators) shows the purity of the water you look at and why.
+`/droplets debug purity` (operators) shows the purity of the water you look at and why.
 
 Water you pour keeps its purity. Pour a bucket of sea water into a mountain lake, fill the bucket again, and you get sea water back. An infinite source made from poured water takes the worst purity beside it.
 

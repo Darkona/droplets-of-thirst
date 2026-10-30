@@ -265,7 +265,7 @@ public class PurityOffTests
             CommandSourceStack source = player.createCommandSourceStack().withPermission(2).withSuppressedOutput();
             try
             {
-                int result = helper.getLevel().getServer().getCommands().getDispatcher().execute("droplets_of_thirst debug purity", source);
+                int result = helper.getLevel().getServer().getCommands().getDispatcher().execute("droplets debug purity", source);
                 helper.assertValueEqual(result, 0, "result of debug purity with purity off");
             }
             catch (Exception e)

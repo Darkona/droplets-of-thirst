@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.infrastructure.command.DropletsCommands;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.infrastructure.command.ItemDump;
@@ -21,7 +22,7 @@ public class DevTests
     public static void itemDumpListsFoodDrinksAndCurrentValues(GameTestHelper helper)
     {
         helper.assertValueEqual(helper.getLevel().getServer().getCommands().getDispatcher().getRoot()
-                .getChild(DropletsOfThirst.ID).getChild("dev") != null, !FMLEnvironment.production, "dev commands registered outside production");
+                .getChild(DropletsCommands.COMMAND).getChild("dev") != null, !FMLEnvironment.production, "dev commands registered outside production");
 
         List<String> rows = ItemDump.rows(Set.of("minecraft"));
         helper.assertValueEqual(rows.get(0), ItemDump.HEADER, "header");

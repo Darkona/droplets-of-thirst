@@ -28,19 +28,19 @@ All commands need operator rights (permission level 2).
 
 | Command | What it does |
 |---|---|
-| `/droplets_of_thirst query <player>` | Shows the player's thirst and quenched |
-| `/droplets_of_thirst set <player> <thirst> <quenched>` | Sets them (0-20; quenched is capped at thirst) |
-| `/droplets_of_thirst enable <players> <true\|false>` | Turns thirst on or off for those players. Off, their thirst does not change |
-| `/droplets_of_thirst debug exhaustion [player]` | Mode, every factor of the thirst loss multiplier, the `thirst_drain` attribute, the total, exhaustion, thirst and quenched |
-| `/droplets_of_thirst debug purity` | Purity of the water you look at (or the block at your feet): poured water, salt water rule, base and where it comes from, altitude, still/running and biome deltas, cap |
-| `/droplets_of_thirst config check` | Every config problem found, or "no problems found" |
-| `/droplets_of_thirst infer <item>` | How recipe inference estimates the item: each recipe, each ingredient's value, multiplier, result count, the estimate and why it would not be used |
+| `/droplets query <player>` | Shows the player's thirst and quenched |
+| `/droplets set <player> <thirst> <quenched>` | Sets them (0-20; quenched is capped at thirst) |
+| `/droplets enable <players> <true\|false>` | Turns thirst on or off for those players. Off, their thirst does not change |
+| `/droplets debug exhaustion [player]` | Mode, every factor of the thirst loss multiplier, the `thirst_drain` attribute, the total, exhaustion, thirst and quenched |
+| `/droplets debug purity` | Purity of the water you look at (or the block at your feet): poured water, salt water rule, base and where it comes from, altitude, still/running and biome deltas, cap |
+| `/droplets config check` | Every config problem found, or "no problems found" |
+| `/droplets infer <item>` | How recipe inference estimates the item: each recipe, each ingredient's value, multiplier, result count, the estimate and why it would not be used |
 
-<!-- SCREENSHOT: chat output of /droplets_of_thirst debug exhaustion in a desert at noon -->
+<!-- SCREENSHOT: chat output of /droplets debug exhaustion in a desert at noon -->
 
 ### Checking a config
 
-Some problems do not show in a single key: unknown effect or item ids, overlapping altitude bands, curve points out of order, invalid keyword patterns, `slowRegenMinThirst` above `fullRegenMinThirst`. The mod logs them as one warning each time the world loads, after `/reload` and after a config file changes. It skips the bad entries, and nothing crashes. `/droplets_of_thirst config check` lists the same problems.
+Some problems do not show in a single key: unknown effect or item ids, overlapping altitude bands, curve points out of order, invalid keyword patterns, `slowRegenMinThirst` above `fullRegenMinThirst`. The mod logs them as one warning each time the world loads, after `/reload` and after a config file changes. It skips the bad entries, and nothing crashes. `/droplets config check` lists the same problems.
 
 ---
 
@@ -48,7 +48,7 @@ Some problems do not show in a single key: unknown effect or item ids, overlappi
 
 ### `[depletion]`
 
-Thirst loss per tick is `activity × M`, where `M = climate × fire protection × fire resistance × rain/thunder × day/night × sun × altitude × water × Hydrated × droplets_of_thirst:thirst_drain`. Every `exhaustionPerPoint` (4.0) of exhaustion removes one quenched point, or one thirst point when quenched is 0. `M` (except the attribute) is recomputed once a second per player and right away after armor, effect, dimension or config changes. `/droplets_of_thirst debug exhaustion` shows each factor.
+Thirst loss per tick is `activity × M`, where `M = climate × fire protection × fire resistance × rain/thunder × day/night × sun × altitude × water × Hydrated × droplets_of_thirst:thirst_drain`. Every `exhaustionPerPoint` (4.0) of exhaustion removes one quenched point, or one thirst point when quenched is 0. `M` (except the attribute) is recomputed once a second per player and right away after armor, effect, dimension or config changes. `/droplets debug exhaustion` shows each factor.
 
 | Key | Default | Meaning |
 |---|---|---|
@@ -208,7 +208,7 @@ Water poured into the world keeps its purity. Sea water poured into a meadow sta
 - Anything that takes or drinks water there reads that purity: bottles, bowls, buckets, drinking by hand, dispensers, the Traveler's Backpack hose.
 - The infinite source that forms between two poured sources takes the worst purity beside it. Picking up a poured source hands its purity to the water sources beside it, so the one that refills its place is not clean either.
 - The mod ignores a remembered position that no longer holds a water source, and forgets it when it reads it. Water placed in other ways (commands, mods that place the block directly) has the world's purity, unless it is next to poured water.
-- The data is saved per chunk with the world and never goes to clients. `/droplets_of_thirst debug purity` shows "poured water" when it applies.
+- The data is saved per chunk with the world and never goes to clients. `/droplets debug purity` shows "poured water" when it applies.
 
 ### Thirst only (purity off)
 
@@ -219,7 +219,7 @@ For the thirst bar alone, set `general.enabled = false`. The server sends its va
 - Drinking any water restores thirst and never gives purity effects, including the Dehydration of `hotDirtyWater`. `DrinkEvent` reports `NO_PURITY`.
 - The purification recipes do not load, and the JEI "Water Purification" page is hidden. Minecraft checks recipes when datapacks load, so this part applies after `/reload` or a restart.
 - The terracotta bowls stay, as plain water containers, because registered items cannot depend on a config.
-- `/droplets_of_thirst debug purity` only says that purity is off. For other mods, `DropletsAPI.isPurityEnabled()` returns `false` and `withPurity` returns an unchanged copy.
+- `/droplets debug purity` only says that purity is off. For other mods, `DropletsAPI.isPurityEnabled()` returns `false` and `withPurity` returns an unchanged copy.
 - The other keys of this file do nothing.
 - The mod ignores and hides purity that items already have from before. These items may not stack with new water until they are used up.
 
@@ -236,7 +236,7 @@ One list per purity: `contaminated`, `dirty`, `murky`, `acceptable`, `clean`, `p
 | `clean` | `[]` |
 | `pure` | `[]` |
 
-- Any mob effect id works, also from other mods, including `droplets_of_thirst:dehydration` and `droplets_of_thirst:hydrated` (for example `"droplets_of_thirst:hydrated,600,0,100"` in `pure`). An unknown id is skipped and listed by `/droplets_of_thirst config check`.
+- Any mob effect id works, also from other mods, including `droplets_of_thirst:dehydration` and `droplets_of_thirst:hydrated` (for example `"droplets_of_thirst:hydrated,600,0,100"` in `pure`). An unknown id is skipped and listed by `/droplets config check`.
 - Nausea lasts 10 seconds (200 ticks) per drink by default. Vanilla builds up the screen distortion only while more than 3 seconds of Nausea are left, and it needs 7.5 seconds to reach full strength. A shorter Nausea is barely a wobble. Drinking again resets it to 10 seconds. It does not add up.
 - The whole list shares one roll per drink. An entry applies when the roll is below its chance, so a 40% entry always comes together with the 100% ones.
 - `blocksHydration` (`true`/`false`, default `false`): when that entry applies, the drink restores no thirst, unless `general.quenchWhenDebuffed` is `true` (the default).
@@ -304,7 +304,7 @@ Off by default. When it is on, the server looks at the recipes that make an item
 - Inference cuts loops (ingot to block to ingot) and anything deeper than `maxDepth`.
 - Items that are drunk go to the drink table and the rest to the food table. Tooltips show "(est.)". The values are sent to clients like the rest of the table.
 
-It runs when the world loads, after `/reload` and when `items.toml` changes. It never runs during play. The log shows one line with the number of estimated items and the time it took. The config warning and `/droplets_of_thirst config check` list the recipes that inference could not read.
+It runs when the world loads, after `/reload` and when `items.toml` changes. It never runs during play. The log shows one line with the number of estimated items and the time it took. The config warning and `/droplets config check` list the recipes that inference could not read.
 
 ---
 

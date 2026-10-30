@@ -84,7 +84,7 @@ public final class ItemsConfig
         BUILDER.pop();
 
         BUILDER.comment("Estimates thirst values from recipe ingredients for items that have none from any other source (shown as \"est.\").",
-                "Computed when the world loads, on /reload and when this file changes; /droplets_of_thirst infer <item> explains a result").push("inference");
+                "Computed when the world loads, on /reload and when this file changes; /droplets infer <item> explains a result").push("inference");
         INFERENCE = BUILDER.comment("Whether values are estimated").define("enabled", false);
         INFERENCE_ONLY_CONSUMABLES = BUILDER.comment("Only items that are eaten or drunk get an estimate; other items still pass their value on to recipes that use them")
                 .define("onlyConsumables", true);

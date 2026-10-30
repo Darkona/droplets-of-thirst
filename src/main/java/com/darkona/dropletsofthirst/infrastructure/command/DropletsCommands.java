@@ -49,11 +49,13 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 
 @EventBusSubscriber(modid = DropletsOfThirst.ID)
 public class DropletsCommands {
+    public static final String COMMAND = "droplets";
+
 
     @SubscribeEvent
     public static void RegisterCommand(RegisterCommandsEvent event){
         CommandDispatcher<CommandSourceStack> dispatcher=event.getDispatcher();
-        LiteralCommandNode<CommandSourceStack> root = dispatcher.register(Commands.literal(DropletsOfThirst.ID)
+        LiteralCommandNode<CommandSourceStack> root = dispatcher.register(Commands.literal(COMMAND)
                 .requires(cs->cs.hasPermission(2))
                 .then(Commands.literal("query").then(Commands.argument("Player", EntityArgument.player())
                         .executes(context -> {
@@ -107,7 +109,7 @@ public class DropletsCommands {
                                 .executes(context -> infer(context.getSource(), ItemArgument.getItem(context, "item").getItem()))))
         );
         if (!FMLEnvironment.production)
-            dispatcher.register(Commands.literal(DropletsOfThirst.ID).requires(cs->cs.hasPermission(2))
+            dispatcher.register(Commands.literal(COMMAND).requires(cs->cs.hasPermission(2))
                     .then(Commands.literal("dev")
                             .then(Commands.literal("dump_items")
                                     .then(Commands.argument("namespaces", StringArgumentType.greedyString())

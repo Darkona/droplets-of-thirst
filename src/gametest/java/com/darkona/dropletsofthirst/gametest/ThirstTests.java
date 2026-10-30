@@ -337,10 +337,10 @@ public class ThirstTests
         ServerPlayer player = player(helper);
         CommandSourceStack source = player.createCommandSourceStack().withPermission(2).withSuppressedOutput();
         var dispatcher = helper.getLevel().getServer().getCommands().getDispatcher();
-        helper.assertValueEqual(dispatcher.execute("droplets_of_thirst set @s 4 10", source), 4, "result of set");
+        helper.assertValueEqual(dispatcher.execute("droplets set @s 4 10", source), 4, "result of set");
         helper.assertValueEqual(thirst(player).getQuenched(), 4, "quenched after set 4 10");
-        helper.assertValueEqual(dispatcher.execute("droplets_of_thirst query @s", source), 4, "result of query");
-        helper.assertValueEqual(dispatcher.execute("droplets_of_thirst enable @s false", source), 1, "result of enable");
+        helper.assertValueEqual(dispatcher.execute("droplets query @s", source), 4, "result of query");
+        helper.assertValueEqual(dispatcher.execute("droplets enable @s false", source), 1, "result of enable");
         helper.assertFalse(thirst(player).getShouldTickThirst(), "thirst still enabled after enable false");
         helper.succeed();
     }

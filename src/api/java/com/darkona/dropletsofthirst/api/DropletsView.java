@@ -19,7 +19,7 @@ public interface DropletsView
         return DropletsAPI.MAX_THIRST;
     }
 
-    /** Whether thirst is active for this player (the {@code /droplets_of_thirst enable} flag). */
+    /** Whether thirst is active for this player (the {@code /droplets enable} flag). */
     boolean isEnabled();
 
     /**
