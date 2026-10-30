@@ -96,7 +96,6 @@ These keys exist on 1.21.1 and not on 26.3.
 
 - The pure water bonus also counts Cold Sweat waterskins.
 - With purity off, Create goggles and the Sand Filter tooltip show no purity, the Sand Filter lets water through unchanged, and cactus compacting gives plain water. `sandFilterFiltrationAmount`, `sandFilterMaxPurity` and `openEndedPipePurity` do nothing.
-- Moving from Thirst Was Taken: `common.toml` `Create compatibility.*` moves to `compat.toml` `create.*`.
 
 ---
 
