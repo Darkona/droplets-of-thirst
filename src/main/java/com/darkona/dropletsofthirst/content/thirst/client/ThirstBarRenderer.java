@@ -1,5 +1,7 @@
 package com.darkona.dropletsofthirst.content.thirst.client;
 
+import net.minecraft.util.FastColor;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.content.thirst.ThirstBarStyles;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
@@ -14,8 +16,6 @@ import dev.darkona.jdlib.api.hud.HudFrame;
 import dev.darkona.jdlib.api.hud.HudGate;
 import dev.darkona.jdlib.api.hud.HudSide;
 import dev.darkona.jdlib.api.hud.JDHudBars;
-import dev.darkona.jdlib.api.hud.VanillaLayer;
-import dev.darkona.jdlib.core.color.Colors;
 import dev.darkona.jdlib.core.hud.ConsumablePreview;
 import dev.darkona.jdlib.core.hud.VanillaIconMotion;
 import net.minecraft.client.Minecraft;
@@ -45,7 +45,7 @@ public final class ThirstBarRenderer
 
     public static void registerLayer()
     {
-        JDHudBars.register(new JDHudBars.Spec(LAYER, VanillaLayer.FOOD_LEVEL, JDHudBars.Order.ABOVE, HudSide.RIGHT, 0,
+        JDHudBars.register(new JDHudBars.Spec(LAYER, VanillaGuiLayers.FOOD_LEVEL, JDHudBars.Order.ABOVE, HudSide.RIGHT, 0,
                 HudGate.standard().and(HudGate.ridingHidesVehicleHealth()), () -> true,
                 ClientConfig.THIRST_BAR_X_OFFSET::get, ClientConfig.THIRST_BAR_Y_OFFSET::get, 0, ThirstBarRenderer::paint));
     }
@@ -61,9 +61,9 @@ public final class ThirstBarRenderer
         GuiGraphics guiGraphics = frame.graphics();
         minecraft.getProfiler().push("thirst");
         int tint = ThirstBarStyles.resolve(player);
-        float red = Colors.red(tint) / 255f;
-        float green = Colors.green(tint) / 255f;
-        float blue = Colors.blue(tint) / 255f;
+        float red = FastColor.ARGB32.red(tint) / 255f;
+        float green = FastColor.ARGB32.green(tint) / 255f;
+        float blue = FastColor.ARGB32.blue(tint) / 255f;
         ResourceLocation fill = tint < 0 ? THIRST_ICONS : THIRST_MASK;
         ResourceLocation outline = tint < 0 ? QUENCHED_ICONS : QUENCHED_MASK;
         int right = frame.edgeX();
