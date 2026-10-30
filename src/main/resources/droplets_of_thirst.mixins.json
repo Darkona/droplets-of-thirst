@@ -12,7 +12,6 @@
     "MixinCauldronWrapper",
     "MixinDefaultDispenseItemBehavior",
     "MixinFluidBucketWrapper",
-    "MixinFluidStack",
     "MixinFluidUtil",
     "MixinFluidType",
     "MixinFoodData",

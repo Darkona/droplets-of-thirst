@@ -17,7 +17,6 @@ import com.darkona.dropletsofthirst.index.DropletsItems;
 import com.darkona.dropletsofthirst.index.DropletsLootConditions;
 import com.darkona.dropletsofthirst.index.DropletsPotions;
 import com.darkona.dropletsofthirst.index.DropletsCreativeModeTabs;
-import com.darkona.dropletsofthirst.index.DropletsLegacyAliases;
 import com.darkona.dropletsofthirst.network.DropletsPackets;
 import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.index.DropletsDataComponents;
@@ -55,7 +54,6 @@ public class DropletsOfThirst
         DropletsLootConditions.register(modBus);
         DropletsDataMaps.register(modBus);
         DropletsCreativeModeTabs.register(modBus);
-        DropletsLegacyAliases.register(modBus);
         DropletsPackets.register(modBus);
         modBus.addListener(this::commonSetup);
         modBus.addListener(PlayerThirstManager::onConfigReloaded);

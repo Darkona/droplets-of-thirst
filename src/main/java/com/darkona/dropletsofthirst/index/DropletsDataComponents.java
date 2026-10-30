@@ -30,9 +30,6 @@ public class DropletsDataComponents {
             builder -> builder.persistent(Codec.INT.xmap(DropletsDataComponents::bounded, Function.identity()))
                     .networkSynchronized(ByteBufCodecs.VAR_INT.map(DropletsDataComponents::bounded, Function.identity())));
 
-    public static final DataComponentType<Integer> LEGACY_PURITY = register("legacy_purity",
-            builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
-
     public static int bounded(int purity)
     {
         if (purity >= WaterPurity.MIN_PURITY && purity <= WaterPurity.MAX_PURITY)

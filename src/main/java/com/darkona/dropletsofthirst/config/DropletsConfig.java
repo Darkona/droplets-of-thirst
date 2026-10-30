@@ -10,7 +10,6 @@ public final class DropletsConfig
 
     public static void register(ModContainer modContainer)
     {
-        LegacyConfigMigration.run();
         modContainer.registerConfig(ModConfig.Type.COMMON, GameplayConfig.SPEC, DropletsOfThirst.ID + "/gameplay.toml");
         modContainer.registerConfig(ModConfig.Type.COMMON, PurityConfig.SPEC, DropletsOfThirst.ID + "/purity.toml");
         modContainer.registerConfig(ModConfig.Type.COMMON, ItemsConfig.SPEC, DropletsOfThirst.ID + "/items.toml");

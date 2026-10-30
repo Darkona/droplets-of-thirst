@@ -1,7 +1,6 @@
 package com.darkona.dropletsofthirst.gametest;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import com.darkona.dropletsofthirst.content.thirst.DrinkValues;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
@@ -23,7 +22,6 @@ import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.gametest.GameTestHolder;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
 import net.neoforged.neoforge.network.connection.ConnectionType;
@@ -86,34 +84,6 @@ public class SaveTests
         ItemStack loaded = ItemStack.CODEC.parse(ops, saved).getOrThrow();
         helper.assertTrue(loaded.is(Items.WATER_BUCKET), "a bucket with purity 7 was lost on load");
         helper.assertValueEqual(loaded.get(DropletsDataComponents.PURITY), WaterPurity.defaultPurity(), "purity 7 after a load");
-        helper.succeed();
-    }
-
-    @GameTest(template = "empty")
-    public static void thirstWasTakenPurityMovesToSixLevels(GameTestHelper helper)
-    {
-        RegistryOps<Tag> ops = helper.getLevel().registryAccess().createSerializationContext(NbtOps.INSTANCE);
-        int[] expected = {PurityLevel.CONTAMINATED.level(), PurityLevel.DIRTY.level(), PurityLevel.ACCEPTABLE.level(), PurityLevel.PURE.level()};
-        for (int old = 0; old < expected.length; old++)
-        {
-            CompoundTag components = new CompoundTag();
-            components.putInt("thirst:purity", old);
-            CompoundTag item = new CompoundTag();
-            item.putString("id", "minecraft:water_bucket");
-            item.putInt("count", 1);
-            item.put("components", components);
-            ItemStack bucket = ItemStack.CODEC.parse(ops, item).getOrThrow();
-            helper.assertValueEqual(bucket.get(DropletsDataComponents.PURITY), expected[old], "item purity from Thirst Was Taken " + old);
-            helper.assertFalse(bucket.has(DropletsDataComponents.LEGACY_PURITY), "the old purity stayed on the item");
-
-            CompoundTag fluid = new CompoundTag();
-            fluid.putString("id", "minecraft:water");
-            fluid.putInt("amount", 1000);
-            fluid.put("components", components.copy());
-            FluidStack water = FluidStack.CODEC.parse(ops, fluid).getOrThrow();
-            helper.assertValueEqual(water.get(DropletsDataComponents.PURITY), expected[old], "fluid purity from Thirst Was Taken " + old);
-            helper.assertFalse(water.has(DropletsDataComponents.LEGACY_PURITY), "the old purity stayed on the fluid");
-        }
         helper.succeed();
     }
 

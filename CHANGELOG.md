@@ -2,6 +2,10 @@
 
 Changes by feature, newest version first. Upstream issues are cited as `thirst#NN` (ghen-git/Thirst-Mod).
 
+## Unreleased
+
+- Worlds, items, fluids and configs from Thirst Was Taken or from older versions of this mod are no longer converted: the `thirst:` ids, the old purity component and the old config keys are not read, and the old config files are ignored. Start a new world or use the new `droplets_of_thirst` files. `[1.21.1]`
+
 ## 1.21.1-1.0.0 (Minecraft 1.21.1, NeoForge), 2026-10-01
 
 ### Rebrand: Droplets of Thirst
@@ -12,8 +16,6 @@ Changes by feature, newest version first. Upstream issues are cited as `thirst#N
 - The command is now `/droplets_of_thirst`; `/thirst` still works as an alias. `[1.21.1]`
 - Thirst Was Taken and Thirst Was Reclaimed (mod id `thirst`) are marked incompatible: the game refuses to start with both installed and explains why. `[1.21.1]`
 - Credits now name ghen's Thirst Was Taken as the original mod. `[1.21.1]`
-- Worlds from Thirst Was Taken load without losing anything: old `thirst:` items, blocks, block entities (Sand Filter), effects, the purity component and the player thirst data are mapped to the new ids and saved under them from then on. `[1.21.1]`
-- Player thirst, quenched and the per-player "thirst enabled" flag and water purity on items and fluids all carry over from Thirst Was Taken saves. Cauldron purity does not: cauldrons no longer store one (see Bug fixes). `[1.21.1]`
 - Config files moved to `config/droplets_of_thirst/`. On first start, if that folder does not exist and `config/thirst/` does, the old files are copied over and a warning is logged. Modpacks that ship `defaultconfigs/thirst/` must rename it to `defaultconfigs/droplets_of_thirst/`. `[1.21.1]`
 - Added an MIT `LICENSE` that keeps the original Thirst Was Taken copyright notice; it is also shipped inside the jar. `[1.21.1]`
 - New English README: credits, migration notes, compatibility and version roadmap. `[1.21.1]`
@@ -26,7 +28,6 @@ Changes by feature, newest version first. Upstream issues are cited as `thirst#N
 - World water starts dirty (`worldWaterBasePurity` 1), running water is one level better, and height adds up to three levels (`altitudeBands`), both above sea level (mountains) and below it (caves). Ocean water is always contaminated. Biomes change the base and the cap: see Datapacks. `[1.21.1]`
 - A water cauldron gives murky water (2), or clean water (4) over a heat source. Cooking adds levels: a campfire one per cooking, a furnace or a smoker two, up to pure without Create and up to clean with it. With Create, pure water only comes from the Sand Filter (`sandFilterMaxPurity` 5); fans and heated basins add one level up to clean, and compacting a cactus gives acceptable water. `[1.21.1]`
 - **Poured water keeps its purity.** Pouring sea water into a meadow and filling a bucket there no longer gives the meadow's water back. A water source poured with a bucket (by a player or a dispenser), placed through NeoForge's `FluidUtil.tryPlaceFluid` (used by many mods' containers) or by a Create open pipe end is remembered with the purity of the water poured (or `defaultPurity` when it had none). Filling a bottle, a bowl or a bucket there, drinking by hand, Create pipes and hose pulleys read that purity. The infinite source that forms between two poured sources takes the worst purity beside it, and picking up a poured source hands its purity to the sources beside it, so the one that refills its place is not clean either. A remembered position that no longer holds a water source is ignored and forgotten when read. It is one small map per chunk, saved with the chunk and never sent to clients; nothing runs per tick. `[1.21.1]`
-- Thirst Was Taken had four levels. Its saves and config files move to the new ones: dirty to contaminated (0), slightly dirty to dirty (1), acceptable to acceptable (3), purified to pure (5). This covers the purity of items and fluids (`thirst:purity`, converted as the item or fluid loads), `defaultPurity`, `worldWaterBasePurity`, `saltWaterPurity` and the old effect percentages. `[1.21.1]`
 
 ### Mod compatibility
 

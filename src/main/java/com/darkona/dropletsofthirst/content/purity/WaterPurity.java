@@ -6,7 +6,6 @@ import com.darkona.dropletsofthirst.config.SyncedValues;
 import com.darkona.dropletsofthirst.index.DropletsDataComponents;
 import com.darkona.dropletsofthirst.index.DropletsDataMaps;
 import com.darkona.dropletsofthirst.index.DropletsItems;
-import com.darkona.dropletsofthirst.index.DropletsLegacyAliases;
 import com.darkona.dropletsofthirst.index.DropletsTags;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import dev.darkona.jdlib.core.config.NumberRows;
@@ -35,7 +34,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.FluidState;
-import net.neoforged.neoforge.common.MutableDataComponentHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -329,14 +327,5 @@ public class WaterPurity
     public static int drinkPurity(ItemStack item)
     {
         return isWaterFilledContainer(item) ? getPurity(item) : ThirstHelper.getDrinkPurity(item);
-    }
-
-    public static void migrateLegacyPurity(MutableDataComponentHolder stack)
-    {
-        if (!stack.has(DropletsDataComponents.LEGACY_PURITY))
-            return;
-        Integer legacy = stack.remove(DropletsDataComponents.LEGACY_PURITY);
-        if (legacy != null && !stack.has(DropletsDataComponents.PURITY))
-            stack.set(DropletsDataComponents.PURITY, DropletsDataComponents.bounded(DropletsLegacyAliases.purityFromLegacy(legacy)));
     }
 }

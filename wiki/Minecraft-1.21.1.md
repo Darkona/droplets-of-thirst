@@ -10,7 +10,6 @@ Droplets of Thirst for Minecraft 1.21.1 runs on **Minecraft 1.21.1 and NeoForge 
 
 - **Sprinting**: with 3 droplets or less you cannot start a sprint. A sprint already in progress goes on.
 - **The Nether**: the Nether multiplier and the hot climate of dirty water apply in dimensions whose type is ultra-warm, as the Nether.
-- **Thirst Was Taken worlds** load with the players' thirst and the purity of their water. The four purity levels of Thirst Was Taken move to the six of Droplets of Thirst. Cauldrons lose their purity, because cauldrons no longer store one.
 - **With Create installed**, cooking stops at clean (4), and only the Sand Filter makes pure water (5). Without Create, cooking reaches pure as on 26.3.
 
 ### Create
