@@ -10,8 +10,6 @@ import com.darkona.dropletsofthirst.content.thirst.ExhaustionFactors;
 import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.content.thirst.RecipeInference;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.index.DropletsDataMaps;
-import com.darkona.dropletsofthirst.content.purity.DimensionWater;
 import com.darkona.dropletsofthirst.index.DropletsAttachmentTypes;
 import com.darkona.dropletsofthirst.config.ConfigCheck;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
@@ -108,7 +106,6 @@ public class DropletsCommands {
                         .then(Commands.argument("item", ItemArgument.item(event.getBuildContext()))
                                 .executes(context -> infer(context.getSource(), ItemArgument.getItem(context, "item").getItem()))))
         );
-        dispatcher.register(Commands.literal("thirst").requires(cs->cs.hasPermission(2)).redirect(root));
         if (!FMLEnvironment.production)
             dispatcher.register(Commands.literal(DropletsOfThirst.ID).requires(cs->cs.hasPermission(2))
                     .then(Commands.literal("dev")
@@ -141,8 +138,7 @@ public class DropletsCommands {
         StringBuilder text = new StringBuilder("Thirst loss of ").append(player.getScoreboardName())
                 .append(" (mode ").append(GameplayConfig.MODE.get()).append(")");
         for (int i = 0; i < factors.length; i++)
-            text.append("\n  ").append(ExhaustionFactors.FACTORS[i]).append(": x").append(format(factors[i]))
-                    .append(i == 0 ? " (" + climateSource(player) + ")" : "");
+            text.append("\n  ").append(ExhaustionFactors.FACTORS[i]).append(": x").append(format(factors[i]));
         text.append("\n  droplets_of_thirst:thirst_drain: x").append(format(drain))
                 .append("\n  total: x").append(format(cached * drain))
                 .append("\n  exhaustion ").append(format(thirst.getExhaustion())).append(" / ").append(format(GameplayConfig.EXHAUSTION_PER_POINT.get()))
@@ -150,16 +146,6 @@ public class DropletsCommands {
                 .append(thirst.getShouldTickThirst() ? "" : " (thirst disabled for this player)");
         source.sendSuccess(() -> Component.literal(text.toString()), false);
         return 1;
-    }
-
-    private static String climateSource(ServerPlayer player)
-    {
-        DimensionWater dimension = player.level().dimensionTypeRegistration().getData(DropletsDataMaps.DIMENSION_WATER);
-        if (dimension != null && dimension.thirstMultiplier().isPresent())
-            return "dimension_water thirst_multiplier";
-        if (player.level().dimensionType().ultraWarm())
-            return "netherMultiplier";
-        return "climate curves";
     }
 
     private static int debugPurity(CommandSourceStack source, ServerPlayer player)

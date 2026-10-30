@@ -340,7 +340,6 @@ public class ThirstTests
         helper.assertValueEqual(dispatcher.execute("droplets_of_thirst set @s 4 10", source), 4, "result of set");
         helper.assertValueEqual(thirst(player).getQuenched(), 4, "quenched after set 4 10");
         helper.assertValueEqual(dispatcher.execute("droplets_of_thirst query @s", source), 4, "result of query");
-        helper.assertValueEqual(dispatcher.execute("thirst query @s", source), 4, "result of the /thirst alias");
         helper.assertValueEqual(dispatcher.execute("droplets_of_thirst enable @s false", source), 1, "result of enable");
         helper.assertFalse(thirst(player).getShouldTickThirst(), "thirst still enabled after enable false");
         helper.succeed();

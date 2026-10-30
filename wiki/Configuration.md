@@ -24,7 +24,7 @@ The gameplay files are common configs. They exist before a world loads, because 
 
 ## Commands
 
-All commands need operator rights (permission level 2). `/thirst` is an alias of `/droplets_of_thirst`.
+All commands need operator rights (permission level 2).
 
 | Command | What it does |
 |---|---|
