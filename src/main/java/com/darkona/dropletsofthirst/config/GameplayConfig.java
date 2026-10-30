@@ -11,7 +11,6 @@ public final class GameplayConfig
 
     public enum Mode { MIRROR_FOOD, OWN }
 
-    public enum ClimateFormula { LEGACY, CURVE }
 
     public static final ModConfigSpec.EnumValue<Mode> MODE;
     public static final ModConfigSpec.DoubleValue BASAL_PER_TICK;
@@ -40,8 +39,6 @@ public final class GameplayConfig
     public static final ModConfigSpec.DoubleValue FIRE_PROTECTION_PER_LEVEL;
     public static final ModConfigSpec.IntValue FIRE_PROTECTION_MAX_LEVELS;
 
-    public static final ModConfigSpec.EnumValue<ClimateFormula> CLIMATE_FORMULA;
-    public static final ModConfigSpec.DoubleValue LEGACY_HARSHNESS;
     public static final ModConfigSpec.ConfigValue<List<? extends String>> TEMPERATURE_CURVE;
     public static final ModConfigSpec.ConfigValue<List<? extends String>> HUMIDITY_CURVE;
     public static final ModConfigSpec.DoubleValue RAIN_MULTIPLIER;
@@ -126,14 +123,11 @@ public final class GameplayConfig
         FIRE_PROTECTION_MAX_LEVELS = BUILDER.comment("Fire Protection levels counted at most").defineInRange("fireProtectionMaxLevels", 12, 0, 100);
 
         BUILDER.comment("Multipliers from the player's surroundings, recomputed every second. 1.0 = no change").push("climate");
-        CLIMATE_FORMULA = BUILDER.comment("LEGACY: 'multiplier' x biome temperature / humidity, softened below 1 by legacyHarshness (as before).",
-                        "CURVE: 'multiplier' x temperatureCurve(biome temperature) x humidityCurve(biome downfall).",
-                        "With Cold Sweat and compat.toml coldsweat.useBodyTemperature, coldsweat.bodyTemperatureCurve replaces both")
-                .defineEnum("formula", ClimateFormula.LEGACY);
-        LEGACY_HARSHNESS = BUILDER.comment("LEGACY: how much of a multiplier below 1 is kept (0.5 = halfway to 1)").defineInRange("legacyHarshness", 0.5, 0.0, 1.0);
-        TEMPERATURE_CURVE = BUILDER.comment("CURVE: [\"temperature,multiplier\", ...] in ascending temperature; straight lines between points, flat beyond the ends")
+        TEMPERATURE_CURVE = BUILDER.comment("The climate multiplier is 'multiplier' x temperatureCurve(biome temperature) x humidityCurve(biome downfall);",
+                        "with Cold Sweat and compat.toml coldsweat.useBodyTemperature, coldsweat.bodyTemperatureCurve replaces both",
+                        "[\"temperature,multiplier\", ...] in ascending temperature; straight lines between points, flat beyond the ends")
                 .<String>defineListAllowEmpty("temperatureCurve", List.of("-0.5,0.7", "0.8,1.0", "2.0,1.5"), () -> "0.8,1.0", GameplayConfig::isValidPair);
-        HUMIDITY_CURVE = BUILDER.comment("CURVE: [\"downfall,multiplier\", ...] in ascending downfall (0 dry to 1 wet)")
+        HUMIDITY_CURVE = BUILDER.comment("[\"downfall,multiplier\", ...] in ascending downfall (0 dry to 1 wet)")
                 .<String>defineListAllowEmpty("humidityCurve", List.of("0.0,1.2", "0.4,1.0", "1.0,0.8"), () -> "0.4,1.0", GameplayConfig::isValidPair);
         RAIN_MULTIPLIER = BUILDER.comment("When rain falls on the player").defineInRange("rain", 1.0, 0.0, 10.0);
         THUNDER_MULTIPLIER = BUILDER.comment("When rain falls on the player during a thunderstorm (replaces rain)").defineInRange("thunder", 1.0, 0.0, 10.0);

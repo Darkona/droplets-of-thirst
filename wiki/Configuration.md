@@ -71,10 +71,8 @@ Thirst loss per tick is `activity × M`, where `M = climate × fire protection �
 
 | Key | Default | Meaning |
 |---|---|---|
-| `formula` | `LEGACY` | `LEGACY`: `multiplier × temperature / humidity` of the biome, softened below 1. `CURVE`: `multiplier × temperatureCurve(temperature) × humidityCurve(downfall)` |
-| `legacyHarshness` | `0.5` | LEGACY: part of a multiplier below 1 that is kept (0.5 = halfway to 1) |
-| `temperatureCurve` | `["-0.5,0.7", "0.8,1.0", "2.0,1.5"]` | CURVE: `"temperature,multiplier"` points in ascending order, straight lines between them, flat beyond the ends |
-| `humidityCurve` | `["0.0,1.2", "0.4,1.0", "1.0,0.8"]` | CURVE: the same for the biome's downfall (0 dry to 1 wet) |
+| `temperatureCurve` | `["-0.5,0.7", "0.8,1.0", "2.0,1.5"]` | The climate multiplier is `multiplier × temperatureCurve(temperature) × humidityCurve(downfall)` of the biome. `"temperature,multiplier"` points in ascending order, straight lines between them, flat beyond the ends |
+| `humidityCurve` | `["0.0,1.2", "0.4,1.0", "1.0,0.8"]` | The same for the biome's downfall (0 dry to 1 wet) |
 | `rain` / `thunder` | `1.0` / `1.0` | When rain falls on the player (thunder replaces rain in a storm) |
 | `day` / `night` | `1.0` / `1.0` | In dimensions with a day cycle |
 | `sun` | `1.0` | Day, not raining, sky visible |

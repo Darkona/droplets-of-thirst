@@ -5,6 +5,7 @@ Changes by feature, newest version first. Upstream issues are cited as `thirst#N
 ## Unreleased
 
 - Worlds, items, fluids and configs from Thirst Was Taken or from older versions of this mod are no longer converted: the `thirst:` ids, the old purity component and the old config keys are not read, and the old config files are ignored. Start a new world or use the new `droplets_of_thirst` files. `[1.21.1]`
+- The climate multiplier always uses the temperature and humidity curves (`temperatureCurve`, `humidityCurve` in `gameplay.toml`); the old formula from Thirst Was Taken is gone, with its `formula` and `legacyHarshness` keys. With the default curves deserts make you thirstier than plains and cold biomes slow thirst less than before. `[1.21.1]`
 
 ## 1.21.1-1.0.0 (Minecraft 1.21.1, NeoForge), 2026-10-01
 

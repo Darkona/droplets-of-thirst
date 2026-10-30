@@ -145,24 +145,8 @@ public final class ExhaustionFactors
         float temperature = seasons ? SereneSeasonsCompat.temperature(level, biomeHolder, pos, base) : base;
         float season = seasons ? SereneSeasonsCompat.seasonMultiplier(level, biomeHolder) : 1.0F;
         float downfall = biome.getModifiedClimateSettings().downfall();
-        if (GameplayConfig.CLIMATE_FORMULA.get() == GameplayConfig.ClimateFormula.CURVE)
-            return season * multiplier * (float) (NumberRows.curve(TEMPERATURE_CURVE.get(GameplayConfig.TEMPERATURE_CURVE.get()), temperature)
-                    * NumberRows.curve(HUMIDITY_CURVE.get(GameplayConfig.HUMIDITY_CURVE.get()), downfall));
-
-        float humidity = downfall + 0.6f;
-        if(humidity <= 0.6)
-            humidity += 0.5;
-
-        float temp = temperature + 0.2f;
-        if(temp <= 0)
-            temp = (float) Math.exp(temp);
-        else if(temp > 1)
-            temp /= 2;
-
-        float thirstModifier = multiplier * (temp / humidity);
-        if(thirstModifier < 1)
-            thirstModifier = 1 - (1 - thirstModifier) * GameplayConfig.LEGACY_HARSHNESS.get().floatValue();
-        return season * thirstModifier;
+        return season * multiplier * (float) (NumberRows.curve(TEMPERATURE_CURVE.get(GameplayConfig.TEMPERATURE_CURVE.get()), temperature)
+                * NumberRows.curve(HUMIDITY_CURVE.get(GameplayConfig.HUMIDITY_CURVE.get()), downfall));
     }
 
     public static boolean isHotClimate(Player player)

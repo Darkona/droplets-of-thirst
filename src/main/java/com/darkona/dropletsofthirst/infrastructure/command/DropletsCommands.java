@@ -159,7 +159,7 @@ public class DropletsCommands {
             return "dimension_water thirst_multiplier";
         if (player.level().dimensionType().ultraWarm())
             return "netherMultiplier";
-        return GameplayConfig.CLIMATE_FORMULA.get() + " formula";
+        return "climate curves";
     }
 
     private static int debugPurity(CommandSourceStack source, ServerPlayer player)
