@@ -24,6 +24,21 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.level.levelgen.Heightmap;
+import com.darkona.dropletsofthirst.content.thirst.RecipeInference;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import com.darkona.dropletsofthirst.api.event.DehydrationDamageEvent;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.ConnectionProtocol;
@@ -66,6 +81,7 @@ import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 public class ThirstTests
 {
     private static ThirstChangeEvent.Cause lastCause;
+    private static float lastDehydrationDamage;
     private static final String IMMORTAL_TAG = "droplets-test-immortal";
     private static final String PROTECTED_TAG = "droplets-test-protected";
     private static final String FROZEN_TAG = "droplets-test-frozen";
@@ -73,6 +89,7 @@ public class ThirstTests
     static
     {
         NeoForge.EVENT_BUS.addListener((ThirstChangeEvent.Post event) -> lastCause = event.getCause());
+        NeoForge.EVENT_BUS.addListener((DehydrationDamageEvent event) -> lastDehydrationDamage = event.getAmount());
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, (LivingDeathEvent event) -> {
             if (event.getEntity().getTags().contains(IMMORTAL_TAG))
                 event.setCanceled(true);
@@ -188,6 +205,83 @@ public class ThirstTests
         helper.assertValueEqual(lastCause, ThirstChangeEvent.Cause.EAT, "cause of eating an apple");
         helper.assertFalse(player.hasEffect(MobEffects.CONFUSION), "food rolled purity effects");
         helper.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void rainStopsAtFullThirst(GameTestHelper helper)
+    {
+        ServerPlayer player = player(helper);
+        ServerLevel level = helper.getLevel();
+        PlayerThirst thirst = thirst(player);
+        float rain = level.getRainLevel(1.0F);
+        BlockPos sky = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, player.blockPosition());
+        player.setPos(sky.getX(), sky.getY(), sky.getZ());
+        player.setXRot(-90.0F);
+        player.tickCount = GameplayConfig.RAIN_INTERVAL_TICKS.get();
+        level.setRainLevel(1.0F);
+        try
+        {
+            thirst.setThirst(20);
+            thirst.setQuenched(20);
+            thirst.tick(player);
+            helper.assertTrue(thirst.serializeNBT(level.registryAccess()).getFloat("overflow") == 0.0F, "rain at full thirst overflows");
+            thirst.setThirst(10);
+            thirst.setQuenched(0);
+            thirst.tick(player);
+            helper.assertTrue(thirst.getThirst() == 11, "rain gives a sip below full, thirst " + thirst.getThirst());
+        }
+        finally
+        {
+            level.setRainLevel(rain);
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void dehydrationStopsAtMinimumHealth(GameTestHelper helper)
+    {
+        ServerPlayer player = player(helper);
+        PlayerThirst thirst = thirst(player);
+        double amount = GameplayConfig.DAMAGE_AMOUNT.get();
+        Difficulty difficulty = helper.getLevel().getDifficulty();
+        GameplayConfig.DAMAGE_AMOUNT.set(5.0);
+        helper.getLevel().getServer().setDifficulty(Difficulty.NORMAL, true);
+        try
+        {
+            thirst.setThirst(0);
+            player.setHealth(3.0F);
+            for (int i = 0; i < GameplayConfig.DAMAGE_INTERVAL_TICKS.get(); i++)
+                thirst.tick(player);
+            float expected = 3.0F - GameplayConfig.DAMAGE_MIN_HEALTH_NORMAL.get().floatValue();
+            helper.assertTrue(lastDehydrationDamage == expected, "the hit stops at the minimum health, was " + lastDehydrationDamage);
+        }
+        finally
+        {
+            GameplayConfig.DAMAGE_AMOUNT.set(amount);
+            helper.getLevel().getServer().setDifficulty(difficulty, true);
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void estimatesDoNotDependOnWhichItemComesFirst(GameTestHelper helper)
+    {
+        HolderLookup.Provider registries = helper.getLevel().registryAccess();
+        RecipeManager recipes = new RecipeManager(registries);
+        recipes.replaceRecipes(List.of(
+                shapeless("bread_from_apple", Items.APPLE, Items.BREAD),
+                shapeless("apple_from_bread", Items.BREAD, Items.APPLE),
+                shapeless("apple_from_sugar", Items.SUGAR, Items.APPLE)));
+        Map<Item, int[]> known = Map.of(Items.SUGAR, new int[]{4, 2, -1});
+        RecipeInference.Result result = RecipeInference.run(new RecipeInference.Inputs(known, Set.of()), recipes, registries);
+        helper.assertTrue(result.foods().containsKey(Items.APPLE) && result.foods().containsKey(Items.BREAD), "both items get an estimate");
+        helper.assertTrue(result.foods().get(Items.BREAD)[0] == result.foods().get(Items.APPLE)[0], "the item inside the cycle keeps its value");
+        helper.succeed();
+    }
+
+    private static RecipeHolder<?> shapeless(String name, Item ingredient, Item result)
+    {
+        return new RecipeHolder<>(DropletsOfThirst.asResource("test/" + name), new ShapelessRecipe("", CraftingBookCategory.MISC, new ItemStack(result), NonNullList.of(Ingredient.EMPTY, Ingredient.of(ingredient))));
     }
 
     @GameTest(template = "empty")

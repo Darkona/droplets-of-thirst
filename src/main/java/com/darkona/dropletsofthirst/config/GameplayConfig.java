@@ -161,7 +161,7 @@ public final class GameplayConfig
         REGEN_CLIMATE_DEPENDENT = BUILDER.comment("Whether thirst lost by regenerating health is scaled by the climate multiplier").define("climateDependent", true);
         FULL_REGEN_MIN_THIRST = BUILDER.comment("With haltedWhenThirsty: thirst needed for fast (saturation) regeneration").defineInRange("fullRegenMinThirst", 20, 0, 20);
         SLOW_REGEN_MIN_THIRST = BUILDER.comment("With haltedWhenThirsty: below fullRegenMinThirst, saturation still heals every slowRegenIntervalTicks with this much thirst").defineInRange("slowRegenMinThirst", 19, 0, 20);
-        SLOW_REGEN_INTERVAL_TICKS = BUILDER.defineInRange("slowRegenIntervalTicks", 8, 1, 1200);
+        SLOW_REGEN_INTERVAL_TICKS = BUILDER.comment("Counted in vanilla healing attempts, one every 10 ticks: 8 heals every 80 ticks").defineInRange("slowRegenIntervalTicks", 8, 1, 1200);
         HUNGER_REGEN_MIN_THIRST = BUILDER.comment("With haltedWhenThirsty: thirst needed for normal (food level) regeneration").defineInRange("hungerRegenMinThirst", 19, 0, 20);
         PEACEFUL_REGEN_AMOUNT = BUILDER.comment("Peaceful without inPeaceful: thirst restored every peacefulRegenIntervalTicks").defineInRange("peacefulRegenAmount", 1, 0, 20);
         PEACEFUL_REGEN_INTERVAL_TICKS = BUILDER.defineInRange("peacefulRegenIntervalTicks", 11, 1, 1200);

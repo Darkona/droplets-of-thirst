@@ -184,6 +184,7 @@ public final class RecipeInference
             cycles++;
             return NONE;
         }
+        int cutsBefore = cycles + cutoffs;
         values = NONE;
         for (Entry entry : entries)
         {
@@ -192,7 +193,8 @@ public final class RecipeInference
                 values = candidate;
         }
         visiting.remove(item);
-        memo.put(item, values);
+        if (depth == 0 || cycles + cutoffs == cutsBefore)
+            memo.put(item, values);
         return values;
     }
 

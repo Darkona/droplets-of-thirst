@@ -4,6 +4,12 @@ Changes by feature, newest version first. Upstream issues are cited as `thirst#N
 
 ## Unreleased
 
+- Nausea and Dehydration no longer drain thirst while an effect from `pauses_thirst` or `stops_thirst` is active, and activity from a `stops_thirst` effect is no longer charged when it ends.
+- Keywords now reach real foods: soups, fruits and food-type drinks that have no values. Before, they only matched items that cannot be eaten.
+- The config comment and wiki now say what `slowRegenIntervalTicks` counts: healing attempts, one every 10 ticks.
+- Rain no longer gives sips at full thirst, so looking up in the rain cannot cause Overhydrated.
+- A hit of dehydration stops at the minimum health of the difficulty, even with a high `amount`.
+- Estimates from recipes no longer lose value for an item that is part of a recipe loop.
 - Worlds, items, fluids and configs from Thirst Was Taken or from older versions of this mod are no longer converted: the `thirst:` ids, the old purity component and the old config keys are not read, and the old config files are ignored. Start a new world or use the new `droplets_of_thirst` files. `[1.21.1]`
 - The climate multiplier always uses the temperature and humidity curves (`temperatureCurve`, `humidityCurve` in `gameplay.toml`); the old formula from Thirst Was Taken is gone, with its `formula` and `legacyHarshness` keys. With the default curves deserts make you thirstier than plains and cold biomes slow thirst less than before. `[1.21.1]`
 - The command is now `/droplets` (it was `/droplets_of_thirst`), and `/thirst` is no longer an alias. `/droplets debug exhaustion` no longer names where the climate factor comes from. `[1.21.1]`

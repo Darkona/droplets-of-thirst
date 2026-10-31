@@ -47,7 +47,7 @@ You respawn with full thirst.
 | Water bottle | 4 | 5 | Two droplets. Pure water (5) gives 6 and 8 |
 | Terracotta water bowl | 4 | 5 | Same as a bottle. The empty bowl goes back to your inventory |
 | Sip by hand | 1 | 1 | Sneak and right-click water with both hands empty |
-| Rain | 1 | 1 | Look up while it rains on you, one sip every half second |
+| Rain | 1 | 1 | Look up while it rains on you, one sip every half second, until your thirst is full |
 | Milk bucket | 4 | 4 | |
 | Honey bottle | 3 | 4 | |
 

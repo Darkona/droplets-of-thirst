@@ -294,7 +294,12 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
             readThirstEffects(player);
         }
         if(stoppedByEffect)
+        {
+            pendingActivity = 0;
+            pendingRegen = 0;
+            prevTickExhaustion = player.getFoodData().getExhaustionLevel();
             return;
+        }
 
         if(interval)
         {
@@ -308,7 +313,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
         Difficulty difficulty = player.level().getDifficulty();
         boolean paused = pausedByEffect;
 
-        if(nauseous && GameplayConfig.DEPLETES_WHEN_NAUSEOUS.get())
+        if(nauseous && !paused && GameplayConfig.DEPLETES_WHEN_NAUSEOUS.get())
             exhaustion += GameplayConfig.NAUSEA_PER_TICK.get().floatValue() * exhaustionModifier(player);
 
         float activity;
@@ -353,7 +358,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
         if(difficulty == Difficulty.PEACEFUL && !GameplayConfig.DEPLETES_IN_PEACEFUL.get() && player.tickCount % GameplayConfig.PEACEFUL_REGEN_INTERVAL_TICKS.get() == 0)
             change(player, thirst + GameplayConfig.PEACEFUL_REGEN_AMOUNT.get(), quenched, ThirstChangeEvent.Cause.PEACEFUL);
 
-        if(GameplayConfig.RAIN_DRINKING.get() && player.tickCount % GameplayConfig.RAIN_INTERVAL_TICKS.get() == 0
+        if(thirst < MAX_THIRST && GameplayConfig.RAIN_DRINKING.get() && player.tickCount % GameplayConfig.RAIN_INTERVAL_TICKS.get() == 0
                 && Mth.wrapDegrees(player.getXRot()) <= GameplayConfig.RAIN_MAX_PITCH.get() && player.level().isRainingAt(player.blockPosition().above())
                 && !VampireThirst.isVampire(player))
         {
@@ -369,9 +374,10 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
             {
                 float damage = GameplayConfig.DAMAGE_AMOUNT.get().floatValue();
                 float health = player.getHealth();
-                if (health > minHealth(difficulty) && (GameplayConfig.DAMAGE_CAN_KILL.get() || health > damage))
+                float floor = minHealth(difficulty);
+                if (health > floor && (GameplayConfig.DAMAGE_CAN_KILL.get() || health > damage))
                 {
-                    DehydrationDamageEvent event = NeoForge.EVENT_BUS.post(new DehydrationDamageEvent(player, damage));
+                    DehydrationDamageEvent event = NeoForge.EVENT_BUS.post(new DehydrationDamageEvent(player, Math.min(damage, health - floor)));
                     if (!event.isCanceled() && event.getAmount() > 0)
                         player.hurt(player.level().damageSources().source(DropletsDamageTypes.DIE_OF_THIRST_KEY), event.getAmount());
                 }
@@ -545,8 +551,9 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
 
     public void addScaledExhaustion(Player player, float amount)
     {
-        if(!player.getAbilities().invulnerable && shouldTickThirst)
-            exhaustion = Math.max(0.0F, exhaustion + amount * exhaustionModifier(player));
+        if(player.getAbilities().invulnerable || !shouldTickThirst || (amount > 0 && (pausedByEffect || stoppedByEffect)))
+            return;
+        exhaustion = Math.max(0.0F, exhaustion + amount * exhaustionModifier(player));
     }
 
     public float exhaustionModifier(Player player)

@@ -328,7 +328,7 @@ public class ThirstHelper
 
         for (Item item : BuiltInRegistries.ITEM)
         {
-            if (tables.has(item) || isFoodItem(item))
+            if (tables.has(item))
                 continue;
 
             String name = item.getDescriptionId();

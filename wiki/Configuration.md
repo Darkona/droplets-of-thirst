@@ -107,7 +107,7 @@ In `OWN` mode these are the sources, with vanilla's hunger numbers. In `MIRROR_F
 | `depletesThirst` | `true` | Regenerating health makes thirst go down |
 | `climateDependent` | `true` | That loss is scaled by the climate factor |
 | `fullRegenMinThirst` | `20` | With `haltedWhenThirsty`: thirst needed for fast (saturation) regeneration |
-| `slowRegenMinThirst` / `slowRegenIntervalTicks` | `19` / `8` | Below that, saturation still heals every 8 ticks with at least 19 thirst |
+| `slowRegenMinThirst` / `slowRegenIntervalTicks` | `19` / `8` | Below that, saturation still heals with at least 19 thirst, once every 8 healing attempts. Vanilla makes one attempt every 10 ticks, so 8 means every 80 ticks |
 | `hungerRegenMinThirst` | `19` | Thirst needed for normal (food level) regeneration |
 | `peacefulRegenAmount` / `peacefulRegenIntervalTicks` | `1` / `11` | Thirst restored in Peaceful (unless `depletion.inPeaceful`) |
 
