@@ -80,7 +80,7 @@ public final class ExhaustionFactors
         float own = climate * fireProtection * fireResistance * weather * time * sun * altitude * water * hydrated;
         float result = own;
         PriorityList.Snapshot<ResourceLocation, ExhaustionModifier> modifiers = MODIFIERS.snapshot();
-        for (int i = 0; i < modifiers.size(); i++)
+        for (int i = 0; i < modifiers.size() && !level.isClientSide(); i++)
             result = Math.max(0.0F, modifiers.value(i).apply(player, result));
         if (breakdown != null)
             breakdown[9] = own == 0.0F ? 1.0F : result / own;
@@ -107,6 +107,8 @@ public final class ExhaustionFactors
     private static @Nullable Holder<Enchantment> fireProtection(Level level)
     {
         RegistryAccess access = level.registryAccess();
+        if(level.isClientSide())
+            return access.registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.FIRE_PROTECTION).orElse(null);
         if(access != fireProtectionAccess)
         {
             fireProtectionHolder = access.registryOrThrow(Registries.ENCHANTMENT).getHolder(Enchantments.FIRE_PROTECTION).orElse(null);
