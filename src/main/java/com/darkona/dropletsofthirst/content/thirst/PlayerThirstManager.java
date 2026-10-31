@@ -16,6 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -72,18 +73,19 @@ public class PlayerThirstManager {
 
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Pre event) {
-        if (event.getEntity() instanceof ServerPlayer serverPlayer && serverPlayer.isAlive()) {
-            serverPlayer.getData(DropletsAttachmentTypes.PLAYER_THIRST).tick(serverPlayer);
-        }
+        Player player = event.getEntity();
+        if (simulates(player) && player.isAlive())
+            player.getData(DropletsAttachmentTypes.PLAYER_THIRST).tick(player);
+    }
+
+    private static boolean simulates(Player player) {
+        return player instanceof ServerPlayer || player.isLocalPlayer();
     }
 
     @SubscribeEvent
     public static void syncThirst(PlayerTickEvent.Post event) {
         if (event.getEntity() instanceof ServerPlayer serverPlayer) {
-            PlayerThirst thirst = serverPlayer.getData(DropletsAttachmentTypes.PLAYER_THIRST);
-            if ((serverPlayer.tickCount + serverPlayer.getId()) % PlayerThirst.SAFETY_RESYNC_TICKS == 0)
-                thirst.updateThirstData(serverPlayer);
-            thirst.syncIfChanged(serverPlayer);
+            serverPlayer.getData(DropletsAttachmentTypes.PLAYER_THIRST).syncIfChanged(serverPlayer);
         }
     }
 
@@ -133,7 +135,7 @@ public class PlayerThirstManager {
 
     @SubscribeEvent
     public static void onJump(LivingEvent.LivingJumpEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player)
+        if (event.getEntity() instanceof Player player && simulates(player))
             activity(player, player.isSprinting() ? GameplayConfig.SPRINT_JUMP : GameplayConfig.JUMP, 1.0F);
     }
 
@@ -153,8 +155,8 @@ public class PlayerThirstManager {
             activity(player, GameplayConfig.DAMAGE_MULTIPLIER, event.getSource().getFoodExhaustion());
     }
 
-    private static void activity(ServerPlayer player, Supplier<Double> value, float factor) {
-        if (GameplayConfig.MODE.get() == GameplayConfig.Mode.OWN)
+    private static void activity(Player player, Supplier<Double> value, float factor) {
+        if (player.level().isClientSide() || GameplayConfig.MODE.get() == GameplayConfig.Mode.OWN)
             player.getData(DropletsAttachmentTypes.PLAYER_THIRST).addActivity(player, value.get().floatValue() * factor);
     }
 

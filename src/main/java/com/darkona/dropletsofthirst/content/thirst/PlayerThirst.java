@@ -71,7 +71,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
     boolean pausedByEffect;
     boolean stoppedByEffect;
     boolean nauseous;
-    private enum Shown { THIRST, QUENCHED, EXHAUSTION_STEP, RULES }
+    private enum Shown { THIRST, QUENCHED, RULES }
     private final ShownFields<Shown> shown = new ShownFields<>(Shown.class);
     int syncedRules = SYNC_SPRINT_BLOCKED | SYNC_BOTH_HANDS | SPRINT_MIN_THIRST << SYNC_SPRINT_MIN_SHIFT;
     int handDrinkReadyTick = 0;
@@ -287,6 +287,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
         if(player.getAbilities().invulnerable || !shouldTickThirst)
             return;
 
+        boolean client = player.level().isClientSide();
         boolean interval = (player.tickCount + player.getId()) % MODIFIER_INTERVAL_TICKS == 0;
         if(interval || effectsDirty)
         {
@@ -304,9 +305,9 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
         if(interval)
         {
             modifierDirty = true;
-            if(GameplayConfig.FULL_HYDRATION_BONUS.get())
+            if(!client && GameplayConfig.FULL_HYDRATION_BONUS.get())
                 fullHydrationBonus(player);
-            if(overflow > 0)
+            if(!client && overflow > 0)
                 overflow = Math.max(0.0F, overflow - GameplayConfig.OVERHYDRATION_DECAY.get().floatValue() * MODIFIER_INTERVAL_TICKS / 20.0F);
         }
 
@@ -317,7 +318,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
             exhaustion += GameplayConfig.NAUSEA_PER_TICK.get().floatValue() * exhaustionModifier(player);
 
         float activity;
-        if(GameplayConfig.MODE.get() == GameplayConfig.Mode.OWN)
+        if(client || GameplayConfig.MODE.get() == GameplayConfig.Mode.OWN)
         {
             activity = pendingActivity + movementExhaustion(player);
             pendingActivity = 0;
@@ -346,9 +347,14 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
         }
 
         float perPoint = GameplayConfig.EXHAUSTION_PER_POINT.get().floatValue();
-        if (exhaustion > perPoint)
-        {
+        boolean pointSpent = exhaustion > perPoint;
+        if (pointSpent)
             exhaustion -= perPoint;
+        if (client)
+            return;
+
+        if (pointSpent)
+        {
             if (quenched > 0)
                 change(player, thirst, quenched - 1, ThirstChangeEvent.Cause.DEPLETION);
             else if (difficulty != Difficulty.PEACEFUL || GameplayConfig.DEPLETES_IN_PEACEFUL.get())
@@ -485,7 +491,6 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
             return;
         shown.show(Shown.THIRST, thirst);
         shown.show(Shown.QUENCHED, quenched);
-        shown.show(Shown.EXHAUSTION_STEP, (int) (exhaustion * EXHAUSTION_SYNC_STEPS));
         shown.show(Shown.RULES, flags);
         if(!shown.shouldSend())
             return;
@@ -599,8 +604,6 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
     public static final float HUNGER_EXHAUSTION_PER_LEVEL = 0.005F;
 
     public static final int MODIFIER_INTERVAL_TICKS = 20;
-    public static final int EXHAUSTION_SYNC_STEPS = 10;
-    public static final int SAFETY_RESYNC_TICKS = 200;
 
     public static final int OVERHYDRATION_NAUSEA_TICKS = 200;
 
