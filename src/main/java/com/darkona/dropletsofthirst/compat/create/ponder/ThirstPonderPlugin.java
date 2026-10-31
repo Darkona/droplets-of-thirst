@@ -43,7 +43,7 @@ public class ThirstPonderPlugin implements PonderPlugin {
                 .addToIndex()
                 .item(CreateRegistry.SAND_FILTER_BLOCK, true, false)
                 .title("Purification")
-                .description("Components which purifying water")
+                .description("Components which purify water")
                 .register();
     }
 }

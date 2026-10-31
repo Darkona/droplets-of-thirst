@@ -4,6 +4,7 @@ Changes by feature, newest version first. Upstream issues are cited as `thirst#N
 
 ## Unreleased
 
+- French, Polish, Russian, Japanese, Korean and both Chinese translations are complete, including effect and potion names.
 - The server only sends thirst to the client when thirst or quenched change. Between changes the client works out the exhaustion bar by itself and settles on the server's value at each change. The periodic resend is gone.
 - Nausea and Dehydration no longer drain thirst while an effect from `pauses_thirst` or `stops_thirst` is active, and activity from a `stops_thirst` effect is no longer charged when it ends.
 - Keywords now reach real foods: soups, fruits and food-type drinks that have no values. Before, they only matched items that cannot be eaten.
