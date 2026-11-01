@@ -1,0 +1,300 @@
+{
+	"meta": {
+		"format_version": "5.0",
+		"model_format": "java_block",
+		"box_uv": false
+	},
+	"name": "charcoal_filter",
+	"parent": "minecraft:block/block",
+	"java_block_version": "1.9.0",
+	"ambientocclusion": true,
+	"front_gui_light": false,
+	"unhandled_root_fields": {},
+	"resolution": {
+		"width": 16,
+		"height": 16
+	},
+	"elements": [
+		{
+			"name": "cube",
+			"box_uv": false,
+			"rescale": false,
+			"locked": false,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"from": [
+				0,
+				10,
+				0
+			],
+			"to": [
+				16,
+				16,
+				16
+			],
+			"autouv": 0,
+			"color": 0,
+			"origin": [
+				8,
+				8,
+				8
+			],
+			"faces": {
+				"north": {
+					"uv": [
+						0,
+						0,
+						16,
+						6
+					],
+					"texture": 1
+				},
+				"east": {
+					"uv": [
+						0,
+						0,
+						16,
+						6
+					],
+					"texture": 1
+				},
+				"south": {
+					"uv": [
+						0,
+						0,
+						16,
+						6
+					],
+					"texture": 1
+				},
+				"west": {
+					"uv": [
+						0,
+						0,
+						16,
+						6
+					],
+					"texture": 1
+				},
+				"up": {
+					"uv": [
+						0,
+						0,
+						16,
+						16
+					],
+					"texture": 0
+				},
+				"down": {
+					"uv": [
+						0,
+						0,
+						16,
+						16
+					],
+					"texture": 1
+				}
+			},
+			"type": "cube",
+			"uuid": "430a64db-1be9-5584-9639-9aaf516d1e04"
+		},
+		{
+			"name": "cube",
+			"box_uv": false,
+			"rescale": false,
+			"locked": false,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"from": [
+				4,
+				4,
+				4
+			],
+			"to": [
+				12,
+				10,
+				12
+			],
+			"autouv": 0,
+			"color": 1,
+			"origin": [
+				8,
+				8,
+				8
+			],
+			"faces": {
+				"north": {
+					"uv": [
+						4,
+						6,
+						12,
+						12
+					],
+					"texture": 1
+				},
+				"east": {
+					"uv": [
+						4,
+						6,
+						12,
+						12
+					],
+					"texture": 1
+				},
+				"south": {
+					"uv": [
+						4,
+						6,
+						12,
+						12
+					],
+					"texture": 1
+				},
+				"west": {
+					"uv": [
+						4,
+						6,
+						12,
+						12
+					],
+					"texture": 1
+				},
+				"up": {
+					"uv": [
+						4,
+						4,
+						12,
+						12
+					],
+					"texture": 0
+				},
+				"down": {
+					"uv": [
+						4,
+						4,
+						12,
+						12
+					],
+					"texture": 1
+				}
+			},
+			"type": "cube",
+			"uuid": "2c449b42-38e4-57b2-8fe0-9d60e064c470"
+		},
+		{
+			"name": "cube",
+			"box_uv": false,
+			"rescale": false,
+			"locked": false,
+			"render_order": "default",
+			"allow_mirror_modeling": true,
+			"from": [
+				6,
+				0,
+				6
+			],
+			"to": [
+				10,
+				4,
+				10
+			],
+			"autouv": 0,
+			"color": 2,
+			"origin": [
+				8,
+				8,
+				8
+			],
+			"faces": {
+				"north": {
+					"uv": [
+						6,
+						12,
+						10,
+						16
+					],
+					"texture": 1
+				},
+				"east": {
+					"uv": [
+						6,
+						12,
+						10,
+						16
+					],
+					"texture": 1
+				},
+				"south": {
+					"uv": [
+						6,
+						12,
+						10,
+						16
+					],
+					"texture": 1
+				},
+				"west": {
+					"uv": [
+						6,
+						12,
+						10,
+						16
+					],
+					"texture": 1
+				},
+				"up": {
+					"uv": [
+						6,
+						6,
+						10,
+						10
+					],
+					"texture": 0
+				},
+				"down": {
+					"uv": [
+						6,
+						6,
+						10,
+						10
+					],
+					"texture": 1
+				}
+			},
+			"type": "cube",
+			"uuid": "33ca8d6c-fb25-583f-90d5-988a303457ab"
+		}
+	],
+	"groups": [],
+	"outliner": [
+		"430a64db-1be9-5584-9639-9aaf516d1e04",
+		"2c449b42-38e4-57b2-8fe0-9d60e064c470",
+		"33ca8d6c-fb25-583f-90d5-988a303457ab"
+	],
+	"textures": [
+		{
+			"name": "charcoal_filter_top.png",
+			"folder": "block",
+			"namespace": "droplets_of_thirst",
+			"id": "top",
+			"particle": true,
+			"uuid": "73fe9211-75f7-5a64-bcfb-85db2ef48268",
+			"mode": "bitmap",
+			"saved": true,
+			"internal": false,
+			"relative_path": "../../textures/block/charcoal_filter_top.png"
+		},
+		{
+			"name": "charcoal_filter.png",
+			"folder": "block",
+			"namespace": "droplets_of_thirst",
+			"id": "side",
+			"particle": false,
+			"uuid": "e88908b4-3dcb-55cd-b108-7d012c3b27ec",
+			"mode": "bitmap",
+			"saved": true,
+			"internal": false,
+			"relative_path": "../../textures/block/charcoal_filter.png"
+		}
+	]
+}

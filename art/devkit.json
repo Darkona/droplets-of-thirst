@@ -1,0 +1,7 @@
+{
+  "namespace": "droplets_of_thirst",
+  "models": "art/models",
+  "textures": "art/textures",
+  "resources": "src/main/resources",
+  "pruneTextures": false
+}

@@ -346,3 +346,5 @@ tasks.named('test') {
     useJUnitPlatform()
     systemProperty 'droplets.classes', sourceSets.main.java.destinationDirectory.get().asFile.absolutePath
 }
+
+apply from: file("${providers.gradleProperty('jdlibDir').getOrElse('../JDLib')}/devkit/devkit-tasks.gradle")
