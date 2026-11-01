@@ -32,7 +32,7 @@ All commands need operator rights (permission level 2).
 | `/droplets set <player> <thirst> <quenched>` | Sets them (0-20; quenched is capped at thirst) |
 | `/droplets enable <players> <true\|false>` | Turns thirst on or off for those players. Off, their thirst does not change |
 | `/droplets debug exhaustion [player]` | Mode, every factor of the thirst loss multiplier, the `thirst_drain` attribute, the total, exhaustion, thirst and quenched |
-| `/droplets debug purity` | Purity of the water you look at (or the block at your feet): poured water, salt water rule, base and where it comes from, altitude, still/running and biome deltas, cap |
+| `/droplets debug purity` | Purity of the water you look at (or the block at your feet): salt water rule, base and where it comes from, altitude, still/running and biome deltas, cap |
 | `/droplets config check` | Every config problem found, or "no problems found" |
 | `/droplets infer <item>` | How recipe inference estimates the item: each recipe, each ingredient's value, multiplier, result count, the estimate and why it would not be used |
 
@@ -107,8 +107,8 @@ In `OWN` mode these are the sources, with vanilla's hunger numbers. In `MIRROR_F
 | `depletesThirst` | `true` | Regenerating health makes thirst go down |
 | `climateDependent` | `true` | That loss is scaled by the climate factor |
 | `fullRegenMinThirst` | `20` | With `haltedWhenThirsty`: thirst needed for fast (saturation) regeneration |
-| `slowRegenMinThirst` / `slowRegenIntervalTicks` | `19` / `8` | Below that, saturation still heals with at least 19 thirst, once every 8 healing attempts. Vanilla makes one attempt every 10 ticks, so 8 means every 80 ticks |
-| `hungerRegenMinThirst` | `19` | Thirst needed for normal (food level) regeneration |
+| `slowRegenMinThirst` / `slowRegenIntervalTicks` | `16` / `8` | Below that, saturation still heals with at least 16 thirst, once every 8 healing attempts. Vanilla makes one attempt every 10 ticks, so 8 means every 80 ticks |
+| `hungerRegenMinThirst` | `16` | Thirst needed for normal (food level) regeneration |
 | `peacefulRegenAmount` / `peacefulRegenIntervalTicks` | `1` / `11` | Thirst restored in Peaceful (unless `depletion.inPeaceful`) |
 
 ### `[damage]`
@@ -126,7 +126,7 @@ In `OWN` mode these are the sources, with vanilla's hunger numbers. In `MIRROR_F
 | `sprint.blockedWhenThirsty` | `true` | No sprinting with `minThirst` or less. A sprint in progress stops too |
 | `sprint.minThirst` | `6` | 3 droplets |
 | `drinking.extraThirstToQuenched` | `true` | Thirst restored above full turns into quenched |
-| `drinking.waterBottleStackSize` | `64` | Stack size of water bottles (1-99) |
+| `drinking.waterBottleStackSize` | `16` | Stack size of water bottles (1-99) |
 | `drinking.canFillFromFlowingWater` | `true` | Glass bottles and terracotta bowls fill from flowing water. `false` = source blocks only, as in vanilla. Buckets always need a source |
 | `drinking.rain` | `true` | Drink rain by looking up |
 | `drinking.rainMaxPitch` | `-80` | How far up to look (-90 = straight up) |
@@ -199,16 +199,6 @@ Every purity value in the config files is one of these six levels:
 | `pureWater.thirstBonus` | `2` | Thirst added when drinking pure water (5) from a container: a bottle then gives 6 instead of 4. Bottles, buckets, bowls, the Traveler's Backpack hose and other purity containers count. A sip by hand does not, and neither do other drinks with a purity |
 | `pureWater.quenchedBonus` | `3` | Quenched added the same way: a bottle then gives 8 instead of 5 |
 | `world.*` | | See [Water purity in the world](Modpack-Makers#water-purity-in-the-world) |
-
-### Poured water
-
-Water poured into the world keeps its purity. Sea water poured into a meadow stays sea water when you fill a bucket there again. No key controls it: it follows `general.enabled`.
-
-- A water source left by a bucket (a player's or a dispenser's) or by NeoForge's `FluidUtil.tryPlaceFluid` (the fluid containers of many mods) is remembered with the purity of the water poured. Water without a stored purity counts as `defaultPurity`.
-- Anything that takes or drinks water there reads that purity: bottles, bowls, buckets, drinking by hand, dispensers, the Traveler's Backpack hose.
-- The infinite source that forms between two poured sources takes the worst purity beside it. Picking up a poured source hands its purity to the water sources beside it, so the one that refills its place is not clean either.
-- The mod ignores a remembered position that no longer holds a water source, and forgets it when it reads it. Water placed in other ways (commands, mods that place the block directly) has the world's purity, unless it is next to poured water.
-- The data is saved per chunk with the world and never goes to clients. `/droplets debug purity` shows "poured water" when it applies.
 
 ### Thirst only (purity off)
 

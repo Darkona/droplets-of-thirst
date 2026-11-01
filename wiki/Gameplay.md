@@ -33,7 +33,7 @@ With [Serene Seasons](#other-mods) installed, the season changes the biome tempe
 ## When thirst runs low
 
 - **3 droplets or less**: you cannot sprint, even with a full hunger bar. A sprint in progress stops too, as with hunger.
-- **Not full**: health regenerates slower. Fast regeneration needs a full bar, and normal regeneration needs at least 19 points (9.5 droplets).
+- **Not full**: health regenerates slower. Fast regeneration needs a full bar, and any regeneration needs at least 16 points (8 droplets).
 - **Empty**: you take damage every 2 seconds. On Easy it stops at 5 hearts, on Normal at half a heart, and on Hard it can kill you.
 
 You respawn with full thirst.
@@ -71,6 +71,42 @@ Some food hydrates a little and some makes you thirstier. Plain food (bread, mea
 | Rotten flesh, spider eye, pufferfish, poisonous potato | -3 | -3 |
 
 <!-- SCREENSHOT: item tooltip of a melon slice showing the thirst droplets and quenched icons -->
+
+### Juices, soda and milk
+
+Water keeps you alive, but better drinks reward a little more work. A juice needs water that is at least acceptable, so a clean source pays off.
+
+| Drink | How to get it | Thirst | Quenched | Bonus |
+|---|---|---|---|---|
+| Apple Juice | Apple and a water bottle | 7 | 9 | Hydrated, 1 minute |
+| Melon Juice | 2 melon slices and a water bottle | 8 | 10 | Hydrated, 2 minutes |
+| Berry Juice | 2 sweet berries, sugar and a water bottle | 7 | 9 | Speed, 20 seconds |
+| ABC Juice | Apple, beetroot, carrot and a water bottle | 10 | 14 | Hydrated for 3 minutes and Regeneration for 5 seconds |
+| Soda Water | Fill a glass bottle on a bubble column | 3 | 4 | Speed, 15 seconds |
+| Cola | Soda water, cocoa beans and sugar | 4 | 5 | Speed and Haste, 40 seconds |
+| Milk Bottle | A milk bucket and 3 glass bottles make 3 | 3 | 4 | Cures what dirty water did to you and nothing else |
+
+All of them leave the bottle behind, and a little food comes with them. If another mod already makes the same drink, its recipe stays and this one turns off: Farmer's Delight covers apple, melon and milk, Expanded Delight apple and berry, Extra Delight berry, and Cultural Delights cola.
+
+### Canteen
+
+The Canteen carries 8 drinks of one kind. Craft it with up to 8 identical drinks at once, and you get each empty bottle back. It works with anything tagged as a drink, from this mod or from others: juice, soda, milk, a potion, water. It only holds one kind at a time, so water does not go in with juice. Waters of different purity do mix, and all of it drops to the dirtiest.
+
+Right-click to take one sip, which counts as drinking that whole bottle: same thirst, food and effects. Right-click water to fill it, and it keeps the purity of that water. Right-click a tank or a cauldron to fill or empty it.
+
+Water is a real fluid inside the Canteen, so pipes and machines can fill it and empty it, 250 mB per sip. A Canteen with a juice inside has no fluid for them.
+
+### Amphora
+
+The Amphora stores 4 buckets of water without changing it, so water keeps the purity you worked for. Bottles, buckets, terracotta bowls and Canteens go in and out with a right-click, and pipes and machines reach it too. Right-click with an empty hand to see what it holds.
+
+Water of any purity goes in, and the whole Amphora drops to the dirtiest one, so one dirty bottle spoils it all. It takes other fluids as well, and it never takes items. To move it, break it with an empty hand: it goes to your inventory with its contents, and they stay when you place it. You cannot drink from it. Anything else shatters it: a tool or any other item in your hand, an arrow, a falling anvil, an explosion. It leaves a few bricks, and its water spills on the ground and dries up, with no source block.
+
+### Charcoal Filter
+
+The Charcoal Filter purifies water by gravity. Create's Sand Filter is the fast option: it raises water two levels at a time, but you have to pump the water through it. Put it under a water cauldron or anything that holds water, such as an Amphora or a tank from another mod, and put a container under it. It pulls water from above, raises it one purity level, and passes it down at 1 mB per tick, so it is slow. Nothing has to push the water.
+
+Filters stack: each one in a column adds a level, up to pure. It only takes water that has a purity. A cauldron under the filter only takes a whole bucket, and it does not keep the purity, so use an Amphora.
 
 ### Drinking too much
 
@@ -110,7 +146,7 @@ Water taken from the world gets its purity from where it is:
 
 `/droplets debug purity` (operators) shows the purity of the water you look at and why.
 
-Water you pour keeps its purity. Pour a bucket of sea water into a mountain lake, fill the bucket again, and you get sea water back. An infinite source made from poured water takes the worst purity beside it.
+Waters of different purity mix in any tank: the whole tank drops to the dirtiest one.
 
 ### Cleaning water
 
@@ -139,6 +175,9 @@ If the server turns purity off, all water is the same and only thirst matters.
 | Clay bowl | 3 clay balls in a V shape give 4 | Cook it into a terracotta bowl |
 | Terracotta bowl | Clay bowl in a furnace or on a campfire | Fill it with water like a glass bottle, from the world or a cauldron |
 | Terracotta water bowl | Terracotta bowl filled with water | Drink it like a water bottle. It can be purified like a bottle |
+| Charcoal Filter | Planks, leaves, sand, charcoal and gravel, in a funnel shape. Leaves need shears | Purifies water by gravity. See [Charcoal Filter](#charcoal-filter) |
+| Amphora | 6 terracotta | Stores 4 buckets of water and keeps its purity. See [Amphora](#amphora) |
+| Canteen | Leather and 3 iron ingots | Carries 8 drinks of one kind. See [Canteen](#canteen) |
 
 Everything is also in the Droplets of Thirst creative tab. The tab lists each water container once per purity.
 
@@ -149,7 +188,7 @@ Everything is also in the Droplets of Thirst creative tab. The tab lists each wa
 | Effect | What it does | Source |
 |---|---|---|
 | Quenchness | Restores 1 thirst and 1 quenched every 2 seconds per level | Potion of Quenchness |
-| Hydrated | Thirst drains at half the speed per level | `/effect`, or datapacks and config |
+| Hydrated | Thirst drains at half the speed per level | Juices, `/effect`, or datapacks and config |
 | Dehydration | Thirst drains faster, like Hunger does for food | Dirty water in a hot climate |
 | Overhydrated | 10% slower per level | Drinking far past full |
 

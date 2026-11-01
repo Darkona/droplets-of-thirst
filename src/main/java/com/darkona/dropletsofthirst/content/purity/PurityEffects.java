@@ -9,7 +9,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.Nullable;
@@ -51,6 +53,15 @@ public final class PurityEffects
             for (MobEffectInstance effect : event.getEffects())
                 player.addEffect(effect);
         return event.hydrates();
+    }
+
+    public static void cure(LivingEntity entity)
+    {
+        for (int purity = WaterPurity.MIN_PURITY; purity <= WaterPurity.MAX_PURITY; purity++)
+            for (Effect effect : table(purity))
+                if (effect.effect().value().getCategory() == MobEffectCategory.HARMFUL)
+                    entity.removeEffect(effect.effect());
+        entity.removeEffect(DropletsMobEffects.DEHYDRATION);
     }
 
     public static Effect[] table(int purity)

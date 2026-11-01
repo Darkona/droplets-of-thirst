@@ -4,11 +4,13 @@ import com.darkona.dropletsofthirst.content.purity.DimensionWater;
 import com.darkona.dropletsofthirst.content.purity.BiomeWater;
 import com.darkona.dropletsofthirst.content.thirst.DrinkValues;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.material.Fluid;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
@@ -18,6 +20,10 @@ public final class DropletsDataMaps
     public static final DataMapType<Item, DrinkValues> DRINKS = DataMapType
             .builder(DropletsOfThirst.asResource("drinks"), Registries.ITEM, DrinkValues.CODEC)
             .synced(DrinkValues.CODEC, false)
+            .build();
+    public static final DataMapType<Fluid, Item> DRINK_FLUIDS = DataMapType
+            .builder(DropletsOfThirst.asResource("drink_fluids"), Registries.FLUID, BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").codec())
+            .synced(BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").codec(), false)
             .build();
     public static final DataMapType<Block, DrinkValues> HYDRATING_BLOCKS = DataMapType
             .builder(DropletsOfThirst.asResource("hydrating_blocks"), Registries.BLOCK, DrinkValues.CODEC)
@@ -39,6 +45,7 @@ public final class DropletsDataMaps
     private static void registerTypes(RegisterDataMapTypesEvent event)
     {
         event.register(DRINKS);
+        event.register(DRINK_FLUIDS);
         event.register(HYDRATING_BLOCKS);
         event.register(BIOME_WATER);
         event.register(DIMENSION_WATER);

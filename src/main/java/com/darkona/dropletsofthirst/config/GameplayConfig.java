@@ -160,9 +160,9 @@ public final class GameplayConfig
         REGEN_DEPLETES_THIRST = BUILDER.comment("Whether regenerating health makes thirst go down, like hunger").define("depletesThirst", true);
         REGEN_CLIMATE_DEPENDENT = BUILDER.comment("Whether thirst lost by regenerating health is scaled by the climate multiplier").define("climateDependent", true);
         FULL_REGEN_MIN_THIRST = BUILDER.comment("With haltedWhenThirsty: thirst needed for fast (saturation) regeneration").defineInRange("fullRegenMinThirst", 20, 0, 20);
-        SLOW_REGEN_MIN_THIRST = BUILDER.comment("With haltedWhenThirsty: below fullRegenMinThirst, saturation still heals every slowRegenIntervalTicks with this much thirst").defineInRange("slowRegenMinThirst", 19, 0, 20);
+        SLOW_REGEN_MIN_THIRST = BUILDER.comment("With haltedWhenThirsty: below fullRegenMinThirst, saturation still heals every slowRegenIntervalTicks with this much thirst").defineInRange("slowRegenMinThirst", 16, 0, 20);
         SLOW_REGEN_INTERVAL_TICKS = BUILDER.comment("Counted in vanilla healing attempts, one every 10 ticks: 8 heals every 80 ticks").defineInRange("slowRegenIntervalTicks", 8, 1, 1200);
-        HUNGER_REGEN_MIN_THIRST = BUILDER.comment("With haltedWhenThirsty: thirst needed for normal (food level) regeneration").defineInRange("hungerRegenMinThirst", 19, 0, 20);
+        HUNGER_REGEN_MIN_THIRST = BUILDER.comment("With haltedWhenThirsty: thirst needed for normal (food level) regeneration").defineInRange("hungerRegenMinThirst", 16, 0, 20);
         PEACEFUL_REGEN_AMOUNT = BUILDER.comment("Peaceful without inPeaceful: thirst restored every peacefulRegenIntervalTicks").defineInRange("peacefulRegenAmount", 1, 0, 20);
         PEACEFUL_REGEN_INTERVAL_TICKS = BUILDER.defineInRange("peacefulRegenIntervalTicks", 11, 1, 1200);
         BUILDER.pop();
@@ -183,7 +183,7 @@ public final class GameplayConfig
 
         BUILDER.push("drinking");
         EXTRA_THIRST_TO_QUENCHED = BUILDER.comment("Whether thirst restored above full turns into quenched").define("extraThirstToQuenched", true);
-        WATER_BOTTLE_STACK_SIZE = BUILDER.comment("Stack size of water bottles").defineInRange("waterBottleStackSize", 64, 1, 99);
+        WATER_BOTTLE_STACK_SIZE = BUILDER.comment("Stack size of water bottles").defineInRange("waterBottleStackSize", 16, 1, 99);
         CAN_FILL_FROM_FLOWING_WATER = BUILDER.comment("Whether glass bottles and terracotta bowls can be filled from flowing water; if false only source blocks work, as in vanilla. Buckets always need a source").define("canFillFromFlowingWater", true);
         RAIN_DRINKING = BUILDER.comment("Whether players drink rain by looking up").define("rain", true);
         RAIN_MAX_PITCH = BUILDER.comment("How far up players must look to drink rain (-90 = straight up)").defineInRange("rainMaxPitch", -80.0, -90.0, 90.0);

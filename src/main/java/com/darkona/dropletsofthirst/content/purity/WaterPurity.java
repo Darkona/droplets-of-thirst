@@ -111,6 +111,12 @@ public class WaterPurity
         return container != null && !item.is(DropletsTags.PURITY_OPT_OUT) && container.equalsFilled(item);
     }
 
+    public static ItemStack emptyContainer(ItemStack item)
+    {
+        ContainerWithPurity container = waterContainers.get(item.getItem());
+        return container == null || container.getEmptyItem() == null ? ItemStack.EMPTY : new ItemStack(container.getEmptyItem());
+    }
+
     public static Integer getPurity(ItemStack item)
     {
         Integer stored = item.get(DropletsDataComponents.PURITY);
@@ -187,6 +193,24 @@ public class WaterPurity
         return fluid.get(DropletsDataComponents.PURITY) != null;
     }
 
+    public static boolean boil(ItemStack item, int cap)
+    {
+        if (!isWaterFilledContainer(item) || getPurity(item) >= cap)
+            return false;
+        addPurity(item, getPurity(item) + 1);
+        return true;
+    }
+
+    public static FluidStack mixInto(FluidStack held, FluidStack resource, boolean execute)
+    {
+        if (held.isEmpty() || !enabled() || !held.is(FluidTags.WATER) || !resource.is(FluidTags.WATER) || FluidStack.isSameFluidSameComponents(held, resource))
+            return resource;
+        int purity = execute ? Math.min(getPurity(held), getPurity(resource)) : getPurity(held);
+        if (execute)
+            addPurity(held, purity);
+        return addPurity(resource.copy(), purity);
+    }
+
     public static ItemStack addPurity(ItemStack item, int purity)
     {
         if (enabled() && !item.is(DropletsTags.PURITY_OPT_OUT))
@@ -216,8 +240,7 @@ public class WaterPurity
             return getWaterPurity(level, pos, fluid.isSource());
         if (level.getBlockState(pos).is(Blocks.WATER_CAULDRON))
             return CauldronPurity.at(level, pos);
-        int poured = PouredWater.pickedUp(level, pos);
-        return poured >= MIN_PURITY ? poured : getWaterPurity(level, pos, true);
+        return getWaterPurity(level, pos, true);
     }
 
     public static int getWaterPurity(Level level, BlockPos pos, boolean source)
@@ -227,16 +250,6 @@ public class WaterPurity
 
     public static int getWaterPurity(Level level, BlockPos pos, boolean source, @Nullable List<String> trace)
     {
-        if (source)
-        {
-            int poured = PouredWater.purityAt(level, pos);
-            if (poured >= MIN_PURITY)
-            {
-                if (trace != null)
-                    trace.add("poured water: fixed " + poured);
-                return poured;
-            }
-        }
         return getWaterPurity(level, level.getBiome(pos), pos, source, trace);
     }
 

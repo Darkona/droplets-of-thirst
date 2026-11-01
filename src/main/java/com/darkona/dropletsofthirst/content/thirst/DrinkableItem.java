@@ -21,7 +21,7 @@ public class DrinkableItem extends Item
 
     public DrinkableItem()
     {
-        super(new Properties().stacksTo(64));
+        super(new Properties().stacksTo(16));
     }
 
     public DrinkableItem(Properties p_41383_)

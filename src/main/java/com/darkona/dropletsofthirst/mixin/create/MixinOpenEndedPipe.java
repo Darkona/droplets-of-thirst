@@ -1,7 +1,6 @@
 package com.darkona.dropletsofthirst.mixin.create;
 
 import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
-import com.darkona.dropletsofthirst.content.purity.PouredWater;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
@@ -45,23 +44,8 @@ public abstract class MixinOpenEndedPipe
     @ModifyReturnValue(method = "removeFluidFromSpace", at = @At("RETURN"), remap = false)
     private FluidStack droplets_of_thirst$addPurity(FluidStack drained, boolean simulate, @Share("purity") LocalIntRef purity)
     {
-        if (purity.get() >= 0 && !drained.isEmpty() && drained.is(FluidTags.WATER))
-        {
-            if (!WaterPurity.hasPurity(drained))
-                WaterPurity.addPurity(drained, purity.get());
-            OpenEndedPipe pipe = (OpenEndedPipe) (Object) this;
-            if (!simulate && pipe.getWorld() != null && !pipe.getWorld().getFluidState(pipe.getOutputPos()).is(FluidTags.WATER))
-                PouredWater.pickedUp(pipe.getWorld(), pipe.getOutputPos());
-        }
+        if (purity.get() >= 0 && !drained.isEmpty() && drained.is(FluidTags.WATER) && !WaterPurity.hasPurity(drained))
+            WaterPurity.addPurity(drained, purity.get());
         return drained;
-    }
-
-    @ModifyReturnValue(method = "provideFluidToSpace", at = @At("RETURN"), remap = false)
-    private boolean droplets_of_thirst$registerPouredWater(boolean placed, FluidStack fluid, boolean simulate)
-    {
-        OpenEndedPipe pipe = (OpenEndedPipe) (Object) this;
-        if (placed && !simulate && pipe.getWorld() != null && fluid.is(FluidTags.WATER))
-            PouredWater.poured(pipe.getWorld(), pipe.getOutputPos(), WaterPurity.getPurity(fluid));
-        return placed;
     }
 }

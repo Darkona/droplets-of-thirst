@@ -42,6 +42,16 @@ public class DropletsCreativeModeTabs
         list.add(DropletsItems.CLAY_BOWL.get().getDefaultInstance());
         list.add(DropletsItems.TERRACOTTA_BOWL.get().getDefaultInstance());
         addPurities(list, new ItemStack(DropletsItems.TERRACOTTA_WATER_BOWL.get()));
+        list.add(DropletsItems.APPLE_JUICE.toStack());
+        list.add(DropletsItems.MELON_JUICE.toStack());
+        list.add(DropletsItems.BERRY_JUICE.toStack());
+        list.add(DropletsItems.ABC_JUICE.toStack());
+        list.add(DropletsItems.SODA_WATER.toStack());
+        list.add(DropletsItems.COLA.toStack());
+        list.add(DropletsItems.MILK_BOTTLE.toStack());
+        list.add(DropletsItems.CANTEEN.toStack());
+        list.add(DropletsItems.AMPHORA.toStack());
+        list.add(DropletsItems.CHARCOAL_FILTER.toStack());
 
         return list;
     }

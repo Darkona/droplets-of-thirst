@@ -36,5 +36,11 @@ public final class DropletsGameTests
             event.register(CulturalDelightsTests.class);
         if (ModList.get().isLoaded("vampirism"))
             event.register(VampirismTests.class);
+        if (ModList.get().isLoaded("supplementaries"))
+            event.register(SupplementariesTests.class);
+        if (ModList.get().isLoaded("mekanism"))
+            event.register(MekanismTests.class);
+        if (ModList.get().isLoaded("immersiveengineering"))
+            event.register(ImmersiveEngineeringTests.class);
     }
 }

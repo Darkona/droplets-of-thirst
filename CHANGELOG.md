@@ -4,11 +4,30 @@ Changes by feature, newest version first. Upstream issues are cited as `thirst#N
 
 ## Unreleased
 
+- Water of any purity now mixes in tanks and Canteens, and the whole tank drops to the dirtiest purity. It works with any mod tank built on the NeoForge fluid tank.
+- With Supplementaries and Moonlight, the Jar and the Faucet keep the purity of water: the Faucet takes it from water blocks and cauldrons, the Jar keeps it when filled by pipes or bottles and passes it to the bottles it fills.
+- Mekanism's Electric Pump and Immersive Engineering's Fluid Pump now keep the purity of the water they take from the world.
+- Create's Sand Filter now raises water two purity levels by default. Server configs that already exist keep their old value.
+- New Charcoal Filter: it pulls water with a purity from the block above, raises it one level and passes it to the block below at 1 mB per tick. Filters chain, up to pure.
+- New Amphora: a terracotta block that stores 4 buckets of water and keeps its purity. Pipes and machines can reach it. Breaking it with an empty hand carries it with its contents. A tool, an arrow or a falling anvil shatters it, and its water spills and dries up.
+- Water bottles and terracotta water bowls now stack to 16 by default (`waterBottleStackSize` for bottles). Server configs that already exist keep their old value.
+- With Cold Sweat, a Canteen of water has a temperature like a waterskin: the Boiler and Icebox change it, and sips warm or cool you.
+- Cold Sweat's Boiler now purifies water containers while it has fuel, up to acceptable.
+- New Canteen: craft it with up to 8 identical drinks tagged `c:drinks`, and each sip counts as drinking one. It holds one kind of drink at a time. Water goes in as a real fluid, so pipes and machines can fill it.
+- Our drinks are in the `c:drinks` tags.
+- Cold Sweat 2.4.4 or newer is now required when installed: the game stopped at load with those versions. Filling a waterskin now uses their new event.
+- The purity color of a water bucket now tints only the water, and the bucket stays gray.
+- New drinks that reward more work: Apple, Melon, Berry and ABC Juice, made with water that is at least acceptable. They restore more than pure water and give Hydrated, Speed or Regeneration.
+- Soda Water: fill a glass bottle on a bubble column. It gives a short burst of Speed, and with cocoa beans and sugar it becomes Cola.
+- Milk Bottle: a milk bucket fills 3 bottles, and each one cures only what dirty water did to you.
+- Each of these recipes turns off when another mod already makes the same drink (Farmer's Delight, Expanded Delight, Extra Delight, Cultural Delights).
 - French, Polish, Russian, Japanese, Korean and both Chinese translations are complete, including effect and potion names.
 - The server only sends thirst to the client when thirst or quenched change. Between changes the client works out the exhaustion bar by itself and settles on the server's value at each change. The periodic resend is gone.
 - Nausea and Dehydration no longer drain thirst while an effect from `pauses_thirst` or `stops_thirst` is active, and activity from a `stops_thirst` effect is no longer charged when it ends.
 - Keywords now reach real foods: soups, fruits and food-type drinks that have no values. Before, they only matched items that cannot be eaten.
 - The config comment and wiki now say what `slowRegenIntervalTicks` counts: healing attempts, one every 10 ticks.
+- Water poured into the world no longer keeps its purity: a source takes the purity of the place where it is, as any other water. Poured water saved by earlier versions is forgotten.
+- Health regeneration is more forgiving: `slowRegenMinThirst` and `hungerRegenMinThirst` are now 16, so losing a droplet or two no longer stops healing. Server configs that already exist keep their old values.
 - Rain no longer gives sips at full thirst, so looking up in the rain cannot cause Overhydrated.
 - A hit of dehydration stops at the minimum health of the difficulty, even with a high `amount`.
 - Estimates from recipes no longer lose value for an item that is part of a recipe loop.

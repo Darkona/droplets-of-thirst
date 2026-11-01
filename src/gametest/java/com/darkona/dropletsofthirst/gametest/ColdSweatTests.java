@@ -11,6 +11,8 @@ import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import dev.darkona.jdlib.core.config.NumberRows;
 import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.darkona.dropletsofthirst.config.GameplayConfig;
+import com.momosoftworks.coldsweat.common.item.WaterskinItem;
+import com.momosoftworks.coldsweat.common.blockentity.BoilerBlockEntity;
 import com.momosoftworks.coldsweat.core.init.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -33,6 +35,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.gametest.PrefixGameTestTemplate;
@@ -50,6 +53,50 @@ public class ColdSweatTests
         helper.assertTrue(empty.is(ModItems.WATERSKIN), "the remainder is not an empty waterskin");
         helper.assertFalse(WaterPurity.hasPurity(empty), "the emptied waterskin kept its purity");
         helper.assertTrue(ItemStack.isSameItemSameComponents(empty, new ItemStack(ModItems.WATERSKIN.get())), "the emptied waterskin does not stack with a new one");
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)
+    public static void theBoilerPurifiesWaterUpToAcceptable(GameTestHelper helper)
+    {
+        BlockPos pos = helper.absolutePos(new BlockPos(1, 2, 1));
+        BlockState state = com.momosoftworks.coldsweat.core.init.ModBlocks.BOILER.get().defaultBlockState();
+        helper.getLevel().setBlockAndUpdate(pos, state);
+        BoilerBlockEntity boiler = (BoilerBlockEntity) helper.getLevel().getBlockEntity(pos);
+        boiler.setHotFuel(1000, false);
+        ItemStack dirty = WaterPurity.addPurity(PotionContents.createItemStack(Items.POTION, Potions.WATER), 1);
+        ItemStack clean = WaterPurity.addPurity(PotionContents.createItemStack(Items.POTION, Potions.WATER), 4);
+        ItemStack canteen = com.darkona.dropletsofthirst.index.DropletsItems.CANTEEN.toStack();
+        canteen.getCapability(Capabilities.FluidHandler.ITEM).fill(WaterPurity.addPurity(new FluidStack(Fluids.WATER, 250), 2), IFluidHandler.FluidAction.EXECUTE);
+        boiler.setItem(1, dirty);
+        boiler.setItem(2, clean);
+        boiler.setItem(3, canteen);
+        for (int tick = 0; tick < 1000; tick++)
+            boiler.tick(helper.getLevel(), state, pos);
+        helper.assertValueEqual(WaterPurity.getPurity(boiler.getItem(1)), 3, "dirty water stops at acceptable");
+        helper.assertValueEqual(WaterPurity.getPurity(boiler.getItem(2)), 4, "clean water is left alone");
+        FluidStack boiled = boiler.getItem(3).getCapability(Capabilities.FluidHandler.ITEM).getFluidInTank(0);
+        helper.assertValueEqual(WaterPurity.getPurity(boiled), 3, "the canteen boils too");
+        helper.assertTrue(ColdSweatCompat.canteenTemperature(boiler.getItem(3)) > 0, "the boiler heats the canteen");
+        ItemStack hot = boiler.getItem(3);
+        ServerPlayer player = TestSupport.player(helper);
+        hot.getItem().finishUsingItem(hot, helper.getLevel(), player);
+        helper.assertValueEqual(ColdSweatCompat.canteenTemperature(hot), 0.0, "an emptied canteen has no temperature");
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)
+    public static void waterskinFilledFromATankTakesItsPurity(GameTestHelper helper)
+    {
+        ServerPlayer player = TestSupport.player(helper);
+        ItemStack empty = new ItemStack(ModItems.WATERSKIN.value());
+        player.setItemInHand(InteractionHand.MAIN_HAND, empty);
+        FluidStack tank = new FluidStack(Fluids.WATER, 250);
+        WaterPurity.addPurity(tank, 0);
+        WaterskinItem.handleFillWaterskin(player, empty, InteractionHand.MAIN_HAND, helper.absolutePos(new BlockPos(1, 2, 1)), tank);
+        ItemStack filled = player.getItemInHand(InteractionHand.MAIN_HAND);
+        helper.assertTrue(filled.is(ModItems.FILLED_WATERSKIN), "the hand holds " + filled);
+        helper.assertValueEqual(WaterPurity.getPurity(filled), 0, "purity of the tank water");
         helper.succeed();
     }
 

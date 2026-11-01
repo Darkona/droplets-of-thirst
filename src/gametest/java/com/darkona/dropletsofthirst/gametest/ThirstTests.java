@@ -237,6 +237,39 @@ public class ThirstTests
         helper.succeed();
     }
 
+    private static boolean healsWithin(ServerPlayer player, int thirst, int food, float saturation)
+    {
+        thirst(player).setThirst(thirst);
+        player.setHealth(10.0F);
+        player.getFoodData().setFoodLevel(food);
+        player.getFoodData().setSaturation(saturation);
+        for (int tick = 0; tick < 100 && player.getHealth() <= 10.0F; tick++)
+            player.getFoodData().tick(player);
+        return player.getHealth() > 10.0F;
+    }
+
+    @GameTest(template = "empty")
+    public static void healingNeedsTheMinimumThirstOnBothPaths(GameTestHelper helper)
+    {
+        int slow = GameplayConfig.SLOW_REGEN_MIN_THIRST.get();
+        int hunger = GameplayConfig.HUNGER_REGEN_MIN_THIRST.get();
+        GameplayConfig.SLOW_REGEN_MIN_THIRST.set(GameplayConfig.SLOW_REGEN_MIN_THIRST.getDefault());
+        GameplayConfig.HUNGER_REGEN_MIN_THIRST.set(GameplayConfig.HUNGER_REGEN_MIN_THIRST.getDefault());
+        try
+        {
+            helper.assertTrue(healsWithin(player(helper), 16, 20, 5.0F), "saturation heals slowly at 16 thirst");
+            helper.assertTrue(healsWithin(player(helper), 16, 18, 0.0F), "food heals at 16 thirst");
+            helper.assertFalse(healsWithin(player(helper), 15, 20, 5.0F), "saturation does not heal at 15 thirst");
+            helper.assertFalse(healsWithin(player(helper), 15, 18, 0.0F), "food does not heal at 15 thirst");
+        }
+        finally
+        {
+            GameplayConfig.SLOW_REGEN_MIN_THIRST.set(slow);
+            GameplayConfig.HUNGER_REGEN_MIN_THIRST.set(hunger);
+        }
+        helper.succeed();
+    }
+
     @GameTest(template = "empty")
     public static void dehydrationStopsAtMinimumHealth(GameTestHelper helper)
     {

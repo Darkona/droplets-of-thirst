@@ -55,25 +55,12 @@ public class MinersDelightTests
     {
         BlockPos pos = helper.absolutePos(new BlockPos(2, 2, 2));
         helper.getLevel().setBlockAndUpdate(pos, Blocks.WATER.defaultBlockState());
-        com.darkona.dropletsofthirst.content.purity.PouredWater.poured(helper.getLevel(), pos, CONTAMINATED);
-        helper.assertValueEqual(WaterPurity.getBlockPurity(helper.getLevel(), pos), CONTAMINATED, "purity of the poured source");
+        int expected = WaterPurity.getBlockPurity(helper.getLevel(), pos);
 
         ItemStack cup = useFromAbove(player(helper), pos, new ItemStack(item("copper_cup")));
         helper.assertTrue(cup.is(item("water_cup")), "the copper cup was not filled: " + cup);
         helper.assertTrue(WaterPurity.hasPurity(cup), "a cup filled from the world has no purity");
-        helper.assertValueEqual(WaterPurity.getPurity(cup), CONTAMINATED, "purity of a cup filled from poured water");
-        helper.succeed();
-    }
-
-    @GameTest(template = "box", templateNamespace = DropletsOfThirst.ID)
-    public static void cupEmptiedIntoTheWorldKeepsItsPurity(GameTestHelper helper)
-    {
-        BlockPos pos = helper.absolutePos(new BlockPos(2, 2, 2));
-        ServerPlayer player = player(helper);
-        ItemStack cup = WaterPurity.addPurity(new ItemStack(item("water_cup")), CONTAMINATED);
-        helper.assertTrue(((CopperCupItem) cup.getItem()).emptyContents(player, helper.getLevel(), pos, null, cup), "the cup was not emptied at " + pos);
-        helper.assertTrue(helper.getLevel().getFluidState(pos).isSource(), "no water source where the cup was emptied");
-        helper.assertValueEqual(WaterPurity.getBlockPurity(helper.getLevel(), pos), CONTAMINATED, "purity of the source a dirty cup left");
+        helper.assertValueEqual(WaterPurity.getPurity(cup), expected, "purity of a cup filled from world water");
         helper.succeed();
     }
 

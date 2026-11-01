@@ -3,6 +3,7 @@ package com.darkona.dropletsofthirst.content.purity;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.index.DropletsItems;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 public final class PurityTint
 {
@@ -24,7 +25,7 @@ public final class PurityTint
 
     public static int liquidLayer(ItemStack stack)
     {
-        return stack.is(DropletsItems.TERRACOTTA_WATER_BOWL.get()) ? 1 : 0;
+        return stack.is(DropletsItems.TERRACOTTA_WATER_BOWL.get()) || stack.is(Items.WATER_BUCKET) ? 1 : 0;
     }
 
     private PurityTint() {}

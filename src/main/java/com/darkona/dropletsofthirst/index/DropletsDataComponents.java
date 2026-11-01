@@ -11,6 +11,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.fluids.SimpleFluidContent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class DropletsDataComponents {
@@ -29,6 +30,12 @@ public class DropletsDataComponents {
     public static final DataComponentType<Integer> PURITY = register("purity",
             builder -> builder.persistent(Codec.INT.xmap(DropletsDataComponents::bounded, Function.identity()))
                     .networkSynchronized(ByteBufCodecs.VAR_INT.map(DropletsDataComponents::bounded, Function.identity())));
+
+    public static final DataComponentType<SimpleFluidContent> CANTEEN_FLUID = register("canteen_fluid",
+            builder -> builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC));
+
+    public static final DataComponentType<SimpleFluidContent> AMPHORA_FLUID = register("amphora_fluid",
+            builder -> builder.persistent(SimpleFluidContent.CODEC).networkSynchronized(SimpleFluidContent.STREAM_CODEC));
 
     public static int bounded(int purity)
     {

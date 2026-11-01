@@ -78,7 +78,7 @@ if (values != null && !values.estimated()) { ... }       // estimated = guessed 
 int purity = DropletsAPI.getPurity(stack);               // MIN_PURITY (0) .. MAX_PURITY (5)
 PurityLevel named = PurityLevel.byLevel(purity);          // CONTAMINATED .. PURE, null if out of range
 ItemStack pure = DropletsAPI.withPurity(stack, PurityLevel.PURE.level());  // a copy
-int here = DropletsAPI.getWaterPurity(level, pos);       // server side; poured water keeps its purity
+int here = DropletsAPI.getWaterPurity(level, pos);       // server side
 ```
 
 `getItemPurity`, `getFluidPurity`, `withItemPurity` and `withFluidPurity` do the same as the `getPurity` and `withPurity` overloads, for callers that cannot pick an overload by type (scripting languages).

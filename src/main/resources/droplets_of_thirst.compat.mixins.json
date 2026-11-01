@@ -5,8 +5,9 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "droplets_of_thirst.refmap.json",
   "mixins": [
+    "cold_sweat.MixinBoilerBlockEntity",
     "cold_sweat.MixinFilledWaterskinItem",
-    "cold_sweat.MixinWaterskinItem",
+    "cold_sweat.MixinIceboxBlockEntity",
     "create.MixinBasinRecipe",
     "create.MixinFillingBySpout",
     "create.MixinFluidDrainingBehaviour",
@@ -21,7 +22,14 @@
     "farm_and_charm.MixinSinkBlock",
     "farm_and_charm.MixinTimberWellBlock",
     "herbalbrews.MixinTeaKettleBlockEntity",
+    "immersiveengineering.MixinFluidPumpBlockEntity",
+    "immersiveengineering.MixinUtils",
+    "mekanism.MixinTileEntityElectricPump",
     "minersdelight.MixinCopperCupItem",
+    "moonlight.MixinSoftFluidStackImpl",
+    "moonlight.MixinSoftFluidTank",
+    "supplementaries.MixinLiquidBlockInteraction",
+    "supplementaries.MixinWaterCauldronInteraction",
     "travelersbackpack.MixinHoseItem"
   ],
   "injectors": {

@@ -76,18 +76,31 @@ The server resolves this table on world load and on `/reload`, and sends it to e
 
 ---
 
+## Canteen fluids: `droplets_of_thirst:drink_fluids`
+
+A data map on fluids that says which item one Canteen sip of that fluid counts as. File: `data/<namespace>/data_maps/fluid/drink_fluids.json`. Water needs no entry. The defaults cover Create tea and milk.
+
+```json
+{
+  "values": {
+    "create:tea": { "item": "create:builders_tea" }
+  }
+}
+```
+
+Items reach the Canteen through the `c:drinks` tag: tag an item there and players can craft it into a Canteen. The sip is the item itself, so its thirst, food and effects all apply.
+
 ## Water purity in the world
 
 Water picked up from the world (buckets, bottles, bowls, drinking by hand, dispensers, the Traveler's Backpack hose) gets a purity from 0 to 5:
 
-1. **Poured water**: a source poured by a bucket keeps the purity it was poured with (see [Poured water](Configuration#poured-water)).
-2. **Salt water**: if `saltWaterPurity` is 0-5 and the biome is in `#droplets_of_thirst:salt_water`, the water gets that fixed value and nothing else applies.
-3. **Base purity**, the first that is set:
+1. **Salt water**: if `saltWaterPurity` is 0-5 and the biome is in `#droplets_of_thirst:salt_water`, the water gets that fixed value and nothing else applies.
+2. **Base purity**, the first that is set:
    1. `base` of the biome in the `droplets_of_thirst:biome_water` data map;
    2. the biome tags `#droplets_of_thirst:water_purity/5` down to `/0`, checked in that order;
    3. `base` of the dimension type in the `droplets_of_thirst:dimension_water` data map;
    4. `worldWaterBasePurity` in `purity.toml` (1).
-4. Plus the **altitude** delta, the **still/running** delta and the biome's `delta`. The result is kept between 0 and the biome's `max` (5 by default).
+3. Plus the **altitude** delta, the **still/running** delta and the biome's `delta`. The result is kept between 0 and the biome's `max` (5 by default).
 
 Global settings in `purity.toml`, section `[world]`:
 

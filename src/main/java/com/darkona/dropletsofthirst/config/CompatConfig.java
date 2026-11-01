@@ -40,7 +40,7 @@ public final class CompatConfig
     static
     {
         BUILDER.push("create");
-        SAND_FILTER_FILTRATION_AMOUNT = BUILDER.comment("Purification levels gained by filtering water through a Sand Filter").defineInRange("sandFilterFiltrationAmount", 1, 0, PurityLevel.MAX);
+        SAND_FILTER_FILTRATION_AMOUNT = BUILDER.comment("Purification levels gained by filtering water through a Sand Filter").defineInRange("sandFilterFiltrationAmount", 2, 0, PurityLevel.MAX);
         SAND_FILTER_MB_PER_TICK = BUILDER.comment("Millibuckets of water filtered per game tick with a Sand Filter").defineInRange("sandFilterMbPerTick", 10, 1, 1000);
         SAND_FILTER_MAX_PURITY = BUILDER.comment("Highest purity a Sand Filter raises water to (0 contaminated ... 5 pure); water already purer passes unchanged.",
                         "With Create, filters are the only way to pure water: cooking stops at clean (4)").defineInRange("sandFilterMaxPurity", PurityLevel.PURE.level(), PurityLevel.MIN, PurityLevel.MAX);

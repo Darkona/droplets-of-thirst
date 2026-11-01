@@ -1,0 +1,71 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "droplets_of_thirst:purity_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:apple"
+    },
+    {
+      "item": "minecraft:beetroot"
+    },
+    {
+      "item": "minecraft:carrot"
+    },
+    {
+      "type": "neoforge:difference",
+      "base": {
+        "type": "neoforge:components",
+        "items": "minecraft:potion",
+        "components": {
+          "minecraft:potion_contents": {
+            "potion": "minecraft:water"
+          }
+        }
+      },
+      "subtracted": {
+        "type": "neoforge:compound",
+        "children": [
+          {
+            "type": "neoforge:components",
+            "items": "minecraft:potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "potion": "minecraft:water"
+              },
+              "droplets_of_thirst:purity": 0
+            }
+          },
+          {
+            "type": "neoforge:components",
+            "items": "minecraft:potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "potion": "minecraft:water"
+              },
+              "droplets_of_thirst:purity": 1
+            }
+          },
+          {
+            "type": "neoforge:components",
+            "items": "minecraft:potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "potion": "minecraft:water"
+              },
+              "droplets_of_thirst:purity": 2
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "result": {
+    "id": "droplets_of_thirst:abc_juice",
+    "count": 1
+  }
+}
