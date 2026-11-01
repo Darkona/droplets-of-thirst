@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.compat.create;
 
-import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
+import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -32,7 +32,7 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
     public static final int TANK_SIZE = 1000;
     SmartFluidTankBehaviour dirtyTank;
     SmartFluidTankBehaviour purifiedTank;
-    /** The block in front, recomputed only when the filter is turned. */
+
     private Direction nextFacing;
     private BlockPos nextPos;
     private final LazyOptional<IFluidHandler> tanksView = LazyOptional.of(() -> new SandFilterTanksView(this));
@@ -55,10 +55,6 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
         return super.createRenderBoundingBox().expandTowards(0, -2, 0);
     }
 
-    /**
-     * Pipes connect only to the two ends: purified water leaves from the {@code FACING} side, dirty water enters
-     * from the opposite one. Without a side, both tanks, read only, for Jade and other inspectors.
-     */
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side)
     {
@@ -83,11 +79,6 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
         tanksView.invalidate();
     }
 
-    /**
-     * Moves up to {@code sandFilterMbPerTick} from the dirty to the purified tank, only what the purified tank accepts:
-     * water of a different purity is not mixed, it waits. Then hands purified water on to a filter right in front
-     * that faces the same way, so a row of filters purifies in stages.
-     */
     public void tick()
     {
         super.tick();
@@ -122,9 +113,6 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
         purified.fill(new FluidStack(water, drained), IFluidHandler.FluidAction.EXECUTE);
     }
 
-    /**
-     * {@code sandFilterFiltrationAmount} more, up to {@code sandFilterMaxPurity}; water already above it passes unchanged.
-     */
     public static int filteredPurity(int purity)
     {
         return CreateCompat.sandFilterPurity(purity);
@@ -176,9 +164,6 @@ public class SandFilterBlockEntity extends SmartBlockEntity implements IHaveGogg
         return hasFluid();
     }
 
-    /**
-     * The purity and fluid name of a tank, and its amount over its capacity; nothing for an empty tank.
-     */
     private static void tankTooltip(List<Component> tooltip, LangBuilder mb, SmartFluidTankBehaviour tank) {
         if(tank.isEmpty())
             return;

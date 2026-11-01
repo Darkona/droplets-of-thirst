@@ -1,0 +1,61 @@
+package com.darkona.dropletsofthirst.content.loot;
+
+import com.darkona.dropletsofthirst.index.DropletsLoot;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.entries.LootPoolEntryType;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+
+import java.util.function.Consumer;
+
+public class OptionalItemEntry extends LootPoolSingletonContainer
+{
+    private final ResourceLocation name;
+    private final Item item;
+
+    OptionalItemEntry(ResourceLocation name, int weight, int quality, LootItemCondition[] conditions, LootItemFunction[] functions)
+    {
+        super(weight, quality, conditions, functions);
+        this.name = name;
+        this.item = BuiltInRegistries.ITEM.getOptional(name).orElse(Items.AIR);
+    }
+
+    @Override
+    public LootPoolEntryType getType()
+    {
+        return DropletsLoot.OPTIONAL_ITEM.get();
+    }
+
+    @Override
+    protected void createItemStack(Consumer<ItemStack> output, LootContext context)
+    {
+        if (item != Items.AIR)
+            output.accept(new ItemStack(item));
+    }
+
+    public static class Serializer extends LootPoolSingletonContainer.Serializer<OptionalItemEntry>
+    {
+        @Override
+        public void serializeCustom(JsonObject json, OptionalItemEntry entry, JsonSerializationContext context)
+        {
+            super.serializeCustom(json, entry, context);
+            json.addProperty("name", entry.name.toString());
+        }
+
+        @Override
+        protected OptionalItemEntry deserialize(JsonObject json, JsonDeserializationContext context, int weight, int quality, LootItemCondition[] conditions, LootItemFunction[] functions)
+        {
+            return new OptionalItemEntry(new ResourceLocation(GsonHelper.getAsString(json, "name")), weight, quality, conditions, functions);
+        }
+    }
+}

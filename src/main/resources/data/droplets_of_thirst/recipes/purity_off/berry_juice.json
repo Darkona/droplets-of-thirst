@@ -1,0 +1,48 @@
+{
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:mod_loaded",
+        "modid": "expandeddelight"
+      }
+    },
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:mod_loaded",
+        "modid": "extradelight"
+      }
+    },
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "droplets_of_thirst:purity_enabled"
+      }
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:sweet_berries"
+    },
+    {
+      "item": "minecraft:sweet_berries"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "type": "forge:partial_nbt",
+      "item": "minecraft:potion",
+      "nbt": {
+        "Potion": "minecraft:water"
+      }
+    }
+  ],
+  "result": {
+    "item": "droplets_of_thirst:berry_juice",
+    "count": 1
+  }
+}

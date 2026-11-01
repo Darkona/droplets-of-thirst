@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.gametest;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
+import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import net.minecraft.gametest.framework.GameTest;
@@ -18,14 +18,10 @@ import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
 import static com.darkona.dropletsofthirst.gametest.TestSupport.assertValueEqual;
 
-/**
- * Reliquary: the Emperor's Chalice hydrates, the Infernal Chalice does not, and the optional cooldown. Registered by
- * {@link DropletsGameTests} only when Reliquary is installed.
- */
 @PrefixGameTestTemplate(false)
 public class ReliquaryTests
 {
-    /** The full use path: the item's own finish, then the Finish event that droplets_of_thirst and the compat listen to. */
+
     private static void drink(GameTestHelper helper, ServerPlayer player, ItemStack chalice)
     {
         MinecraftForge.EVENT_BUS.post(new LivingEntityUseItemEvent.Finish(player, chalice, 0, chalice.finishUsingItem(helper.getLevel(), player)));

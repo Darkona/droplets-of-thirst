@@ -1,14 +1,10 @@
 package com.darkona.dropletsofthirst.compat.supernatural;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.foundation.gui.ThirstBarStyles;
+import com.darkona.dropletsofthirst.content.thirst.ThirstBarStyles;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.ModList;
 
-/**
- * Supernatural: its vampires get the red bar, and only blood hydrates them ({@code VampireThirst}; the blood bottle is
- * in {@code droplets_of_thirst:blood}). Supernatural has no bite that drinks blood: its vampires fill bottles and drink those.
- */
 public final class SupernaturalCompat
 {
     public static final boolean LOADED = ModList.get().isLoaded("supernatural");

@@ -2,8 +2,8 @@ package com.darkona.dropletsofthirst.compat.jei;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.ThirstValues;
-import com.darkona.dropletsofthirst.content.registry.ItemInit;
-import com.darkona.dropletsofthirst.foundation.gui.DrinkTooltip;
+import com.darkona.dropletsofthirst.index.DropletsItems;
+import com.darkona.dropletsofthirst.content.thirst.client.DrinkTooltip;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
@@ -15,9 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
-/**
- * One item that changes thirst: its thirst and quenched values as droplets (like the item tooltip) and in numbers.
- */
 final class HydrationCategory extends AbstractRecipeCategory<HydrationEntry>
 {
     private static final int WIDTH = 150;
@@ -25,7 +22,7 @@ final class HydrationCategory extends AbstractRecipeCategory<HydrationEntry>
 
     HydrationCategory(IGuiHelper gui)
     {
-        super(DropletsJeiPlugin.HYDRATION, Component.translatable(DropletsOfThirst.ID + ".jei.hydration"), gui.createDrawableItemLike(ItemInit.TERRACOTTA_WATER_BOWL.get()), WIDTH, 32);
+        super(DropletsJeiPlugin.HYDRATION, Component.translatable(DropletsOfThirst.ID + ".jei.hydration"), gui.createDrawableItemLike(DropletsItems.TERRACOTTA_WATER_BOWL.get()), WIDTH, 32);
     }
 
     @Override
@@ -43,9 +40,6 @@ final class HydrationCategory extends AbstractRecipeCategory<HydrationEntry>
         builder.addText(Component.translatable(key, values.thirst(), values.quenched()), WIDTH - VALUES_X, 10).setPosition(VALUES_X, 22).setColor(0xFF404040);
     }
 
-    /**
-     * The tooltip row drawn in the recipe; built once per shown recipe, not per frame.
-     */
     private record Droplets(DrinkTooltip row) implements IDrawable
     {
         @Override

@@ -2,34 +2,32 @@ package com.darkona.dropletsofthirst;
 
 import com.darkona.dropletsofthirst.api.DropletsAPI;
 import com.darkona.dropletsofthirst.compat.coldsweat.ColdSweatCompat;
+import com.darkona.dropletsofthirst.compat.create.CreateCompat;
 import com.darkona.dropletsofthirst.compat.create.CreateRegistry;
-import com.darkona.dropletsofthirst.compat.create.ponder.ThirstPonderPlugin;
-import com.darkona.dropletsofthirst.compat.reliquary.ReliquaryCompat;
 import com.darkona.dropletsofthirst.compat.delight.DelightCompat;
-import com.darkona.dropletsofthirst.compat.supernatural.SupernaturalCompat;
-import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
-import com.darkona.dropletsofthirst.content.DropletsServiceImpl;
-import com.darkona.dropletsofthirst.content.data.DropletsDataMaps;
-import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.content.registry.AttributeInit;
-import com.darkona.dropletsofthirst.content.registry.ConditionInit;
-import com.darkona.dropletsofthirst.content.registry.EffectInit;
-import com.darkona.dropletsofthirst.content.registry.ItemInit;
-import com.darkona.dropletsofthirst.content.registry.LegacyIds;
-import com.darkona.dropletsofthirst.foundation.config.DiscouragedMods;
-import com.darkona.dropletsofthirst.content.registry.LootInit;
-import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.content.thirst.PlayerThirstManager;
-import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
-import com.darkona.dropletsofthirst.foundation.config.*;
-import com.darkona.dropletsofthirst.foundation.gui.DrinkTooltip;
-import com.darkona.dropletsofthirst.foundation.gui.ThirstBarRenderer;
-import com.darkona.dropletsofthirst.foundation.gui.ThirstBarStyles;
-import com.darkona.dropletsofthirst.foundation.network.ThirstModPacketHandler;
-import com.darkona.dropletsofthirst.foundation.tab.ThirstTab;
-import com.darkona.dropletsofthirst.gametest.DropletsGameTests;
+import com.darkona.dropletsofthirst.compat.reliquary.ReliquaryCompat;
 import com.darkona.dropletsofthirst.compat.travelersbackpack.TravelersBackpackCompat;
-import net.createmod.ponder.foundation.PonderIndex;
+import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
+import com.darkona.dropletsofthirst.config.DiscouragedMods;
+import com.darkona.dropletsofthirst.config.DropletsConfig;
+import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.thirst.PlayerThirstManager;
+import com.darkona.dropletsofthirst.gametest.DropletsGameTests;
+import com.darkona.dropletsofthirst.impl.DropletsServiceImpl;
+import com.darkona.dropletsofthirst.index.DropletsAttributes;
+import com.darkona.dropletsofthirst.index.DropletsBlockEntityTypes;
+import com.darkona.dropletsofthirst.index.DropletsBlocks;
+import com.darkona.dropletsofthirst.index.DropletsCapabilities;
+import com.darkona.dropletsofthirst.index.DropletsConditions;
+import com.darkona.dropletsofthirst.index.DropletsCreativeModeTabs;
+import com.darkona.dropletsofthirst.index.DropletsDataMaps;
+import com.darkona.dropletsofthirst.index.DropletsItems;
+import com.darkona.dropletsofthirst.index.DropletsLoot;
+import com.darkona.dropletsofthirst.index.DropletsMobEffects;
+import com.darkona.dropletsofthirst.index.DropletsPotions;
+import com.darkona.dropletsofthirst.index.DropletsRecipes;
+import com.darkona.dropletsofthirst.network.DropletsPackets;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -40,18 +38,13 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
-import com.darkona.dropletsofthirst.compat.create.CreateCompat;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.nio.file.Path;
-
 
 @Mod(DropletsOfThirst.ID)
 public class DropletsOfThirst
@@ -62,77 +55,47 @@ public class DropletsOfThirst
     {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         DropletsAPI.setService(DropletsServiceImpl.INSTANCE);
+        DropletsCapabilities.register(modBus);
+        DropletsBlocks.register(modBus);
+        DropletsBlockEntityTypes.register(modBus);
+        DropletsItems.register(modBus);
+        DropletsRecipes.register(modBus);
+        DropletsMobEffects.register(modBus);
+        DropletsPotions.register(modBus);
+        DropletsAttributes.register(modBus);
+        DropletsConditions.register(modBus);
+        DropletsLoot.register(modBus);
+        DropletsCreativeModeTabs.register(modBus);
+        DropletsPackets.register();
         modBus.addListener(this::commonSetup);
-        modBus.addListener(this::clientSetup);
         modBus.addListener(PlayerThirstManager::onConfigReloaded);
         modBus.addListener(DropletsOfThirst::addPacks);
         modBus.addListener(DropletsGameTests::register);
         MinecraftForge.EVENT_BUS.addListener(DropletsDataMaps::addReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, DropletsDataMaps::bind);
-        ThirstModPacketHandler.register();
         DiscouragedMods.warn();
         TravelersBackpackCompat.init(modBus);
         ColdSweatCompat.init();
         ReliquaryCompat.init();
         VampirismCompat.init();
         DelightCompat.init();
-        ModAttachment.register(modBus);
 
-        if(FMLEnvironment.dist.isClient())
-        {
-            modBus.addListener(ThirstBarRenderer::registerLayer);
-            ThirstBarStyles.registerBuiltIns();
-            VampirismCompat.initClient();
-            SupernaturalCompat.initClient();
-            modBus.addListener(DrinkTooltip::registerFactory);
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, DrinkTooltip::gather);
-            MinecraftForge.EVENT_BUS.addListener(WaterPurity::renderPurityTooltip);
-            MinecraftForge.EVENT_BUS.addListener(PlayerThirstManager::estimatedTooltip);
-        }
-
-        ItemInit.register(modBus);
-        EffectInit.register(modBus);
-        AttributeInit.register(modBus);
-        ConditionInit.register(modBus);
-        LootInit.register(modBus);
-        LegacyIds.register();
-
-        if(CreateCompat.LOADED)
+        if (CreateCompat.LOADED)
             CreateRegistry.register();
 
-        ThirstTab.register(modBus);
-        LegacyConfigMigration.run();
-        ModLoadingContext context = ModLoadingContext.get();
-        context.registerConfig(ModConfig.Type.COMMON, GameplayConfig.SPEC, ID + "/gameplay.toml");
-        context.registerConfig(ModConfig.Type.COMMON, PurityConfig.SPEC, ID + "/purity.toml");
-        context.registerConfig(ModConfig.Type.COMMON, ItemsConfig.SPEC, ID + "/items.toml");
-        context.registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, ID + "/compat.toml");
-        context.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, ID + "/client.toml");
+        if (FMLEnvironment.dist.isClient())
+            DropletsClient.init(modBus);
+
+        DropletsConfig.register();
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         WaterPurity.init();
-        event.enqueueWork(WaterPurity::registerCauldronInteractions);
-        event.enqueueWork(EffectInit::registerBrewing);
+        event.enqueueWork(CauldronPurity::registerInteractions);
+        event.enqueueWork(DropletsPotions::registerBrewing);
     }
 
-    private void clientSetup(final FMLClientSetupEvent event)
-    {
-        if(CreateCompat.LOADED){
-            event.enqueueWork(()-> new Object()
-            {
-                public void registerPonderPlugin(){
-                    PonderIndex.addPlugin(new ThirstPonderPlugin());
-                }
-            }.registerPonderPlugin());
-        }
-    }
-
-    /**
-     * Optional built-in datapacks under {@code datapacks/} in the jar. {@code BUILT_IN} packs are enabled by default,
-     * also in existing worlds; {@code FEATURE} packs must be enabled when creating the world or with {@code /datapack enable}.
-     */
     private static void addPacks(AddPackFindersEvent event)
     {
         addPack(event, "purify_smelting", "Water purification: furnace", PackSource.BUILT_IN);
@@ -144,10 +107,6 @@ public class DropletsOfThirst
         addPack(event, "preset_hardcore", "hardcore preset", PackSource.FEATURE);
     }
 
-    /**
-     * Forge 1.20.1 has no helper for packs inside a mod jar: the pack is the jar's {@code datapacks/<name>} folder,
-     * with the id {@code mod/droplets_of_thirst:datapacks/<name>} that later versions give it.
-     */
     private static void addPack(AddPackFindersEvent event, String name, String title, PackSource source)
     {
         if (event.getPackType() != PackType.SERVER_DATA)

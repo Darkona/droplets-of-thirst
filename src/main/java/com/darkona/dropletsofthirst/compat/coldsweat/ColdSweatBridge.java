@@ -1,15 +1,85 @@
 package com.darkona.dropletsofthirst.compat.coldsweat;
 
+import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
+import com.darkona.dropletsofthirst.content.purity.WaterPurity;
+import com.darkona.dropletsofthirst.content.thirst.CanteenItem;
+import com.momosoftworks.coldsweat.api.event.common.item.WaterskinEvent;
 import com.momosoftworks.coldsweat.api.temperature.modifier.FoodTempModifier;
+import com.momosoftworks.coldsweat.api.temperature.modifier.WaterskinTempModifier;
 import com.momosoftworks.coldsweat.api.util.Temperature;
 import com.momosoftworks.coldsweat.api.util.placement.Matcher;
+import com.momosoftworks.coldsweat.api.util.placement.Placement;
+import com.momosoftworks.coldsweat.common.item.FilledWaterskinItem;
+import com.momosoftworks.coldsweat.common.item.WaterskinItem;
+import com.momosoftworks.coldsweat.config.ConfigSettings;
 import com.momosoftworks.coldsweat.util.registries.ModItems;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractCauldronBlock;
+import net.minecraftforge.common.MinecraftForge;
 
 final class ColdSweatBridge
 {
+    private static final double CANTEEN_LIMIT = 50.0;
+
     private ColdSweatBridge() {}
+
+    static void listen()
+    {
+        MinecraftForge.EVENT_BUS.addListener(ColdSweatBridge::filled);
+    }
+
+    private static void filled(WaterskinEvent.Fill event)
+    {
+        Level level = event.getLevel();
+        if (level.isClientSide())
+            return;
+        BlockPos pos = event.getSourcePos();
+        int purity = WaterPurity.hasPurity(event.getSource()) ? WaterPurity.getPurity(event.getSource())
+                : level.getBlockState(pos).getBlock() instanceof AbstractCauldronBlock ? CauldronPurity.at(level, pos)
+                : WaterPurity.getBlockPurity(level, pos);
+        event.setResultWaterskin(WaterPurity.addPurity(event.getResultWaterskin(), purity));
+    }
+
+    static void fillCanteen(ItemStack canteen, Level level, BlockPos pos)
+    {
+        CompoundTag filled = WaterskinItem.getFilledItem(new ItemStack(ModItems.WATERSKIN), level, pos).getTag();
+        if (filled != null && filled.contains(FilledWaterskinItem.NBT_TEMPERATURE))
+            canteen.getOrCreateTag().putDouble(FilledWaterskinItem.NBT_TEMPERATURE, filled.getDouble(FilledWaterskinItem.NBT_TEMPERATURE));
+    }
+
+    static double canteenTemperature(ItemStack canteen)
+    {
+        CompoundTag tag = canteen.getTag();
+        return tag == null ? 0.0 : tag.getDouble(FilledWaterskinItem.NBT_TEMPERATURE);
+    }
+
+    static boolean warmCanteen(ItemStack canteen, double delta)
+    {
+        double temperature = canteenTemperature(canteen);
+        double warmed = Mth.clamp(temperature + delta, -CANTEEN_LIMIT, CANTEEN_LIMIT);
+        if (warmed == temperature)
+            return false;
+        canteen.getOrCreateTag().putDouble(FilledWaterskinItem.NBT_TEMPERATURE, warmed);
+        return true;
+    }
+
+    static void sipCanteen(ItemStack canteen, LivingEntity entity)
+    {
+        double amount = canteenTemperature(canteen) * ConfigSettings.WATERSKIN_CONSUME_STRENGTH.get() / 50.0;
+        if (amount != 0)
+            Temperature.addModifier(entity, new WaterskinTempModifier(amount / (100.0 * CanteenItem.MAX_SIPS)).expires(100), Temperature.Trait.CORE, Placement.LAST);
+    }
+
+    static void emptyCanteen(ItemStack canteen)
+    {
+        canteen.removeTagKey(FilledWaterskinItem.NBT_TEMPERATURE);
+    }
 
     static double bodyTemperature(Player player)
     {
@@ -26,10 +96,6 @@ final class ColdSweatBridge
         return stack.is(ModItems.WATERSKIN);
     }
 
-    /**
-     * {@code ticks == 0}: lowers the core temperature once. Otherwise lowers the base temperature for {@code ticks},
-     * replacing an earlier drink's modifier instead of stacking with it.
-     */
     static void cool(Player player, double amount, int ticks)
     {
         if (ticks <= 0)

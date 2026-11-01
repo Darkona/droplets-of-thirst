@@ -3,9 +3,6 @@ package com.darkona.dropletsofthirst.compat.appleskin;
 import net.minecraft.client.gui.screens.Screen;
 import squeek.appleskin.ModConfig;
 
-/**
- * Reads AppleSkin's client config. Only loaded through {@link AppleSkinCompat} when AppleSkin is installed.
- */
 final class AppleSkinBridge
 {
     private AppleSkinBridge() {}

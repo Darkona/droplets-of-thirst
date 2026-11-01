@@ -1,6 +1,5 @@
 package com.darkona.dropletsofthirst.compat.create.ponder;
 
-
 import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
 import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -10,7 +9,6 @@ import com.darkona.dropletsofthirst.compat.create.ponder.scene.SandFilterScene;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.createmod.ponder.api.registration.PonderTagRegistrationHelper;
 import net.minecraft.resources.ResourceLocation;
-
 
 public class ThirstPonders {
     public static final ResourceLocation PURIFICATION = DropletsOfThirst.asResource("purification");

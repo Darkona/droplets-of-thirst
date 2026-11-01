@@ -1,8 +1,9 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.infrastructure.command.DropletsCommands;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.foundation.dev.ItemDump;
+import com.darkona.dropletsofthirst.infrastructure.command.ItemDump;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.item.Items;
@@ -15,9 +16,6 @@ import java.util.Set;
 
 import static com.darkona.dropletsofthirst.gametest.TestSupport.assertValueEqual;
 
-/**
- * Development tools: the item dump behind {@code /droplets_of_thirst dev dump_items}, which only exists outside production.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class DevTests
@@ -26,7 +24,7 @@ public class DevTests
     public static void itemDumpListsFoodDrinksAndCurrentValues(GameTestHelper helper)
     {
         assertValueEqual(helper, helper.getLevel().getServer().getCommands().getDispatcher().getRoot()
-                .getChild(DropletsOfThirst.ID).getChild("dev") != null, !FMLEnvironment.production, "dev commands registered outside production");
+                .getChild(DropletsCommands.COMMAND).getChild("dev") != null, !FMLEnvironment.production, "dev commands registered outside production");
 
         List<String> rows = ItemDump.rows(Set.of("minecraft"));
         assertValueEqual(helper, rows.get(0), ItemDump.HEADER, "header");

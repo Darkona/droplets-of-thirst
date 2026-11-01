@@ -1,26 +1,25 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.content.purity.PurityEffects;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.DropletsAPI;
 import com.darkona.dropletsofthirst.api.event.DrinkEvent;
 import com.darkona.dropletsofthirst.compat.jei.PurificationEntry;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.content.registry.ItemInit;
-import com.darkona.dropletsofthirst.content.registry.ThirstComponent;
+import com.darkona.dropletsofthirst.index.DropletsItems;
+import com.darkona.dropletsofthirst.content.purity.PurityNbt;
 import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.foundation.config.PurityConfig;
-import com.darkona.dropletsofthirst.foundation.tab.ThirstTab;
+import com.darkona.dropletsofthirst.config.PurityConfig;
+import com.darkona.dropletsofthirst.index.DropletsCreativeModeTabs;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,7 +29,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
@@ -43,11 +41,9 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
@@ -64,15 +60,11 @@ import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
 import static com.darkona.dropletsofthirst.gametest.TestSupport.assertValueEqual;
 
-/**
- * {@code purity.enabled=false}: nothing stores, shows or rolls a purity. Each test turns it off and back on within
- * the same method, like the other config tests.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class PurityOffTests
 {
-    /** Purity of the last drink; tests run one at a time on the server thread. */
+
     private static int lastDrinkPurity;
 
     static
@@ -106,7 +98,7 @@ public class PurityOffTests
             helper.getLevel().setBlockAndUpdate(water, Blocks.WATER.defaultBlockState());
             ServerPlayer player = player(helper);
             player.moveTo(water.getX() + 0.5, water.getY() + 1, water.getZ() + 0.5, 0.0F, 90.0F);
-            for (Item empty : new Item[]{Items.GLASS_BOTTLE, ItemInit.TERRACOTTA_BOWL.get(), Items.BUCKET})
+            for (Item empty : new Item[]{Items.GLASS_BOTTLE, DropletsItems.TERRACOTTA_BOWL.get(), Items.BUCKET})
             {
                 ItemStack stack = new ItemStack(empty);
                 player.setItemInHand(InteractionHand.MAIN_HAND, stack);
@@ -137,7 +129,7 @@ public class PurityOffTests
             BlockPos pos = helper.absolutePos(new BlockPos(2, 2, 2));
             helper.getLevel().setBlockAndUpdate(pos.below(), Blocks.CAMPFIRE.defaultBlockState());
             Player player = TestSupport.player(helper);
-            for (Item empty : new Item[]{Items.BUCKET, ItemInit.TERRACOTTA_BOWL.get()})
+            for (Item empty : new Item[]{Items.BUCKET, DropletsItems.TERRACOTTA_BOWL.get()})
             {
                 helper.getLevel().setBlockAndUpdate(pos, Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3));
                 ItemStack stack = new ItemStack(empty);
@@ -160,7 +152,7 @@ public class PurityOffTests
             PlayerThirst thirst = thirst(player);
             thirst.setThirst(4);
             ItemStack dirty = PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER);
-            dirty.getOrCreateTag().putInt(ThirstComponent.PURITY, 0);
+            dirty.getOrCreateTag().putInt(PurityNbt.PURITY, 0);
             PlayerThirst.consume(dirty, player);
             helper.assertTrue(player.getActiveEffects().isEmpty(), "dirty water gave effects with purity off: " + player.getActiveEffects());
             helper.assertTrue(thirst.getThirst() > 4, "dirty water did not restore thirst with purity off");
@@ -169,7 +161,7 @@ public class PurityOffTests
             PlayerThirst.drink(player, ItemStack.EMPTY, 1, 0, 0);
             helper.assertTrue(player.getActiveEffects().isEmpty(), "drinking dirty water by hand gave effects with purity off");
             assertValueEqual(helper, lastDrinkPurity, DropletsAPI.NO_PURITY, "purity of hand drinking with purity off");
-            helper.assertTrue(WaterPurity.givePurityEffects(player, 0), "dirty water blocks hydration with purity off");
+            helper.assertTrue(PurityEffects.give(player, 0), "dirty water blocks hydration with purity off");
             assertValueEqual(helper, WaterPurity.waterThirstBonus(PurityLevel.PURE.level()) + WaterPurity.waterQuenchedBonus(PurityLevel.PURE.level()), 0, "pure water bonus with purity off");
         });
         helper.succeed();
@@ -202,9 +194,9 @@ public class PurityOffTests
     @GameTest(template = "empty")
     public static void creativeTabHasOneOfEachWater(GameTestHelper helper)
     {
-        assertValueEqual(helper, waterStacks(ThirstTab.DisplayItems()), 3 * PurityLevel.values().length, "water stacks in the tab with purity on (three containers, six purities)");
+        assertValueEqual(helper, waterStacks(DropletsCreativeModeTabs.DisplayItems()), 3 * PurityLevel.values().length, "water stacks in the tab with purity on (three containers, six purities)");
         withPurityOff(() -> {
-            Collection<ItemStack> items = ThirstTab.DisplayItems();
+            Collection<ItemStack> items = DropletsCreativeModeTabs.DisplayItems();
             assertValueEqual(helper, waterStacks(items), 3, "water stacks in the tab with purity off");
             for (ItemStack stack : items)
                 helper.assertFalse(WaterPurity.hasPurity(stack), stack + " in the tab has a purity with purity off");
@@ -221,10 +213,6 @@ public class PurityOffTests
         return count;
     }
 
-    /**
-     * Recipes are only checked when datapacks load, so this looks at the files: every recipe of this mod that stores or
-     * matches a purity must carry the {@code droplets_of_thirst:purity_enabled} condition, or it would load with purity off.
-     */
     @GameTest(template = "empty")
     public static void purityRecipesCarryThePurityCondition(GameTestHelper helper)
     {
@@ -269,7 +257,7 @@ public class PurityOffTests
             CommandSourceStack source = player.createCommandSourceStack().withPermission(2).withSuppressedOutput();
             try
             {
-                int result = helper.getLevel().getServer().getCommands().getDispatcher().execute("droplets_of_thirst debug purity", source);
+                int result = helper.getLevel().getServer().getCommands().getDispatcher().execute("droplets debug purity", source);
                 assertValueEqual(helper, result, 0, "result of debug purity with purity off");
             }
             catch (Exception e)

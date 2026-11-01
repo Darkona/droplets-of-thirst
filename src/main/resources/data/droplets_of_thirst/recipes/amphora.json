@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " T ",
+    "T T",
+    "TTT"
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:terracotta"
+    }
+  },
+  "result": {
+    "item": "droplets_of_thirst:amphora",
+    "count": 1
+  }
+}

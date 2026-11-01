@@ -2,7 +2,7 @@ package com.darkona.dropletsofthirst.compat.jei;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
+import com.darkona.dropletsofthirst.config.CompatConfig;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.placement.HorizontalAlignment;
@@ -15,9 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.fluids.FluidStack;
 
-/**
- * Water in, the block doing it (with what goes under it), water out, and one line saying how.
- */
 final class PurificationCategory extends AbstractRecipeCategory<PurificationEntry>
 {
     private static final int WIDTH = 150;

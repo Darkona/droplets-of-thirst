@@ -1,41 +1,19 @@
 package com.darkona.dropletsofthirst.compat.coldsweat;
 
 import com.darkona.dropletsofthirst.api.event.DrinkEvent;
+import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.content.registry.ThirstComponent;
-import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.TickTask;
-import net.minecraft.tags.FluidTags;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.ModList;
 
-/**
- * Cold Sweat, through its public API (GPL-3.0 with an exception for use as a library; no code of it is copied):
- * body temperature for the climate multiplier and hot dirty water, and drinking water cools. The waterskin's purity
- * (filled: purity of its water; emptied: none) is two small runtime mixins in {@code foundation.mixin.cold_sweat},
- * until Cold Sweat has a hook for it. The waterskin's drink values and its purity container entry are data
- * ({@code droplets_of_thirst:drinks}, {@code droplets_of_thirst:purity_containers}).
- */
 public final class ColdSweatCompat
 {
     public static final boolean LOADED = ModList.get().isLoaded("cold_sweat");
-
 
     private ColdSweatCompat() {}
 
@@ -44,6 +22,35 @@ public final class ColdSweatCompat
         if (!LOADED)
             return;
         MinecraftForge.EVENT_BUS.addListener(ColdSweatCompat::coolAfterDrinking);
+        ColdSweatBridge.listen();
+    }
+
+    public static void fillCanteen(ItemStack canteen, Level level, BlockPos pos)
+    {
+        if (LOADED)
+            ColdSweatBridge.fillCanteen(canteen, level, pos);
+    }
+
+    public static double canteenTemperature(ItemStack canteen)
+    {
+        return LOADED ? ColdSweatBridge.canteenTemperature(canteen) : 0.0;
+    }
+
+    public static boolean warmCanteen(ItemStack canteen, double delta)
+    {
+        return LOADED && ColdSweatBridge.warmCanteen(canteen, delta);
+    }
+
+    public static void sipCanteen(ItemStack canteen, LivingEntity entity)
+    {
+        if (LOADED)
+            ColdSweatBridge.sipCanteen(canteen, entity);
+    }
+
+    public static void emptyCanteen(ItemStack canteen)
+    {
+        if (LOADED)
+            ColdSweatBridge.emptyCanteen(canteen);
     }
 
     public static double bodyTemperature(Player player)
@@ -51,10 +58,6 @@ public final class ColdSweatCompat
         return LOADED ? ColdSweatBridge.bodyTemperature(player) : 0;
     }
 
-    /**
-     * {@code coldsweat.drinkCooling}: water cools, except Cold Sweat's waterskin, which brings its own temperature.
-     * Drinking by hand and the hose come with no item.
-     */
     private static void coolAfterDrinking(DrinkEvent.Post event)
     {
         double cooling = CompatConfig.COLD_SWEAT_DRINK_COOLING.get();

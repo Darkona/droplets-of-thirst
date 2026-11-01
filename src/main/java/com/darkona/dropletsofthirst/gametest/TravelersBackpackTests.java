@@ -19,9 +19,6 @@ import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
 import static com.darkona.dropletsofthirst.gametest.TestSupport.assertValueEqual;
 
-/**
- * Traveler's Backpack: the hose water effect. Registered by {@link DropletsGameTests} only when it is installed.
- */
 @PrefixGameTestTemplate(false)
 public class TravelersBackpackTests
 {

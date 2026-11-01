@@ -14,18 +14,10 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * An item that changes thirst, with its resolved values, for the recipe viewer's hydration category. Plain data, no
- * recipe viewer classes, so the server can build it too.
- */
 public record HydrationEntry(ItemStack stack, ThirstValues values)
 {
     private static final Comparator<HydrationEntry> BY_ID = Comparator.comparing(entry -> BuiltInRegistries.ITEM.getKey(entry.stack.getItem()));
 
-    /**
-     * Drinks, then foods, each sorted by item id, from the tables in use (the server's on a remote client). Items whose
-     * values give nothing, and items whose values only a provider knows for a real stack, are left out.
-     */
     public static List<HydrationEntry> all()
     {
         List<HydrationEntry> entries = new ArrayList<>();

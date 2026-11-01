@@ -1,0 +1,36 @@
+package com.darkona.dropletsofthirst.config;
+
+import com.darkona.dropletsofthirst.DropletsOfThirst;
+import com.mojang.logging.LogUtils;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoader;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.ModLoadingStage;
+import net.minecraftforge.fml.ModLoadingWarning;
+import org.slf4j.Logger;
+
+import java.util.Map;
+
+public final class DiscouragedMods
+{
+    private static final Logger LOGGER = LogUtils.getLogger();
+    private static final Map<String, String> THIRST_MODS = Map.of(
+            "toughasnails", "Tough As Nails",
+            "legendarysurvivaloverhaul", "Legendary Survival Overhaul",
+            "homeostatic", "Homeostatic",
+            "survive", "Survive",
+            "thirstwastaken2", "Thirst Was Taken 2");
+
+    private DiscouragedMods() {}
+
+    public static void warn()
+    {
+        THIRST_MODS.forEach((id, name) -> {
+            if (!ModList.get().isLoaded(id))
+                return;
+            LOGGER.warn("{} has its own thirst system. Both will run side by side; turn one of them off in its config if you only want one.", name);
+            ModLoader.get().addWarning(new ModLoadingWarning(ModLoadingContext.get().getActiveContainer().getModInfo(), ModLoadingStage.CONSTRUCT,
+                    DropletsOfThirst.ID + ".warning.other_thirst_mod", name));
+        });
+    }
+}

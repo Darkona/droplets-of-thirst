@@ -3,10 +3,6 @@ package com.darkona.dropletsofthirst.core;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Config lists of {@code "a,b,c"} number rows (altitude bands, curves), parsed once per list instance and flattened.
- * {@link #get} is allocation-free while the list is the same instance (config values keep theirs until reloaded).
- */
 public final class NumberRows
 {
     private static final class Parsed
@@ -37,9 +33,6 @@ public final class NumberRows
         return current.values;
     }
 
-    /**
-     * Valid rows only, flattened; a row is valid when it has exactly {@code columns} numbers.
-     */
     public static double[] parse(List<? extends String> rows, int columns)
     {
         double[] values = new double[rows.size() * columns];
@@ -75,9 +68,6 @@ public final class NumberRows
         return values;
     }
 
-    /**
-     * Third column of the first {@code min,max,value} row with {@code min <= y <= max}, or {@code fallback}.
-     */
     public static double band(double[] rows, double y, double fallback)
     {
         for (int i = 0; i + 2 < rows.length; i += 3)
@@ -86,9 +76,6 @@ public final class NumberRows
         return fallback;
     }
 
-    /**
-     * Piecewise-linear curve through {@code x,y} points in ascending x, flat beyond the ends; 1 without points.
-     */
     public static double curve(double[] points, double x)
     {
         if (points.length < 2)
@@ -108,9 +95,6 @@ public final class NumberRows
         return points[points.length - 1];
     }
 
-    /**
-     * Whether the x values of a flattened curve are in ascending order.
-     */
     public static boolean ascending(double[] points)
     {
         for (int i = 2; i < points.length; i += 2)

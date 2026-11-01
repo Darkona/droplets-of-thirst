@@ -1,7 +1,7 @@
 package com.darkona.dropletsofthirst.gametest;
 
 import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.foundation.common.capability.ModAttachment;
+import com.darkona.dropletsofthirst.index.DropletsCapabilities;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.gametest.framework.GameTestAssertException;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -20,10 +20,6 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Players for thirst tests. Vanilla's mock server player is creative, and creative players neither lose thirst nor
- * overhydrate, so these are Forge fake players in survival. The server does not tick them: tests call what they need.
- */
 final class TestSupport
 {
     private TestSupport() {}
@@ -35,20 +31,12 @@ final class TestSupport
         return player;
     }
 
-    /**
-     * {@code GameTestHelper#assertValueEqual} of later versions, which 1.20.1 does not have.
-     */
     static <T> void assertValueEqual(GameTestHelper helper, T actual, T expected, String name)
     {
         if (!Objects.equals(actual, expected))
             throw new GameTestAssertException("Expected " + name + " to be " + expected + ", but was " + actual);
     }
 
-    /**
-     * Changes a config value for the running test without writing the file. {@code ConfigValue#set} of Forge 1.20.1
-     * saves the file, and its file watcher then reloads it on another thread while later tests run, so the value a
-     * test set can come back while another test reads it. Tests restore the old value the same way.
-     */
     static <T> void set(ForgeConfigSpec.ConfigValue<T> value, T newValue)
     {
         try
@@ -69,9 +57,6 @@ final class TestSupport
 
     private static Field CACHED_VALUE;
 
-    /**
-     * The fluid handler of the block entity at {@code pos} on {@code side}, or null.
-     */
     static @Nullable IFluidHandler fluidHandler(GameTestHelper helper, BlockPos pos, @Nullable Direction side)
     {
         BlockEntity entity = helper.getLevel().getBlockEntity(pos);
@@ -80,6 +65,6 @@ final class TestSupport
 
     static PlayerThirst thirst(ServerPlayer player)
     {
-        return ModAttachment.thirst(player);
+        return DropletsCapabilities.thirst(player);
     }
 }

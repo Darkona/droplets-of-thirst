@@ -54,9 +54,37 @@ ordering="NONE"
 side="BOTH"
 
 [[dependencies.${mod_id}]]
+modId="mekanism"
+mandatory=false
+versionRange="[10.4.16,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="immersiveengineering"
+mandatory=false
+versionRange="[1.20.1-10.2.0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="supplementaries"
+mandatory=false
+versionRange="[1.20-3.1.44,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="moonlight"
+mandatory=false
+versionRange="[1.20-2.16.38,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
 modId="cold_sweat"
 mandatory=false
-versionRange="[2.4,)"
+versionRange="[2.4.4,)"
 ordering="NONE"
 side="BOTH"
 
@@ -96,7 +124,7 @@ ordering="NONE"
 side="CLIENT"
 
 # Thirst Was Taken and Thirst Was Reclaimed (mod id "thirst"): no version is accepted, so the game refuses to start with
-# both installed. Droplets of Thirst is its continuation and migrates its worlds and configs.
+# both installed. Droplets of Thirst is its continuation.
 [[dependencies.${mod_id}]]
 modId="thirst"
 mandatory=false

@@ -1,10 +1,10 @@
 package com.darkona.dropletsofthirst.gametest;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
-import com.darkona.dropletsofthirst.foundation.common.event.Events;
+import com.darkona.dropletsofthirst.core.Events;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
+import com.darkona.dropletsofthirst.config.CompatConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -22,7 +22,6 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
@@ -34,11 +33,6 @@ import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 
 import static com.darkona.dropletsofthirst.gametest.TestSupport.assertValueEqual;
 
-/**
- * Farmer's Delight addons and Let's Do mods ({@code -PwithDelight}): kettles refuse dirty water, the infinite water
- * sources give the world's purity, Extra Delight bottles keep theirs. Registered by {@link DropletsGameTests} only when
- * Extra Delight, Farm & Charm, HerbalBrews and Brewery are all installed.
- */
 @PrefixGameTestTemplate(false)
 public class DelightTests
 {
@@ -63,8 +57,7 @@ public class DelightTests
     @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)
     public static void farmAndCharmSinkIsHooked(GameTestHelper helper)
     {
-        // Farm & Charm has the sink class but other Let's Do mods register the block, so this only checks that the
-        // hook applies to it.
+
         try
         {
             Class<?> sink = Class.forName("net.satisfy.farm_and_charm.core.block.SinkBlock");
@@ -121,10 +114,6 @@ public class DelightTests
         helper.succeed();
     }
 
-    /**
-     * The clean_water_cooking pack: hot recipes of Farm & Charm take water of purity 2 or better, cold ones and
-     * Farmer's Delight's cooking pot purity 3 or better; water without a purity counts as acceptable.
-     */
     @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)
     public static void cookingRecipesNeedCleanWater(GameTestHelper helper)
     {
@@ -135,10 +124,6 @@ public class DelightTests
         helper.succeed();
     }
 
-    /**
-     * The water ingredient of {@code id} (the one that takes a water bucket) accepts buckets without a purity and of
-     * {@code min} or better, and refuses dirtier ones.
-     */
     private static void waterRule(GameTestHelper helper, String id, int min)
     {
         Recipe<?> recipe = helper.getLevel().getRecipeManager().byKey(new ResourceLocation(id)).orElse(null);

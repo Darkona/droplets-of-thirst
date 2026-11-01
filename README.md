@@ -6,6 +6,7 @@
 
 - **Thirst**: sprinting, jumping, fighting and hot, dry biomes drain the droplets. Drinking fills them back.
 - **Water purity**: every bottle, bowl and bucket shows the purity of its water. Boil dirty water before you drink it: in a cauldron over a fire, on a campfire or in a furnace. Purity can be turned off if you only want thirst.
+- **Drinks and gear**: juices, soda water, cola and milk bottles, a Canteen that holds 8 drinks, an Amphora that keeps 4 buckets of water and a Charcoal Filter that cleans it.
 - **Made for modpacks**: every number lives in a config file or a datapack, and it works with many popular mods.
 
 ![A bottle of dirty water: drinking it makes you sick](https://raw.githubusercontent.com/Darkona/droplets-of-thirst/main/wiki/images/dirty-water.png)

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "droplets_of_thirst:item/water_bucket_base",
+    "layer1": "droplets_of_thirst:item/water_bucket_liquid"
+  }
+}

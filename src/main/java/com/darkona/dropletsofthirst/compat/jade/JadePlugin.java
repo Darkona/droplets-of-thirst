@@ -1,5 +1,6 @@
 package com.darkona.dropletsofthirst.compat.jade;
 
+import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -24,10 +25,6 @@ import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
 import snownee.jade.api.config.IPluginConfig;
 
-/**
- * Jade: water purity of water cauldrons (murky, or clean on a heat source) and of the tanks of any block exposing a fluid handler
- * (sent by the server). Jade finds and loads this class itself, only when installed; nothing else imports Jade.
- */
 @WailaPlugin(DropletsOfThirst.ID)
 public class JadePlugin implements IWailaPlugin
 {
@@ -76,7 +73,7 @@ public class JadePlugin implements IWailaPlugin
                 return;
             BlockState state = accessor.getBlockState();
             if (state.is(Blocks.WATER_CAULDRON))
-                add(tooltip, WaterPurity.cauldronPurity(accessor.getLevel(), accessor.getPosition()));
+                add(tooltip, CauldronPurity.at(accessor.getLevel(), accessor.getPosition()));
             else
                 for (int purity : accessor.getServerData().getIntArray(KEY))
                     add(tooltip, WaterPurity.sanitizePurity(purity));

@@ -1,0 +1,16 @@
+{
+  "values": {
+    "create:tea": {
+      "neoforge:conditions": [
+        {
+          "type": "neoforge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "item": "create:builders_tea"
+    },
+    "minecraft:milk": {
+      "item": "droplets_of_thirst:milk_bottle"
+    }
+  }
+}

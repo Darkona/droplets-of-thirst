@@ -38,10 +38,6 @@ public class ContainerWithPurity
         fillPredicates();
     }
 
-    /**
-     * Creates a Static container (has purity but can only be
-     * drunk, not used to fill anything)
-     */
     public ContainerWithPurity(Item filledItem)
     {
         this.emptyItem = null;
@@ -76,9 +72,6 @@ public class ContainerWithPurity
         return this;
     }
 
-    /**
-     * Narrows which stacks of the filled item count; it is only tested with stacks of {@link #getFilledItem()}.
-     */
     public ContainerWithPurity setEqualsFilled(Predicate<ItemStack> predicate)
     {
         this.equalsFilled = predicate;

@@ -7,11 +7,11 @@ import com.darkona.dropletsofthirst.api.event.DrinkEvent;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
 import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.content.registry.EffectInit;
+import com.darkona.dropletsofthirst.index.DropletsMobEffects;
 import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
-import com.darkona.dropletsofthirst.foundation.gui.ThirstBarStyles;
+import com.darkona.dropletsofthirst.config.GameplayConfig;
+import com.darkona.dropletsofthirst.content.thirst.ThirstBarStyles;
 import de.teamlapen.vampirism.api.VReference;
 import de.teamlapen.vampirism.core.ModItems;
 import de.teamlapen.vampirism.entity.factions.FactionPlayerHandler;
@@ -34,15 +34,10 @@ import static com.darkona.dropletsofthirst.gametest.TestSupport.player;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.assertValueEqual;
 
-/**
- * Vampirism ({@code -PwithVampirism}): a vampire loses thirst like anyone, only blood hydrates it, and every drink of
- * blood goes through Vampirism's own path ({@code VampirePlayer#drinkBlood}, which posts its event). Registered by
- * {@link DropletsGameTests} only when Vampirism is installed.
- */
 @PrefixGameTestTemplate(false)
 public class VampirismTests
 {
-    /** Purity of the last drink of any player; tests run one at a time on the server thread. */
+
     private static int lastPurity;
 
     static
@@ -75,14 +70,13 @@ public class VampirismTests
         helper.succeed();
     }
 
-    /** Quenchness is not blood: it gives a vampire nothing. */
     @GameTest(template = "empty", templateNamespace = DropletsOfThirst.ID)
     public static void quenchnessDoesNotHydrateAVampire(GameTestHelper helper)
     {
         ServerPlayer player = vampire(helper);
         PlayerThirst thirst = thirst(player);
         thirst.change(player, 10, 0, ThirstChangeEvent.Cause.COMMAND);
-        EffectInit.QUENCHNESS.get().applyEffectTick(player, 1);
+        DropletsMobEffects.QUENCHNESS.get().applyEffectTick(player, 1);
         assertValueEqual(helper, thirst.getThirst(), 10, "a vampire's thirst after a Quenchness tick");
         assertValueEqual(helper, thirst.getQuenched(), 0, "a vampire's quenched after a Quenchness tick");
         helper.succeed();

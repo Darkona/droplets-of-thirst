@@ -1,5 +1,12 @@
 {
   "values": {
+    "droplets_of_thirst:apple_juice": {"thirst": 7, "quenched": 9},
+    "droplets_of_thirst:melon_juice": {"thirst": 8, "quenched": 10},
+    "droplets_of_thirst:berry_juice": {"thirst": 7, "quenched": 9},
+    "droplets_of_thirst:abc_juice": {"thirst": 10, "quenched": 14},
+    "droplets_of_thirst:soda_water": {"thirst": 3, "quenched": 4},
+    "droplets_of_thirst:cola": {"thirst": 4, "quenched": 5},
+    "droplets_of_thirst:milk_bottle": {"thirst": 3, "quenched": 4},
     "farmersrespite:green_tea": {"forge:conditions": [{"type": "forge:mod_loaded", "modid": "farmersrespite"}], "thirst": 10, "quenched": 14},
     "farmersrespite:yellow_tea": {"forge:conditions": [{"type": "forge:mod_loaded", "modid": "farmersrespite"}], "thirst": 10, "quenched": 14},
     "farmersrespite:black_tea": {"forge:conditions": [{"type": "forge:mod_loaded", "modid": "farmersrespite"}], "thirst": 10, "quenched": 14},

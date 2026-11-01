@@ -1,6 +1,6 @@
 package com.darkona.dropletsofthirst.compat.reliquary;
 
-import com.darkona.dropletsofthirst.foundation.config.CompatConfig;
+import com.darkona.dropletsofthirst.config.CompatConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -9,12 +9,6 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 
-/**
- * Reliquary, without linking to it (items are matched by id). The Emperor's Chalice hydrates through the same path
- * as any drink: an entry in the {@code droplets_of_thirst:drinks} data map, with purity 5 and no extra pure water bonus.
- * Its own effects (a point of food, the damage) stay as Reliquary has them. The Infernal Chalice has no entry, so it
- * does not hydrate. This class only adds the optional cooldown after a drink.
- */
 public final class ReliquaryCompat
 {
     public static final boolean LOADED = ModList.get().isLoaded("reliquary");

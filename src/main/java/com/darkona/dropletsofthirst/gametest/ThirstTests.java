@@ -1,5 +1,21 @@
 package com.darkona.dropletsofthirst.gametest;
 
+import com.darkona.dropletsofthirst.api.event.DehydrationDamageEvent;
+import java.util.Set;
+import java.util.Map;
+import java.util.List;
+import com.darkona.dropletsofthirst.content.thirst.RecipeInference;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.Difficulty;
+import net.minecraft.core.NonNullList;
+import com.darkona.dropletsofthirst.content.thirst.ExhaustionFactors;
+import com.darkona.dropletsofthirst.content.purity.PurityEffects;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -13,15 +29,15 @@ import net.minecraft.core.Direction;
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.event.ThirstChangeEvent;
-import com.darkona.dropletsofthirst.content.data.DimensionWater;
-import com.darkona.dropletsofthirst.content.data.DropletsDataMaps;
+import com.darkona.dropletsofthirst.content.purity.DimensionWater;
+import com.darkona.dropletsofthirst.index.DropletsDataMaps;
 import com.darkona.dropletsofthirst.api.PurityLevel;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.foundation.config.PurityConfig;
-import com.darkona.dropletsofthirst.content.registry.ItemInit;
-import com.darkona.dropletsofthirst.content.registry.EffectInit;
+import com.darkona.dropletsofthirst.config.PurityConfig;
+import com.darkona.dropletsofthirst.index.DropletsItems;
+import com.darkona.dropletsofthirst.index.DropletsMobEffects;
 import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
+import com.darkona.dropletsofthirst.config.GameplayConfig;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
@@ -58,25 +74,24 @@ import static com.darkona.dropletsofthirst.gametest.TestSupport.set;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 import static com.darkona.dropletsofthirst.gametest.TestSupport.assertValueEqual;
 
-/**
- * Drinking, eating, limits, overhydration, purity effects and the commands, with the default config.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class ThirstTests
 {
-    /** Cause of the last thirst change of any player; tests run one at a time on the server thread. */
+
     private static ThirstChangeEvent.Cause lastCause;
-    /** Players with this tag do not die: their death is cancelled after every other listener, like a modded totem. */
+    private static float lastDehydrationDamage;
+
     private static final String IMMORTAL_TAG = "droplets-test-immortal";
-    /** Players with this tag cannot break blocks nor attack: cancelled at low priority, like a claim or PvP mod. */
+
     private static final String PROTECTED_TAG = "droplets-test-protected";
-    /** Thirst changes of players with this tag are cancelled, like a mod that freezes thirst. */
+
     private static final String FROZEN_TAG = "droplets-test-frozen";
 
     static
     {
         MinecraftForge.EVENT_BUS.addListener((ThirstChangeEvent.Post event) -> lastCause = event.getCause());
+        MinecraftForge.EVENT_BUS.addListener((DehydrationDamageEvent event) -> lastDehydrationDamage = event.getAmount());
         MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, (LivingDeathEvent event) -> {
             if (event.getEntity().getTags().contains(IMMORTAL_TAG))
                 event.setCanceled(true);
@@ -100,7 +115,6 @@ public class ThirstTests
         return WaterPurity.addPurity(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.WATER), purity);
     }
 
-    /** MIRROR_FOOD: hunger exhaustion that another mod empties between ticks (Vampirism, for its vampires) still counts. */
     @GameTest(template = "empty")
     public static void emptiedHungerExhaustionStillCounts(GameTestHelper helper)
     {
@@ -173,12 +187,12 @@ public class ThirstTests
     public static void drinkingABowlGivesTheEmptyBowlBack(GameTestHelper helper)
     {
         ServerPlayer player = player(helper);
-        ItemStack bowls = new ItemStack(ItemInit.TERRACOTTA_WATER_BOWL.get(), 2);
+        ItemStack bowls = new ItemStack(DropletsItems.TERRACOTTA_WATER_BOWL.get(), 2);
         ItemStack left = bowls.finishUsingItem(helper.getLevel(), player);
-        helper.assertTrue(left.is(ItemInit.TERRACOTTA_WATER_BOWL.get()) && left.getCount() == 1, "water bowls left after drinking one of two");
-        assertValueEqual(helper, player.getInventory().countItem(ItemInit.TERRACOTTA_BOWL.get()), 1, "empty bowls in the inventory");
+        helper.assertTrue(left.is(DropletsItems.TERRACOTTA_WATER_BOWL.get()) && left.getCount() == 1, "water bowls left after drinking one of two");
+        assertValueEqual(helper, player.getInventory().countItem(DropletsItems.TERRACOTTA_BOWL.get()), 1, "empty bowls in the inventory");
         ItemStack last = left.finishUsingItem(helper.getLevel(), player);
-        helper.assertTrue(last.is(ItemInit.TERRACOTTA_BOWL.get()) && last.getCount() == 1, "drinking the last water bowl leaves the empty bowl in hand");
+        helper.assertTrue(last.is(DropletsItems.TERRACOTTA_BOWL.get()) && last.getCount() == 1, "drinking the last water bowl leaves the empty bowl in hand");
         helper.succeed();
     }
 
@@ -193,6 +207,116 @@ public class ThirstTests
         assertValueEqual(helper, lastCause, ThirstChangeEvent.Cause.EAT, "cause of eating an apple");
         helper.assertFalse(player.hasEffect(MobEffects.CONFUSION), "food rolled purity effects");
         helper.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void rainStopsAtFullThirst(GameTestHelper helper)
+    {
+        ServerPlayer player = player(helper);
+        ServerLevel level = helper.getLevel();
+        PlayerThirst thirst = thirst(player);
+        float rain = level.getRainLevel(1.0F);
+        BlockPos sky = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, player.blockPosition());
+        player.setPos(sky.getX(), sky.getY(), sky.getZ());
+        player.setXRot(-90.0F);
+        player.tickCount = GameplayConfig.RAIN_INTERVAL_TICKS.get();
+        level.setRainLevel(1.0F);
+        try
+        {
+            thirst.setThirst(20);
+            thirst.setQuenched(20);
+            thirst.tick(player);
+            helper.assertTrue(thirst.serializeNBT().getFloat("overflow") == 0.0F, "rain at full thirst overflows");
+            thirst.setThirst(10);
+            thirst.setQuenched(0);
+            thirst.tick(player);
+            if (level.isRainingAt(player.blockPosition().above()))
+                helper.assertTrue(thirst.getThirst() == 11, "rain gives a sip below full, thirst " + thirst.getThirst());
+        }
+        finally
+        {
+            level.setRainLevel(rain);
+        }
+        helper.succeed();
+    }
+
+    private static boolean healsWithin(ServerPlayer player, int thirst, int food, float saturation)
+    {
+        thirst(player).setThirst(thirst);
+        player.setHealth(10.0F);
+        player.getFoodData().setFoodLevel(food);
+        player.getFoodData().setSaturation(saturation);
+        for (int tick = 0; tick < 100 && player.getHealth() <= 10.0F; tick++)
+            player.getFoodData().tick(player);
+        return player.getHealth() > 10.0F;
+    }
+
+    @GameTest(template = "empty")
+    public static void healingNeedsTheMinimumThirstOnBothPaths(GameTestHelper helper)
+    {
+        int slow = GameplayConfig.SLOW_REGEN_MIN_THIRST.get();
+        int hunger = GameplayConfig.HUNGER_REGEN_MIN_THIRST.get();
+        TestSupport.set(GameplayConfig.SLOW_REGEN_MIN_THIRST, GameplayConfig.SLOW_REGEN_MIN_THIRST.getDefault());
+        TestSupport.set(GameplayConfig.HUNGER_REGEN_MIN_THIRST, GameplayConfig.HUNGER_REGEN_MIN_THIRST.getDefault());
+        try
+        {
+            helper.assertTrue(healsWithin(player(helper), 16, 20, 5.0F), "saturation heals slowly at 16 thirst");
+            helper.assertTrue(healsWithin(player(helper), 16, 18, 0.0F), "food heals at 16 thirst");
+            helper.assertFalse(healsWithin(player(helper), 15, 20, 5.0F), "saturation does not heal at 15 thirst");
+            helper.assertFalse(healsWithin(player(helper), 15, 18, 0.0F), "food does not heal at 15 thirst");
+        }
+        finally
+        {
+            TestSupport.set(GameplayConfig.SLOW_REGEN_MIN_THIRST, slow);
+            TestSupport.set(GameplayConfig.HUNGER_REGEN_MIN_THIRST, hunger);
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void dehydrationStopsAtMinimumHealth(GameTestHelper helper)
+    {
+        ServerPlayer player = player(helper);
+        PlayerThirst thirst = thirst(player);
+        double amount = GameplayConfig.DAMAGE_AMOUNT.get();
+        Difficulty difficulty = helper.getLevel().getDifficulty();
+        TestSupport.set(GameplayConfig.DAMAGE_AMOUNT, 5.0);
+        helper.getLevel().getServer().setDifficulty(Difficulty.NORMAL, true);
+        try
+        {
+            thirst.setThirst(0);
+            player.setHealth(3.0F);
+            for (int i = 0; i < GameplayConfig.DAMAGE_INTERVAL_TICKS.get(); i++)
+                thirst.tick(player);
+            float expected = 3.0F - GameplayConfig.DAMAGE_MIN_HEALTH_NORMAL.get().floatValue();
+            helper.assertTrue(lastDehydrationDamage == expected, "the hit stops at the minimum health, was " + lastDehydrationDamage);
+        }
+        finally
+        {
+            TestSupport.set(GameplayConfig.DAMAGE_AMOUNT, amount);
+            helper.getLevel().getServer().setDifficulty(difficulty, true);
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "empty")
+    public static void estimatesDoNotDependOnWhichItemComesFirst(GameTestHelper helper)
+    {
+        RecipeManager recipes = new RecipeManager();
+        recipes.replaceRecipes(List.of(
+                shapeless("bread_from_apple", Items.APPLE, Items.BREAD),
+                shapeless("apple_from_bread", Items.BREAD, Items.APPLE),
+                shapeless("apple_from_sugar", Items.SUGAR, Items.APPLE)));
+        Map<Item, int[]> known = Map.of(Items.SUGAR, new int[]{4, 2, -1});
+        RecipeInference.Result result = RecipeInference.run(new RecipeInference.Inputs(known, Set.of()), recipes, helper.getLevel().registryAccess());
+        helper.assertTrue(result.foods().containsKey(Items.APPLE) && result.foods().containsKey(Items.BREAD), "both items get an estimate");
+        helper.assertTrue(result.foods().get(Items.BREAD)[0] == result.foods().get(Items.APPLE)[0], "the item inside the cycle keeps its value");
+        helper.succeed();
+    }
+
+    private static Recipe<?> shapeless(String name, Item ingredient, Item result)
+    {
+        return new ShapelessRecipe(DropletsOfThirst.asResource("test/" + name), "", CraftingBookCategory.MISC, new ItemStack(result), NonNullList.of(Ingredient.EMPTY, Ingredient.of(ingredient)));
     }
 
     @GameTest(template = "empty")
@@ -216,7 +340,7 @@ public class ThirstTests
         thirst.hydrate(player, -6, -6, true, ThirstChangeEvent.Cause.EAT);
         assertValueEqual(helper, thirst.getThirst(), 0, "thirst after salty food");
         assertValueEqual(helper, thirst.getQuenched(), 0, "quenched after salty food");
-        helper.assertFalse(player.hasEffect(EffectInit.OVERHYDRATED.get()), "salty food overhydrated");
+        helper.assertFalse(player.hasEffect(DropletsMobEffects.OVERHYDRATED.get()), "salty food overhydrated");
         helper.succeed();
     }
 
@@ -227,16 +351,15 @@ public class ThirstTests
         PlayerThirst thirst = thirst(player);
         thirst.change(player, 20, 20, ThirstChangeEvent.Cause.COMMAND);
         thirst.hydrate(player, 6, 8, true, ThirstChangeEvent.Cause.DRINK);
-        helper.assertFalse(player.hasEffect(EffectInit.OVERHYDRATED.get()), "one bottle past full already overhydrated");
+        helper.assertFalse(player.hasEffect(DropletsMobEffects.OVERHYDRATED.get()), "one bottle past full already overhydrated");
         thirst.hydrate(player, 6, 8, true, ThirstChangeEvent.Cause.DRINK);
-        MobEffectInstance effect = player.getEffect(EffectInit.OVERHYDRATED.get());
+        MobEffectInstance effect = player.getEffect(DropletsMobEffects.OVERHYDRATED.get());
         helper.assertTrue(effect != null && effect.getAmplifier() == 0, "two bottles past full give Overhydrated I");
         helper.assertTrue(player.hasEffect(MobEffects.CONFUSION), "Overhydrated comes with Nausea");
         helper.assertTrue(player.getEffect(MobEffects.CONFUSION).getDuration() >= 200, "Overhydrated brings at least 10 seconds of Nausea");
         helper.succeed();
     }
 
-    /** Water that another mod keeps from being drunk ({@code ThirstChangeEvent.Pre} cancelled) is not drunk past full either. */
     @GameTest(template = "empty")
     public static void cancelledDrinksDoNotOverhydrate(GameTestHelper helper)
     {
@@ -247,9 +370,9 @@ public class ThirstTests
         for (int i = 0; i < 4; i++)
             thirst.hydrate(player, 6, 8, true, ThirstChangeEvent.Cause.DRINK);
         player.removeTag(FROZEN_TAG);
-        helper.assertFalse(player.hasEffect(EffectInit.OVERHYDRATED.get()), "cancelled drinks overhydrated");
+        helper.assertFalse(player.hasEffect(DropletsMobEffects.OVERHYDRATED.get()), "cancelled drinks overhydrated");
         thirst.hydrate(player, 6, 8, true, ThirstChangeEvent.Cause.DRINK);
-        helper.assertFalse(player.hasEffect(EffectInit.OVERHYDRATED.get()), "one bottle past full after cancelled drinks overhydrated");
+        helper.assertFalse(player.hasEffect(DropletsMobEffects.OVERHYDRATED.get()), "one bottle past full after cancelled drinks overhydrated");
         helper.succeed();
     }
 
@@ -262,7 +385,7 @@ public class ThirstTests
         thirst.change(player, 20, 20, ThirstChangeEvent.Cause.COMMAND);
         for (int i = 0; i < 4; i++)
             thirst.hydrate(player, 6, 8, true, ThirstChangeEvent.Cause.DRINK);
-        helper.assertFalse(player.hasEffect(EffectInit.OVERHYDRATED.get()), "an invulnerable player overhydrated");
+        helper.assertFalse(player.hasEffect(DropletsMobEffects.OVERHYDRATED.get()), "an invulnerable player overhydrated");
         helper.succeed();
     }
 
@@ -273,7 +396,7 @@ public class ThirstTests
         PlayerThirst.consume(waterBottle(0), player);
         MobEffectInstance nausea = player.getEffect(MobEffects.CONFUSION);
         helper.assertTrue(nausea != null, "dirty water gives Nausea (100% by default)");
-        // Vanilla only builds up the screen distortion while more than 60 ticks are left, at 1/150 per tick.
+
         helper.assertTrue(nausea.getDuration() >= 200, "dirty water gives at least 10 seconds of Nausea, not " + nausea.getDuration() + " ticks");
         helper.assertTrue(player.hasEffect(MobEffects.HUNGER), "dirty water gives Hunger (100% by default)");
         helper.succeed();
@@ -290,7 +413,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** Default {@code [effects]}: contaminated and dirty water can poison, murky and acceptable only sicken, clean and pure do nothing. */
     @GameTest(template = "empty")
     public static void defaultEffectTablesFollowTheSixLevels(GameTestHelper helper)
     {
@@ -298,7 +420,7 @@ public class ThirstTests
         assertValueEqual(helper, PurityConfig.EFFECTS.size(), PurityLevel.values().length, "effect lists");
         for (PurityLevel level : PurityLevel.values())
         {
-            WaterPurity.PurityEffect[] table = WaterPurity.effectTable(level.level());
+            PurityEffects.Effect[] table = PurityEffects.table(level.level());
             double[] expected = chances[level.level()];
             assertValueEqual(helper, table.length, expected.length, "effects of " + level.id());
             for (int i = 0; i < table.length; i++)
@@ -317,11 +439,10 @@ public class ThirstTests
         Level level = helper.getLevel();
         BlockPos low = helper.absolutePos(BlockPos.ZERO).atY(level.getSeaLevel());
         BlockPos high = low.above(200);
-        // Plains, not the biome where the test runs: in a hot biome the LEGACY formula halves temperatures above 1, so
-        // cooling with height can raise the multiplier there.
+
         var plains = level.registryAccess().registryOrThrow(Registries.BIOME).getHolderOrThrow(Biomes.PLAINS);
-        float atSea = ThirstHelper.biomeClimate(level, plains, low, 1.0F, false);
-        float onTop = ThirstHelper.biomeClimate(level, plains, high, 1.0F, false);
+        float atSea = ExhaustionFactors.biomeClimate(level, plains, low, 1.0F, false);
+        float onTop = ExhaustionFactors.biomeClimate(level, plains, high, 1.0F, false);
         helper.assertTrue(onTop < atSea, "climate multiplier 200 blocks above sea level " + onTop + ", not below " + atSea);
         helper.succeed();
     }
@@ -335,7 +456,7 @@ public class ThirstTests
         player.moveTo(0.5, 64, 0.5);
         DimensionWater water = DropletsDataMaps.DIMENSION_WATER.get(end.dimensionTypeRegistration());
         helper.assertTrue(water != null && water.thirstMultiplier().isPresent(), "the End has no thirst_multiplier");
-        float climate = ThirstHelper.getExhaustionBiomeModifier(player);
+        float climate = ExhaustionFactors.getExhaustionBiomeModifier(player);
         assertValueEqual(helper, climate, water.thirstMultiplier().get(), "climate multiplier in the End");
         helper.assertTrue(climate < 1.0F, "climate multiplier in the End " + climate + ", not below 1");
         helper.succeed();
@@ -347,16 +468,14 @@ public class ThirstTests
         ServerPlayer player = player(helper);
         CommandSourceStack source = player.createCommandSourceStack().withPermission(2).withSuppressedOutput();
         var dispatcher = helper.getLevel().getServer().getCommands().getDispatcher();
-        assertValueEqual(helper, dispatcher.execute("droplets_of_thirst set @s 4 10", source), 4, "result of set");
+        assertValueEqual(helper, dispatcher.execute("droplets set @s 4 10", source), 4, "result of set");
         assertValueEqual(helper, thirst(player).getQuenched(), 4, "quenched after set 4 10");
-        assertValueEqual(helper, dispatcher.execute("droplets_of_thirst query @s", source), 4, "result of query");
-        assertValueEqual(helper, dispatcher.execute("thirst query @s", source), 4, "result of the /thirst alias");
-        assertValueEqual(helper, dispatcher.execute("droplets_of_thirst enable @s false", source), 1, "result of enable");
+        assertValueEqual(helper, dispatcher.execute("droplets query @s", source), 4, "result of query");
+        assertValueEqual(helper, dispatcher.execute("droplets enable @s false", source), 1, "result of enable");
         helper.assertFalse(thirst(player).getShouldTickThirst(), "thirst still enabled after enable false");
         helper.succeed();
     }
 
-    /** Gaining or losing an effect recomputes the thirst loss multiplier right away (Fire Resistance: none by default). */
     @GameTest(template = "empty")
     public static void effectsRecomputeTheMultiplier(GameTestHelper helper)
     {
@@ -371,7 +490,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** The respawn values come with the respawn, not with the death: a death another mod cancels (its own totem) keeps the thirst. */
     @GameTest(template = "empty")
     public static void aCancelledDeathKeepsThirst(GameTestHelper helper)
     {
@@ -385,7 +503,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** Respawning after a death gives {@code death.respawnThirst} and {@code respawnQuenched}; coming back from the End is not a death. */
     @GameTest(template = "empty")
     public static void respawningGivesTheRespawnValues(GameTestHelper helper)
     {
@@ -402,13 +519,12 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** Dehydration adds thirst exhaustion like any activity: not to creative players nor to players with thirst disabled. */
     @GameTest(template = "empty")
     public static void dehydrationSparesCreativeAndDisabledPlayers(GameTestHelper helper)
     {
         ServerPlayer player = player(helper);
         PlayerThirst thirst = thirst(player);
-        MobEffect dehydration = EffectInit.DEHYDRATION.get();
+        MobEffect dehydration = DropletsMobEffects.DEHYDRATION.get();
         float start = thirst.getExhaustion();
         dehydration.applyEffectTick(player, 0);
         helper.assertTrue(thirst.getExhaustion() > start, "Dehydration added no exhaustion to a survival player");
@@ -423,7 +539,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** OWN mode: a block break or an attack that another mod cancels (claims, PvP rules) costs no thirst, as it costs no hunger in vanilla. */
     @GameTest(template = "empty")
     public static void cancelledActivitiesCostNothingInOwnMode(GameTestHelper helper)
     {
@@ -457,7 +572,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** OWN mode: an attack costs thirst only when it lands, as vanilla charges hunger; a swing at an invulnerable mob costs nothing. */
     @GameTest(template = "empty")
     public static void onlyLandedAttacksCostThirstInOwnMode(GameTestHelper helper)
     {
@@ -489,7 +603,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** Right clicks reach this mod's handlers on the server too; hand drinking itself only acts on the client. */
     @GameTest(template = "empty")
     public static void rightClicksRunOnTheServer(GameTestHelper helper)
     {
@@ -500,7 +613,6 @@ public class ThirstTests
         helper.succeed();
     }
 
-    /** The tooltip line of estimated values: the translated values in gray, kept while they stay the same. */
     @GameTest(template = "empty")
     public static void estimatedLineIsKeptWhileTheValuesStay(GameTestHelper helper)
     {

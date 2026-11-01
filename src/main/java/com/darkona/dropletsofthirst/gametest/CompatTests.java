@@ -6,11 +6,10 @@ import com.darkona.dropletsofthirst.compat.sereneseasons.SereneSeasonsCompat;
 import com.darkona.dropletsofthirst.compat.supernatural.SupernaturalCompat;
 import com.darkona.dropletsofthirst.compat.vampirism.VampirismCompat;
 import com.darkona.dropletsofthirst.content.thirst.ExhaustionFactors;
-import com.darkona.dropletsofthirst.content.data.DropletsTags;
+import com.darkona.dropletsofthirst.index.DropletsTags;
 import com.darkona.dropletsofthirst.content.thirst.PlayerThirst;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
-import com.darkona.dropletsofthirst.foundation.config.GameplayConfig;
-import net.minecraft.core.Holder;
+import com.darkona.dropletsofthirst.config.GameplayConfig;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -30,11 +29,6 @@ import static com.darkona.dropletsofthirst.gametest.TestSupport.thirst;
 
 import static com.darkona.dropletsofthirst.gametest.TestSupport.assertValueEqual;
 
-/**
- * Optional mods, with or without them on the runtime ({@code -PwithCompat}): what Droplets of Thirst registers and calls
- * must follow what is installed, and every bridge must answer on a real player. Runs on a dedicated server, so it also
- * shows that none of this reaches client-only code.
- */
 @GameTestHolder(DropletsOfThirst.ID)
 @PrefixGameTestTemplate(false)
 public class CompatTests

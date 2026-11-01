@@ -1,0 +1,64 @@
+{
+  "conditions": [
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:mod_loaded",
+        "modid": "farmersdelight"
+      }
+    },
+    {
+      "type": "droplets_of_thirst:purity_enabled"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:melon_slice"
+    },
+    {
+      "item": "minecraft:melon_slice"
+    },
+    {
+      "type": "forge:difference",
+      "base": {
+        "type": "forge:partial_nbt",
+        "item": "minecraft:potion",
+        "nbt": {
+          "Potion": "minecraft:water"
+        }
+      },
+      "subtracted": [
+        {
+          "type": "forge:partial_nbt",
+          "item": "minecraft:potion",
+          "nbt": {
+            "Potion": "minecraft:water",
+            "droplets_of_thirst:purity": 0
+          }
+        },
+        {
+          "type": "forge:partial_nbt",
+          "item": "minecraft:potion",
+          "nbt": {
+            "Potion": "minecraft:water",
+            "droplets_of_thirst:purity": 1
+          }
+        },
+        {
+          "type": "forge:partial_nbt",
+          "item": "minecraft:potion",
+          "nbt": {
+            "Potion": "minecraft:water",
+            "droplets_of_thirst:purity": 2
+          }
+        }
+      ]
+    }
+  ],
+  "result": {
+    "item": "droplets_of_thirst:melon_juice",
+    "count": 1
+  }
+}

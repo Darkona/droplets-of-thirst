@@ -2,6 +2,59 @@
 
 Changes by feature, newest version first. Upstream issues are cited as `thirst#NN` (ghen-git/Thirst-Mod).
 
+## 1.20.1-1.1.0 (Minecraft 1.20.1, Forge 47 and NeoForge 47.1)
+
+Brings 1.20.1 up to 1.21.1-1.1.0. One jar, `droplets-of-thirst-1.20.1-1.1.0.jar`, as before.
+
+### New
+
+- New drinks that reward more work: Apple, Melon, Berry and ABC Juice, made with water that is at least acceptable. They restore more than pure water and give Hydrated, Speed or Regeneration.
+- Soda Water: fill a glass bottle on a bubble column. It gives a short burst of Speed, and with cocoa beans and sugar it becomes Cola.
+- Milk Bottle: a milk bucket fills 3 bottles, and each one cures only what dirty water did to you.
+- Each of these recipes turns off when another mod already makes the same drink (Farmer's Delight, Cultural Delights).
+- New Canteen: craft it with up to 8 identical drinks tagged `forge:drinks`, and each sip counts as drinking one. It holds one kind of drink at a time. Water goes in as a real fluid, so pipes and machines can fill it.
+- New Amphora: a terracotta block that stores 4 buckets of water and keeps its purity. Pipes and machines can reach it. Breaking it with an empty hand carries it with its contents. A tool, an arrow or a falling anvil shatters it, and its water spills and dries up.
+- New Charcoal Filter: it pulls water with a purity from the block above, raises it one level and passes it to the block below at 1 mB per tick. Filters chain, up to pure.
+- French, Polish, Russian, Japanese, Korean and both Chinese translations are complete, including effect and potion names.
+
+### Changed
+
+- Water of any purity now mixes in tanks and Canteens, and the whole tank drops to the dirtiest purity. It works with any mod tank built on the Forge fluid tank.
+- Create's Sand Filter now raises water two purity levels by default. Server configs that already exist keep their old value.
+- Water bottles and terracotta water bowls now stack to 16 by default (`waterBottleStackSize` for bottles). Server configs that already exist keep their old value.
+- Health regeneration is more forgiving: `slowRegenMinThirst` and `hungerRegenMinThirst` are now 16, so losing a droplet or two no longer stops healing. Server configs that already exist keep their old values.
+- Water poured into the world no longer keeps its purity: a source takes the purity of the place where it is, as any other water. Poured water saved by earlier versions is forgotten.
+- The server only sends thirst to the client when thirst or quenched change. Between changes the client works out the exhaustion bar by itself and settles on the server's value at each change. The periodic resend is gone.
+- The purity color of a water bucket now tints only the water, and the bucket stays gray.
+- Our drinks are in the `forge:drinks` tags.
+- Network protocol `0.1.13`: both sides need this version. `[1.20.1]`
+- Worlds, items, fluids and configs from Thirst Was Taken or from older versions of this mod are no longer converted: the `thirst:` ids, the old `Purity` NBT and the old config keys are not read, and the old config files are ignored. Start a new world or use the new `droplets_of_thirst` files.
+- The climate multiplier always uses the temperature and humidity curves (`temperatureCurve`, `humidityCurve` in `gameplay.toml`); the old formula from Thirst Was Taken is gone, with its `formula` and `legacyHarshness` keys. With the default curves deserts make you thirstier than plains and cold biomes slow thirst less than before.
+- The command is now `/droplets` (it was `/droplets_of_thirst`), and `/thirst` is no longer an alias. `/droplets debug exhaustion` no longer names where the climate factor comes from.
+
+### Mod compatibility
+
+- Cold Sweat 2.4.4 or newer is now required when installed. Filling a waterskin now uses its new event.
+- With Cold Sweat, a Canteen of water has a temperature like a waterskin: the Boiler and Icebox change it, and sips warm or cool you.
+- Cold Sweat's Boiler now purifies water containers while it has fuel, up to acceptable.
+- Mekanism's Electric Pump and Immersive Engineering's Fluid Pump now keep the purity of the water they take from the world (Mekanism 10.4.16, Immersive Engineering 10.2.0).
+- With Supplementaries and Moonlight, the Jar and the Faucet keep the purity of water: the Faucet takes it from water blocks and cauldrons, the Jar keeps it when filled by pipes or bottles and passes it to the bottles it fills (Supplementaries 1.20-3.1.44, Moonlight 1.20-2.16.38).
+
+### Bug fixes
+
+- Nausea and Dehydration no longer drain thirst while an effect from `pauses_thirst` or `stops_thirst` is active, and activity from a `stops_thirst` effect is no longer charged when it ends.
+- Keywords now reach real foods: soups, fruits and food-type drinks that have no values. Before, they only matched items that cannot be eaten.
+- The config comment now says what `slowRegenIntervalTicks` counts: healing attempts, one every 10 ticks.
+- Rain no longer gives sips at full thirst, so looking up in the rain cannot cause Overhydrated.
+- A hit of dehydration stops at the minimum health of the difficulty, even with a high `amount`.
+- Estimates from recipes no longer lose value for an item that is part of a recipe loop.
+- The splash of drinking by hand is drawn by each client from where the drinker looks. Before, the server sent it as particles.
+
+### Not in this version
+
+- The Charcoal Filter cannot pass water into a cauldron below, and a Canteen cannot be filled by clicking a cauldron: Forge 1.20.1 gives cauldrons no fluid handler. A filter still drains a cauldron above it, level by level. `[1.20.1]`
+- Extra Delight and Expanded Delight have no version for this Minecraft, so their recipe switches do nothing here. `[1.20.1]`
+
 ## 1.20.1-1.0.0 (Minecraft 1.20.1, Forge 47 and NeoForge 47.1), 2026-10-01
 
 The 1.20.1 port has every feature of 1.21.1-1.0.0 (next section), with the differences below. One jar, `droplets-of-thirst-1.20.1-1.0.0.jar`, runs on Forge 47.1.3 or newer and on NeoForge 47.1 for Minecraft 1.20.1.

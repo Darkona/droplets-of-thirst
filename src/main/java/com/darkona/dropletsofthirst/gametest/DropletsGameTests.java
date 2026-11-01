@@ -3,10 +3,6 @@ package com.darkona.dropletsofthirst.gametest;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.event.RegisterGameTestsEvent;
 
-/**
- * Registers the test classes that link against optional mods, only when that mod is installed; the rest are found
- * through {@code @GameTestHolder}. Tests only run with {@code forge.enabledGameTestNamespaces=droplets_of_thirst}.
- */
 public final class DropletsGameTests
 {
     private DropletsGameTests() {}
@@ -31,5 +27,11 @@ public final class DropletsGameTests
             event.register(MinersDelightCreateTests.class);
         if (ModList.get().isLoaded("vampirism"))
             event.register(VampirismTests.class);
+        if (ModList.get().isLoaded("supplementaries"))
+            event.register(SupplementariesTests.class);
+        if (ModList.get().isLoaded("mekanism"))
+            event.register(MekanismTests.class);
+        if (ModList.get().isLoaded("immersiveengineering"))
+            event.register(ImmersiveEngineeringTests.class);
     }
 }

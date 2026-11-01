@@ -1,0 +1,12 @@
+{
+  "values": [
+    "#forge:drinks/water",
+    "#forge:drinks/watery",
+    "#forge:drinks/milk",
+    "#forge:drinks/honey",
+    "#forge:drinks/magic",
+    "#forge:drinks/juice",
+    "droplets_of_thirst:soda_water",
+    "droplets_of_thirst:cola"
+  ]
+}
