@@ -9,7 +9,7 @@ Changes by feature, newest version first. Upstream issues are cited as `thirst#N
 - Mekanism's Electric Pump and Immersive Engineering's Fluid Pump now keep the purity of the water they take from the world.
 - Create's Sand Filter now raises water two purity levels by default. Server configs that already exist keep their old value.
 - New Charcoal Filter: it pulls water with a purity from the block above, raises it one level and passes it to the block below at 1 mB per tick. Filters chain, up to pure.
-- New Amphora: a terracotta block that stores 4 buckets of water and keeps its purity. Pipes and machines can reach it. Breaking it with an empty hand carries it with its contents. A tool, an arrow or a falling anvil shatters it, and its water spills and dries up.
+- New Amphora: a terracotta block that stores 4 buckets of water and keeps its purity. Pipes and machines can reach it. Breaking it with an empty hand carries it with its contents. A tool, an arrow or a falling anvil shatters it, and its water spills and dries up. It faces you when you place it.
 - Water bottles and terracotta water bowls now stack to 16 by default (`waterBottleStackSize` for bottles). Server configs that already exist keep their old value.
 - With Cold Sweat, a Canteen of water has a temperature like a waterskin: the Boiler and Icebox change it, and sips warm or cool you.
 - Cold Sweat's Boiler now purifies water containers while it has fuel, up to acceptable.

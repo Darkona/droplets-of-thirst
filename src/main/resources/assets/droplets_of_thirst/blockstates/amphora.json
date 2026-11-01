@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=north": {
       "model": "droplets_of_thirst:block/amphora"
+    },
+    "facing=east": {
+      "model": "droplets_of_thirst:block/amphora",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "droplets_of_thirst:block/amphora",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "droplets_of_thirst:block/amphora",
+      "y": 270
     }
   }
 }
