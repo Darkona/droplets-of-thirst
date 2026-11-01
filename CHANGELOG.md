@@ -13,7 +13,7 @@ Brings 1.20.1 up to 1.21.1-1.1.0. One jar, `droplets-of-thirst-1.20.1-1.1.0.jar`
 - Milk Bottle: a milk bucket fills 3 bottles, and each one cures only what dirty water did to you.
 - Each of these recipes turns off when another mod already makes the same drink (Farmer's Delight, Cultural Delights).
 - New Canteen: craft it with up to 8 identical drinks tagged `forge:drinks`, and each sip counts as drinking one. It holds one kind of drink at a time. Water goes in as a real fluid, so pipes and machines can fill it.
-- New Amphora: a terracotta block that stores 4 buckets of water and keeps its purity. Pipes and machines can reach it. Breaking it with an empty hand carries it with its contents. A tool, an arrow or a falling anvil shatters it, and its water spills and dries up.
+- New Amphora: a terracotta block that stores 4 buckets of water and keeps its purity. Pipes and machines can reach it. Breaking it with an empty hand carries it with its contents. A tool, an arrow or a falling anvil shatters it, and its water spills and dries up. It faces you when you place it.
 - New Charcoal Filter: it pulls water with a purity from the block above, raises it one level and passes it to the block below at 1 mB per tick. Filters chain, up to pure.
 - French, Polish, Russian, Japanese, Korean and both Chinese translations are complete, including effect and potion names.
 
