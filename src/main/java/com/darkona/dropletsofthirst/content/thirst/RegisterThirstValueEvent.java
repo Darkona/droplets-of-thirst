@@ -20,14 +20,14 @@ public class RegisterThirstValueEvent extends Event {
         this.containers = containers;
     }
 
-    public void addFood(Item item, int thirst, int quenched)
+    public void addFood(Item item, int thirst, int hydration)
     {
-        foods.putIfAbsent(item, new int[]{thirst, quenched, -1});
+        foods.putIfAbsent(item, new int[]{thirst, hydration, -1});
     }
 
-    public void addDrink(Item item, int thirst, int quenched)
+    public void addDrink(Item item, int thirst, int hydration)
     {
-        drinks.putIfAbsent(item, new int[]{thirst, quenched, -1});
+        drinks.putIfAbsent(item, new int[]{thirst, hydration, -1});
     }
 
     public void addContainer(ContainerWithPurity container){

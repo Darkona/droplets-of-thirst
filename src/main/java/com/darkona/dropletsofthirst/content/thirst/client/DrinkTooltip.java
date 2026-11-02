@@ -27,9 +27,9 @@ public final class DrinkTooltip implements TooltipComponent, ClientTooltipCompon
     private final ThirstValues values;
     private final Either<FormattedText, TooltipComponent> element = Either.right(this);
     private final int thirstIcons;
-    private final int quenchedIcons;
+    private final int hydrationIcons;
     private final @Nullable String thirstText;
-    private final @Nullable String quenchedText;
+    private final @Nullable String hydrationText;
     private final @Nullable String estimatedText;
     private int width = -1;
     private int thirstTextWidth;
@@ -38,11 +38,11 @@ public final class DrinkTooltip implements TooltipComponent, ClientTooltipCompon
     {
         this.values = values;
         int thirstBars = (Math.abs(values.thirst()) + 1) / 2;
-        int quenchedBars = (Math.abs(values.quenched()) + 1) / 2;
+        int hydrationBars = (Math.abs(values.quenched()) + 1) / 2;
         thirstIcons = thirstBars > 10 ? 1 : thirstBars;
-        quenchedIcons = quenchedBars > 10 ? 1 : quenchedBars;
+        hydrationIcons = hydrationBars > 10 ? 1 : hydrationBars;
         thirstText = thirstBars > 10 ? "x" + thirstBars : null;
-        quenchedText = quenchedBars > 10 ? "x" + quenchedBars : null;
+        hydrationText = hydrationBars > 10 ? "x" + hydrationBars : null;
         estimatedText = values.estimated() ? I18n.get("droplets_of_thirst.tooltip.estimated_short") : null;
     }
 
@@ -77,7 +77,7 @@ public final class DrinkTooltip implements TooltipComponent, ClientTooltipCompon
     @Override
     public int getHeight()
     {
-        return quenchedIcons > 0 ? 20 : 10;
+        return hydrationIcons > 0 ? 20 : 10;
     }
 
     @Override
@@ -87,8 +87,8 @@ public final class DrinkTooltip implements TooltipComponent, ClientTooltipCompon
         {
             thirstTextWidth = textWidth(font, thirstText);
             int thirstRow = thirstIcons * 9 + thirstTextWidth + textWidth(font, estimatedText);
-            int quenchedRow = quenchedIcons * 7 + textWidth(font, quenchedText);
-            width = Math.max(thirstRow, quenchedRow);
+            int hydrationRow = hydrationIcons * 7 + textWidth(font, hydrationText);
+            width = Math.max(thirstRow, hydrationRow);
         }
         return width;
     }
@@ -125,22 +125,22 @@ public final class DrinkTooltip implements TooltipComponent, ClientTooltipCompon
         if (estimatedText != null)
             guiGraphics.drawString(font, estimatedText, textX + thirstTextWidth, y + 1, TEXT_COLOR);
 
-        if (quenchedIcons == 0)
+        if (hydrationIcons == 0)
             return;
-        boolean saltyQuenched = values.quenched() < 0;
-        float quenched = Math.abs(values.quenched());
-        if (saltyQuenched)
+        boolean saltyHydration = values.quenched() < 0;
+        float hydration = Math.abs(values.quenched());
+        if (saltyHydration)
             guiGraphics.setColor(ThirstBarRenderer.SALTY_RED, ThirstBarRenderer.SALTY_GREEN, ThirstBarRenderer.SALTY_BLUE, 1f);
-        offsetX = x + (quenchedIcons - 1) * 7;
-        for (int i = 0; i < quenchedIcons; ++i)
+        offsetX = x + (hydrationIcons - 1) * 7;
+        for (int i = 0; i < hydrationIcons; ++i)
         {
-            float bar = quenchedText == null ? quenched / 2f - i : 1f;
+            float bar = hydrationText == null ? hydration / 2f - i : 1f;
             int u = bar >= 1 ? 21 : bar > 0.5f ? 14 : bar > 0.25f ? 7 : 0;
-            guiGraphics.blit(ThirstBarRenderer.QUENCHED_ICONS, offsetX, y + 11, u, 27, 7, 7);
+            guiGraphics.blit(ThirstBarRenderer.HYDRATION_ICONS, offsetX, y + 11, u, 27, 7, 7);
             offsetX -= 7;
         }
         guiGraphics.setColor(1f, 1f, 1f, 1f);
-        if (quenchedText != null)
-            guiGraphics.drawString(font, quenchedText, x + quenchedIcons * 7 + GAP, y + 10, saltyQuenched ? SALTY_TEXT_COLOR : TEXT_COLOR);
+        if (hydrationText != null)
+            guiGraphics.drawString(font, hydrationText, x + hydrationIcons * 7 + GAP, y + 10, saltyHydration ? SALTY_TEXT_COLOR : TEXT_COLOR);
     }
 }

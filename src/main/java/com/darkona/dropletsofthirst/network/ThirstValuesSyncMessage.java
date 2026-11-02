@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public record ThirstValuesSyncMessage(Map<Item, int[]> drinks, Map<Item, int[]> foods, List<Item> estimated, List<Item> containers, int defaultPurity, int waterBottleStackSize, boolean purityEnabled, boolean canFillFromFlowingWater,
-                                      int pureThirstBonus, int pureQuenchedBonus)
+                                      int pureThirstBonus, int pureHydrationBonus)
 {
     public void encode(FriendlyByteBuf buffer)
     {
@@ -28,7 +28,7 @@ public record ThirstValuesSyncMessage(Map<Item, int[]> drinks, Map<Item, int[]> 
         buffer.writeVarInt(defaultPurity);
         buffer.writeVarInt(waterBottleStackSize);
         buffer.writeVarInt(pureThirstBonus);
-        buffer.writeVarInt(pureQuenchedBonus);
+        buffer.writeVarInt(pureHydrationBonus);
         buffer.writeBoolean(purityEnabled);
         buffer.writeBoolean(canFillFromFlowingWater);
     }
@@ -42,10 +42,10 @@ public record ThirstValuesSyncMessage(Map<Item, int[]> drinks, Map<Item, int[]> 
         int defaultPurity = buffer.readVarInt();
         int stackSize = buffer.readVarInt();
         int pureThirst = buffer.readVarInt();
-        int pureQuenched = buffer.readVarInt();
+        int pureHydration = buffer.readVarInt();
         boolean purityEnabled = buffer.readBoolean();
         boolean flowing = buffer.readBoolean();
-        return new ThirstValuesSyncMessage(drinks, foods, estimated, containers, defaultPurity, stackSize, purityEnabled, flowing, pureThirst, pureQuenched);
+        return new ThirstValuesSyncMessage(drinks, foods, estimated, containers, defaultPurity, stackSize, purityEnabled, flowing, pureThirst, pureHydration);
     }
 
     private static void writeTable(FriendlyByteBuf buffer, Map<Item, int[]> table)
@@ -66,7 +66,7 @@ public record ThirstValuesSyncMessage(Map<Item, int[]> drinks, Map<Item, int[]> 
     {
         return new ThirstValuesSyncMessage(ThirstHelper.drinkTable(), ThirstHelper.foodTable(), List.copyOf(ThirstHelper.estimatedItems()), WaterPurity.dataContainerItems(),
                 SyncedValues.defaultPurity(), SyncedValues.waterBottleStackSize(), SyncedValues.purityEnabled(), SyncedValues.canFillFromFlowingWater(),
-                SyncedValues.pureThirstBonus(), SyncedValues.pureQuenchedBonus());
+                SyncedValues.pureThirstBonus(), SyncedValues.pureHydrationBonus());
     }
 
     public static void clientHandle(final ThirstValuesSyncMessage message, final Supplier<NetworkEvent.Context> context)

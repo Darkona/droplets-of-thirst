@@ -31,8 +31,8 @@ public final class ThirstBarRenderer
 
     public static final ResourceLocation THIRST_MASK = DropletsOfThirst.asResource("textures/gui/thirst_icons_mask.png");
 
-    public static final ResourceLocation QUENCHED_ICONS = DropletsOfThirst.asResource("textures/gui/quenched_icons.png");
-    private static final ResourceLocation QUENCHED_MASK = DropletsOfThirst.asResource("textures/gui/quenched_icons_mask.png");
+    public static final ResourceLocation HYDRATION_ICONS = DropletsOfThirst.asResource("textures/gui/hydration_icons.png");
+    private static final ResourceLocation HYDRATION_MASK = DropletsOfThirst.asResource("textures/gui/hydration_icons_mask.png");
 
     public static final float SALTY_RED = 0.9f, SALTY_GREEN = 0.2f, SALTY_BLUE = 0.2f;
     private static final RandomSource random = RandomSource.create();
@@ -63,26 +63,26 @@ public final class ThirstBarRenderer
         float green = (tint >> 8 & 255) / 255f;
         float blue = (tint & 255) / 255f;
         ResourceLocation fill = tint < 0 ? THIRST_ICONS : THIRST_MASK;
-        ResourceLocation outline = tint < 0 ? QUENCHED_ICONS : QUENCHED_MASK;
+        ResourceLocation outline = tint < 0 ? HYDRATION_ICONS : HYDRATION_MASK;
         int right = guiGraphics.guiWidth() / 2 + 91 + ClientConfig.THIRST_BAR_X_OFFSET.get();
         int top = guiGraphics.guiHeight() - gui.rightHeight + ClientConfig.THIRST_BAR_Y_OFFSET.get();
         gui.rightHeight += 10;
 
         int ticks = gui.getGuiTicks();
         int level = thirst.getThirst();
-        int quenched = thirst.getQuenched();
-        boolean shake = quenched <= 0 && ticks % (level * 3 + 1) == 0;
+        int hydration = thirst.getHydration();
+        boolean shake = hydration <= 0 && ticks % (level * 3 + 1) == 0;
         int wave = ClientConfig.BUFF_WAVE.get() && ThirstBarStyles.waves(player) ? ticks % (PlayerThirst.MAX_THIRST + 5) : -1;
-        boolean showQuenched = ClientConfig.SHOW_QUENCHED_OVERLAY.get() && AppleSkinCompat.quenchedOverlay();
+        boolean showHydration = ClientConfig.SHOW_HYDRATION_OVERLAY.get() && AppleSkinCompat.hydrationOverlay();
 
         ThirstValues gain = ClientConfig.SHOW_DRINK_PREVIEW.get() ? heldDrink(player) : null;
         int newLevel = level;
-        int newQuenched = quenched;
+        int newHydration = hydration;
         float flash = 0;
         if (gain != null)
         {
             newLevel = Mth.clamp(level + gain.thirst(), 0, PlayerThirst.MAX_THIRST);
-            newQuenched = Mth.clamp(quenched + gain.quenched(), 0, newLevel);
+            newHydration = Mth.clamp(hydration + gain.quenched(), 0, newLevel);
             flash = flashAlpha(ticks);
         }
 
@@ -92,7 +92,7 @@ public final class ThirstBarRenderer
         {
             int width = (int) (Mth.clamp(thirst.getExhaustion() / GameplayConfig.EXHAUSTION_PER_POINT.get().floatValue(), 0f, 1f) * 81);
             guiGraphics.setColor(1f, 1f, 1f, 0.75f);
-            guiGraphics.blit(QUENCHED_ICONS, right - width, top, 81 - width, 18, width, 9);
+            guiGraphics.blit(HYDRATION_ICONS, right - width, top, 81 - width, 18, width, 9);
         }
 
         for (int i = 0; i < 10; ++i)
@@ -109,16 +109,16 @@ public final class ThirstBarRenderer
             guiGraphics.setColor(red, green, blue, 1f);
             if (idx <= level)
                 guiGraphics.blit(fill, x, y, idx < level ? 16 : 8, 0, 9, 9, 25, 9);
-            if (showQuenched && quenched > i * 2)
-                guiGraphics.blit(outline, x, y, outlineU(quenched, i), 0, 9, 9);
+            if (showHydration && hydration > i * 2)
+                guiGraphics.blit(outline, x, y, outlineU(hydration, i), 0, 9, 9);
 
             if (gain == null)
                 continue;
             guiGraphics.setColor(red, green, blue, flash);
             if (newLevel > level && idx >= level && idx <= newLevel)
                 guiGraphics.blit(fill, x, y, idx < newLevel ? 16 : 8, 0, 9, 9, 25, 9);
-            if (newQuenched > quenched && newQuenched > i * 2 && i >= quenched / 2)
-                guiGraphics.blit(outline, x, y, outlineU(newQuenched, i), 0, 9, 9);
+            if (newHydration > hydration && newHydration > i * 2 && i >= hydration / 2)
+                guiGraphics.blit(outline, x, y, outlineU(newHydration, i), 0, 9, 9);
 
             if (newLevel < level && idx <= level && idx >= newLevel)
             {
@@ -130,10 +130,10 @@ public final class ThirstBarRenderer
                     guiGraphics.blit(fill, x, y, 8, 0, 9, 9, 25, 9);
                 }
             }
-            if (newQuenched < quenched && quenched > i * 2 && newQuenched < i * 2 + 2)
+            if (newHydration < hydration && hydration > i * 2 && newHydration < i * 2 + 2)
             {
                 guiGraphics.setColor(SALTY_RED, SALTY_GREEN, SALTY_BLUE, flash);
-                guiGraphics.blit(QUENCHED_MASK, x, y, outlineU(quenched, i), 0, 9, 9);
+                guiGraphics.blit(HYDRATION_MASK, x, y, outlineU(hydration, i), 0, 9, 9);
             }
         }
         guiGraphics.setColor(1f, 1f, 1f, 1f);
@@ -141,9 +141,9 @@ public final class ThirstBarRenderer
         minecraft.getProfiler().pop();
     }
 
-    private static int outlineU(int quenched, int i)
+    private static int outlineU(int hydration, int i)
     {
-        float bar = quenched / 2f - i;
+        float bar = hydration / 2f - i;
         return bar >= 1 ? 27 : bar > 0.5f ? 18 : bar > 0.25f ? 9 : 0;
     }
 

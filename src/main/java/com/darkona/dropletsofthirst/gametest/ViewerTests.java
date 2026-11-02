@@ -59,7 +59,7 @@ public class ViewerTests
         helper.assertTrue(bottle != null, "no water bottle on the hydration page");
         helper.assertTrue(PotionUtils.getPotion(bottle.stack()) == Potions.WATER, "the potion entry is not a water bottle");
         assertValueEqual(helper, bottle.values().thirst(), 4, "water bottle thirst on the hydration page");
-        assertValueEqual(helper, bottle.values().quenched(), 5, "water bottle quenched on the hydration page");
+        assertValueEqual(helper, bottle.values().quenched(), 5, "water bottle hydration on the hydration page");
         helper.assertTrue(entries.stream().anyMatch(entry -> entry.stack().is(DropletsItems.TERRACOTTA_WATER_BOWL.get())), "no terracotta water bowl on the hydration page");
         for (HydrationEntry entry : entries)
             helper.assertTrue(entry.values().thirst() != 0 || entry.values().quenched() != 0, entry.stack() + " does nothing and is on the hydration page");

@@ -41,7 +41,7 @@ Droplets of Thirst for Minecraft 1.21.1 runs on **Minecraft 1.21.1 and NeoForge 
 - The climate factor of thirst loss comes from Cold Sweat's body temperature instead of the biome: comfortable is normal thirst loss, burning is twice as much.
 - A hot body temperature also counts as a hot climate for dirty water.
 - Drinking water can cool the body (`coldsweat.drinkCooling`, off by default).
-- The **waterskin** hydrates like a drink of water (thirst 6, quenched 3) with the purity of the water it holds. Filling it from a source, a cauldron or a tank gives it that water's purity, and the cooking packs purify it like a bottle (it comes out full).
+- The **waterskin** hydrates like a drink of water (thirst 6, hydration 3) with the purity of the water it holds. Filling it from a source, a cauldron or a tank gives it that water's purity, and the cooking packs purify it like a bottle (it comes out full).
 - With Cold Sweat installed, thirst ignores Serene Seasons, because Cold Sweat's body temperature already follows the seasons.
 - When installed, Cold Sweat must be 2.4 or newer.
 
@@ -50,15 +50,15 @@ Droplets of Thirst for Minecraft 1.21.1 runs on **Minecraft 1.21.1 and NeoForge 
 A vampire gets thirsty like anyone else, and only blood quenches its thirst. Its thirst bar has blood-red droplets.
 
 - Thirst goes down with the same activity and climate rules as for other players.
-- Water, other drinks, food, rain and drinking by hand give a vampire nothing: no thirst, no quenched and no purity effects. Hand drinking is off for vampires. The HUD shows no preview for these items.
+- Water, other drinks, food, rain and drinking by hand give a vampire nothing: no thirst, no hydration and no purity effects. Hand drinking is off for vampires. The HUD shows no preview for these items.
 - Blood has no purity, so it never makes a vampire sick, and it never counts towards Overhydrated.
-- **Vampirism**: every drink of blood restores thirst: biting a creature, blood bottles, blood containers and blood food. One point of blood gives `vampirism.thirstPerBlood` thirst (1.0: the blood bar and the thirst bar are both 20, so a full blood refill is a full thirst bar) and quenched by the blood's saturation (`vampirism.quenchedPerBlood`). Altars and commands that fill the blood bar do not count. Vampirism stops a vampire from drinking a bottle while its blood bar is full, so blood and thirst usually go down together.
-- **Supernatural**: its blood bottle gives thirst 6 and quenched 6. Supernatural has no bite, so bottles are the way to drink blood.
+- **Vampirism**: every drink of blood restores thirst: biting a creature, blood bottles, blood containers and blood food. One point of blood gives `vampirism.thirstPerBlood` thirst (1.0: the blood bar and the thirst bar are both 20, so a full blood refill is a full thirst bar) and hydration by the blood's saturation (`vampirism.hydrationPerBlood`). Altars and commands that fill the blood bar do not count. Vampirism stops a vampire from drinking a bottle while its blood bar is full, so blood and thirst usually go down together.
+- **Supernatural**: its blood bottle gives thirst 6 and hydration 6. Supernatural has no bite, so bottles are the way to drink blood.
 - Items in the item tag `droplets_of_thirst:blood` hydrate vampires with their values in the drinks data map. By default it holds `#supernatural:blood`.
 
 ### Reliquary
 
-Drinking from the Emperor's Chalice hydrates like a drink of pure water (thirst 4, quenched 5, no extra pure water bonus). The Infernal Chalice does not hydrate. Reliquary's potions give thirst 2 and quenched 3.
+Drinking from the Emperor's Chalice hydrates like a drink of pure water (thirst 4, hydration 5, no extra pure water bonus). The Infernal Chalice does not hydrate. Reliquary's potions give thirst 2 and hydration 3.
 
 ---
 
@@ -82,7 +82,7 @@ These keys go with the mods above.
 | `delight.worldPurityWaterSources` | `true` | Taps and sinks of Extra Delight, the Let's Do sink and the Farm & Charm timber well give water with the world's purity where they stand. `false` = water without a purity, read as `defaultPurity` |
 | `reliquary.emperorChaliceCooldown` | `0` | Ticks before the Emperor's Chalice can be used again after a drink. `0` = no cooldown |
 | `vampirism.thirstPerBlood` | `1.0` | Thirst a Vampirism vampire gets per point of blood it drinks (0-20). `1.0` = a full blood refill fills the thirst bar |
-| `vampirism.quenchedPerBlood` | `1.0` | Quenched per point of blood, times the blood's saturation in Vampirism (0.3 poor to 1.0 rich; a blood bottle is 0.45) |
+| `vampirism.hydrationPerBlood` | `1.0` | Hydration per point of blood, times the blood's saturation in Vampirism (0.3 poor to 1.0 rich; a blood bottle is 0.45) |
 
 `sereneseasons.*` does nothing while Cold Sweat is installed.
 

@@ -8,6 +8,7 @@ Brings 1.20.1 up to 1.21.1-1.1.0. One jar, `droplets-of-thirst-1.20.1-1.1.0.jar`
 
 ### New
 
+- Quenched is now called **hydration** in the game, the commands, the data maps (field `hydration`), the config keys (`hydrationBonus`, `rainHydration`, `respawnHydration` and the others) and the textures (`textures/gui/hydration_icons.png`). Datapacks and resource packs that use the old names need updating, and config keys with the old names go back to their defaults. Saved thirst is kept, and the API keeps the name `quenched`.
 - New drinks that reward more work: Apple, Melon, Berry and ABC Juice, made with water that is at least acceptable. They restore more than pure water and give Hydrated, Speed or Regeneration.
 - Soda Water: fill a glass bottle on a bubble column. It gives a short burst of Speed, and with cocoa beans and sugar it becomes Cola.
 - Milk Bottle: a milk bucket fills 3 bottles, and each one cures only what dirty water did to you.
@@ -24,7 +25,7 @@ Brings 1.20.1 up to 1.21.1-1.1.0. One jar, `droplets-of-thirst-1.20.1-1.1.0.jar`
 - Water bottles and terracotta water bowls now stack to 16 by default (`waterBottleStackSize` for bottles). Server configs that already exist keep their old value.
 - Health regeneration is more forgiving: `slowRegenMinThirst` and `hungerRegenMinThirst` are now 16, so losing a droplet or two no longer stops healing. Server configs that already exist keep their old values.
 - Water poured into the world no longer keeps its purity: a source takes the purity of the place where it is, as any other water. Poured water saved by earlier versions is forgotten.
-- The server only sends thirst to the client when thirst or quenched change. Between changes the client works out the exhaustion bar by itself and settles on the server's value at each change. The periodic resend is gone.
+- The server only sends thirst to the client when thirst or hydration change. Between changes the client works out the exhaustion bar by itself and settles on the server's value at each change. The periodic resend is gone.
 - The purity color of a water bucket now tints only the water, and the bucket stays gray.
 - Our drinks are in the `forge:drinks` tags.
 - Network protocol `0.1.13`: both sides need this version. `[1.20.1]`

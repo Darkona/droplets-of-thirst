@@ -8,12 +8,12 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public record PlayerThirstSyncMessage(int thirst, int quenched, float exhaustion, int flags)
+public record PlayerThirstSyncMessage(int thirst, int hydration, float exhaustion, int flags)
 {
     public void encode(FriendlyByteBuf buffer)
     {
         buffer.writeInt(thirst);
-        buffer.writeInt(quenched);
+        buffer.writeInt(hydration);
         buffer.writeFloat(exhaustion);
         buffer.writeVarInt(flags);
     }

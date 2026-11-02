@@ -1,6 +1,6 @@
 {
   "values": {
-    "minecraft:cake": { "thirst": 1, "quenched": 1 },
-    "#minecraft:candle_cakes": { "thirst": 1, "quenched": 1 }
+    "minecraft:cake": { "thirst": 1, "hydration": 1 },
+    "#minecraft:candle_cakes": { "thirst": 1, "hydration": 1 }
   }
 }

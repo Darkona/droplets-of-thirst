@@ -14,7 +14,7 @@ public final class AppleSkinCompat
         return LOADED && ClientConfig.FOLLOW_APPLESKIN.get();
     }
 
-    public static boolean quenchedOverlay()
+    public static boolean hydrationOverlay()
     {
         return !following() || AppleSkinBridge.saturationOverlay();
     }

@@ -162,7 +162,7 @@ public class PurityOffTests
             helper.assertTrue(player.getActiveEffects().isEmpty(), "drinking dirty water by hand gave effects with purity off");
             assertValueEqual(helper, lastDrinkPurity, DropletsAPI.NO_PURITY, "purity of hand drinking with purity off");
             helper.assertTrue(PurityEffects.give(player, 0), "dirty water blocks hydration with purity off");
-            assertValueEqual(helper, WaterPurity.waterThirstBonus(PurityLevel.PURE.level()) + WaterPurity.waterQuenchedBonus(PurityLevel.PURE.level()), 0, "pure water bonus with purity off");
+            assertValueEqual(helper, WaterPurity.waterThirstBonus(PurityLevel.PURE.level()) + WaterPurity.waterHydrationBonus(PurityLevel.PURE.level()), 0, "pure water bonus with purity off");
         });
         helper.succeed();
     }

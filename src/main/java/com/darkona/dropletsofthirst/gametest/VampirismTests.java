@@ -78,7 +78,7 @@ public class VampirismTests
         thirst.change(player, 10, 0, ThirstChangeEvent.Cause.COMMAND);
         DropletsMobEffects.QUENCHNESS.get().applyEffectTick(player, 1);
         assertValueEqual(helper, thirst.getThirst(), 10, "a vampire's thirst after a Quenchness tick");
-        assertValueEqual(helper, thirst.getQuenched(), 0, "a vampire's quenched after a Quenchness tick");
+        assertValueEqual(helper, thirst.getHydration(), 0, "a vampire's hydration after a Quenchness tick");
         helper.succeed();
     }
 
@@ -95,7 +95,7 @@ public class VampirismTests
         helper.assertFalse(PlayerThirst.drink(player, ItemStack.EMPTY, 1, 1, PurityLevel.PURE.level()), "drinking by hand hydrated a vampire");
         helper.assertFalse(DropletsAPI.drink(player, 4, 4), "DropletsAPI.drink hydrated a vampire");
         assertValueEqual(helper, thirst.getThirst(), 10, "a vampire's thirst after water, a melon slice and a sip by hand");
-        assertValueEqual(helper, thirst.getQuenched(), 0, "a vampire's quenched after water, a melon slice and a sip by hand");
+        assertValueEqual(helper, thirst.getHydration(), 0, "a vampire's hydration after water, a melon slice and a sip by hand");
         helper.assertTrue(player.getActiveEffects().isEmpty(), "water gave a vampire effects: " + player.getActiveEffects());
         helper.succeed();
     }
@@ -110,10 +110,10 @@ public class VampirismTests
         lastPurity = PurityLevel.MIN;
         drinkBlood(player, 9, 0.45F, new DrinkBloodContext(bottle));
         assertValueEqual(helper, thirst.getThirst(), 15, "thirst after 9 blood from a bottle");
-        assertValueEqual(helper, thirst.getQuenched(), 4, "quenched after 9 blood at saturation 0.45");
+        assertValueEqual(helper, thirst.getHydration(), 4, "hydration after 9 blood at saturation 0.45");
         assertValueEqual(helper, lastPurity, DropletsAPI.NO_PURITY, "purity of a drink of blood");
         drinkBlood(player, 3, 0.45F, new DrinkBloodContext(bottle));
-        assertValueEqual(helper, thirst.getQuenched(), 5, "quenched after 3 more blood (0.05 + 1.35): the fractions carry over");
+        assertValueEqual(helper, thirst.getHydration(), 5, "hydration after 3 more blood (0.05 + 1.35): the fractions carry over");
         helper.succeed();
     }
 
@@ -126,7 +126,7 @@ public class VampirismTests
         Cow cow = helper.spawn(EntityType.COW, new BlockPos(1, 1, 1));
         drinkBlood(player, 5, 0.7F, new DrinkBloodContext(cow));
         assertValueEqual(helper, thirst.getThirst(), 9, "thirst after biting 5 blood");
-        assertValueEqual(helper, thirst.getQuenched(), 3, "quenched after biting 5 blood at saturation 0.7");
+        assertValueEqual(helper, thirst.getHydration(), 3, "hydration after biting 5 blood at saturation 0.7");
         helper.succeed();
     }
 

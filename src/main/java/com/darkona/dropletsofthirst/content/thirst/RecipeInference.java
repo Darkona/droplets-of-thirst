@@ -52,7 +52,7 @@ public final class RecipeInference
     private final Set<Item> visiting = new HashSet<>();
     private final int maxDepth = ItemsConfig.INFERENCE_MAX_DEPTH.get();
     private final int maxThirst = ItemsConfig.INFERENCE_MAX_THIRST.get();
-    private final int maxQuenched = ItemsConfig.INFERENCE_MAX_QUENCHED.get();
+    private final int maxHydration = ItemsConfig.INFERENCE_MAX_HYDRATION.get();
     private final boolean onlyConsumables = ItemsConfig.INFERENCE_ONLY_CONSUMABLES.get();
     private int recipes, cycles, cutoffs;
 
@@ -131,7 +131,7 @@ public final class RecipeInference
             lines.add("No recipe makes " + name + " (special recipes and inference.ignoredRecipeTypes are skipped)");
         else
         {
-            lines.add(name + ", thirst/quenched per recipe (an ingredient is the average of its items that have values):");
+            lines.add(name + ", thirst/hydration per recipe (an ingredient is the average of its items that have values):");
             int[] best = NONE;
             ResourceLocation bestId = null;
             inference.visiting.add(item);
@@ -148,7 +148,7 @@ public final class RecipeInference
                 }
             }
             lines.add("Estimate: " + best[0] + "/" + best[1] + (bestId == null ? "" : " from " + bestId)
-                    + " (caps " + inference.maxThirst + "/" + inference.maxQuenched + ", depth " + inference.maxDepth + ")");
+                    + " (caps " + inference.maxThirst + "/" + inference.maxHydration + ", depth " + inference.maxDepth + ")");
             if (inference.onlyConsumables && !consumable(item))
                 lines.add("Not eaten or drunk (inference.onlyConsumables): only passed on to recipes that use it");
             else if (best[0] < ItemsConfig.INFERENCE_MIN_THIRST.get())
@@ -199,14 +199,14 @@ public final class RecipeInference
     private int[] compute(Entry entry, int depth, @Nullable List<String> trace)
     {
         double thirst = 0;
-        double quenched = 0;
+        double hydration = 0;
         for (Ingredient ingredient : entry.ingredients())
         {
             if (ingredient.isEmpty())
                 continue;
             ItemStack[] stacks = ingredient.getItems();
             double sumThirst = 0;
-            double sumQuenched = 0;
+            double sumHydration = 0;
             int counted = 0;
             for (ItemStack stack : stacks)
             {
@@ -214,20 +214,20 @@ public final class RecipeInference
                 if (values[0] > 0 || values[1] > 0)
                 {
                     sumThirst += Math.max(values[0], 0);
-                    sumQuenched += Math.max(values[1], 0);
+                    sumHydration += Math.max(values[1], 0);
                     counted++;
                 }
             }
             if (counted > 0)
             {
                 thirst += sumThirst / counted;
-                quenched += sumQuenched / counted;
+                hydration += sumHydration / counted;
             }
             if (trace != null)
-                trace.add("  " + describe(stacks) + ": " + (counted == 0 ? "0/0" : format(sumThirst / counted) + "/" + format(sumQuenched / counted)));
+                trace.add("  " + describe(stacks) + ": " + (counted == 0 ? "0/0" : format(sumThirst / counted) + "/" + format(sumHydration / counted)));
         }
         double scale = entry.multiplier() / entry.count();
-        return new int[]{Math.min(maxThirst, (int) Math.round(thirst * scale)), Math.min(maxQuenched, (int) Math.round(quenched * scale)), -1};
+        return new int[]{Math.min(maxThirst, (int) Math.round(thirst * scale)), Math.min(maxHydration, (int) Math.round(hydration * scale)), -1};
     }
 
     private boolean skipped(Item item)

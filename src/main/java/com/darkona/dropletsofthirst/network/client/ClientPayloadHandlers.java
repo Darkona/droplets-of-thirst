@@ -34,7 +34,7 @@ public final class ClientPayloadHandlers
             return;
         PlayerThirst cap = DropletsCapabilities.thirst(player);
         cap.setThirst(message.thirst());
-        cap.setQuenched(message.quenched());
+        cap.setHydration(message.hydration());
         cap.setExhaustion(message.exhaustion());
         cap.setSyncedRules(message.flags());
     }
@@ -43,7 +43,7 @@ public final class ClientPayloadHandlers
     {
         ThirstHelper.useServerTables(message.drinks(), message.foods(), message.containers(), message.estimated());
         SyncedValues.useServerValues(message.defaultPurity(), message.waterBottleStackSize(), message.purityEnabled(), message.canFillFromFlowingWater(),
-                message.pureThirstBonus(), message.pureQuenchedBonus());
+                message.pureThirstBonus(), message.pureHydrationBonus());
     }
 
     public static void handDrank(HandDrankMessage message)
