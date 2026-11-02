@@ -1,8 +1,8 @@
 # Minecraft 1.20.1
 
-Droplets of Thirst for Minecraft 1.20.1 is one jar, `droplets-of-thirst-1.20.1-1.0.0.jar` (branch `1.20.1`), that runs on **Forge 47.1.3 or newer** and on **NeoForge 47.1**. Thirst, water purity, effects, config files, data maps and commands work as the rest of this wiki describes for 26.3.
+Droplets of Thirst for Minecraft 1.20.1 is one jar, `droplets-of-thirst-1.20.1-1.0.0.jar` (branch `1.20.1`), that runs on **Forge 47.1.3 or newer** and on **NeoForge 47.1**. Thirst, water purity, effects, config files, data maps and commands work as the rest of this wiki describes.
 
-It has most integrations of the 1.21.1 version, which 26.3 does not have: Create, Farmer's Delight and its addons, Cold Sweat, Vampirism, Supernatural and Reliquary. [Minecraft 1.21.1](Minecraft-1.21.1) tells what they do and lists their config keys. This page lists what is different from 26.3 and from 1.21.1.
+It has most integrations of the 1.21.1 version: Create, Farmer's Delight and its addons, Cold Sweat, Vampirism, Supernatural and Reliquary. [Minecraft 1.21.1](Minecraft-1.21.1) tells what they do and lists their config keys. This page lists what is different from 1.21.1.
 
 ---
 
@@ -39,7 +39,7 @@ The player's thirst is a capability (`droplets_of_thirst:player_thirst`), kept o
 ### Data
 
 - **Pack format**: `"pack_format": 15`. Folders are plural, as in vanilla 1.20.1: `recipes/`, `loot_tables/`, `tags/items/`, `tags/blocks/`, `tags/fluids/`. Effect tags stay in `tags/mob_effect/`.
-- **Data maps**: `droplets_of_thirst:drinks`, `hydrating_blocks`, `biome_water` and `dimension_water` read the same files as on 26.3 (`data/<namespace>/data_maps/...`), with the same fields, `replace`, `remove` and tags. Droplets of Thirst reads them itself. Conditions on an entry can be `neoforge:conditions` or `forge:conditions`. Both use the Forge condition types (`mod_loaded`, `not`, `and`, `or`, `item_exists`, `tag_empty`, `true`, `false`).
+- **Data maps**: `droplets_of_thirst:drinks`, `hydrating_blocks`, `biome_water` and `dimension_water` read the same files as on 1.21.1 (`data/<namespace>/data_maps/...`), with the same fields, `replace`, `remove` and tags. Droplets of Thirst reads them itself. Conditions on an entry can be `neoforge:conditions` or `forge:conditions`. Both use the Forge condition types (`mod_loaded`, `not`, `and`, `or`, `item_exists`, `tag_empty`, `true`, `false`).
 - **Biome tags**: the default `biome_water` uses the 1.20.1 tags `#forge:is_desert`, `#forge:is_swamp`, `#forge:is_snowy`, `#forge:is_mountain` and the vanilla `#minecraft:is_jungle`, `#minecraft:is_taiga`, `#minecraft:is_badlands`, `#minecraft:is_mountain`. There is no windswept tag, so it lists the four windswept biomes by id. The purity of every vanilla biome is the same as on 26.3.
 - **Recipes**: a purity ingredient is `{"type": "forge:partial_nbt", "item": "minecraft:potion", "nbt": {"Potion": "minecraft:water", "droplets_of_thirst:purity": 3}}`. Water with no purity stored is `{"type": "forge:nbt", "item": "minecraft:potion", "nbt": {"Potion": "minecraft:water"}}` (for a bucket or a bowl, `forge:nbt` without `nbt`). Results take `"nbt"`, and recipe conditions go in `"conditions"` with `forge:` types, for example `{"type": "droplets_of_thirst:purity_enabled"}` or `{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "create"}}`.
 
