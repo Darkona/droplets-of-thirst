@@ -24,6 +24,7 @@ public class AmphoraBlockEntity extends BlockEntity
             setChanged();
         }
     };
+    private boolean carried;
 
     public AmphoraBlockEntity(BlockPos pos, BlockState state)
     {
@@ -33,6 +34,16 @@ public class AmphoraBlockEntity extends BlockEntity
     public FluidTank tank()
     {
         return tank;
+    }
+
+    public void markCarried()
+    {
+        carried = true;
+    }
+
+    public boolean carried()
+    {
+        return carried;
     }
 
     @Override

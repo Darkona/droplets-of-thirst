@@ -100,7 +100,7 @@ Water is a real fluid inside the Canteen, so pipes and machines can fill it and 
 
 The Amphora stores 4 buckets of water without changing it, so water keeps the purity you worked for. Bottles, buckets, terracotta bowls and Canteens go in and out with a right-click, and pipes and machines reach it too. Right-click with an empty hand to see what it holds.
 
-Water of any purity goes in, and the whole Amphora drops to the dirtiest one, so one dirty bottle spoils it all. It takes other fluids as well, and it never takes items. To move it, break it with an empty hand: it goes to your inventory with its contents, and they stay when you place it. You cannot drink from it. Anything else shatters it: a tool or any other item in your hand, an arrow, a falling anvil, an explosion. It leaves a few bricks, and its water spills on the ground and dries up, with no source block.
+Water of any purity goes in, and the whole Amphora drops to the dirtiest one, so one dirty bottle spoils it all. It takes other fluids as well, and it never takes items. To move it, break it with an empty hand: it drops as an item with its contents, and they stay when you place it. You cannot drink from it. Anything else shatters it: a tool or any other item in your hand, an arrow, a falling anvil, an explosion. It leaves a few bricks, and its water spills on the ground and dries up, with no source block.
 
 ### Charcoal Filter
 
