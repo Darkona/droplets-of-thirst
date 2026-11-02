@@ -1,38 +1,38 @@
 # Gameplay
 
-This page describes the defaults. A modpack can change every number here through the [configuration](Configuration) or [datapacks](Modpack-Makers).
+This page describes the defaults. 
+A modpack can change most things here through the [configuration](Configuration) or [datapacks](Modpack-Makers).
 
 ---
 
 ## The thirst bar
+Like hunger, thirst has a hidden reserve, **hydration**. 
 
-The thirst bar sits right above the hunger bar: 10 droplets, 20 points of thirst. Like hunger, thirst has a hidden reserve, **hydration**. The droplets start to empty only when hydration runs out. Hydration is never higher than thirst.
-
-<!-- SCREENSHOT: close-up of the HUD: full hunger bar and a half-empty thirst bar, with the hydration outline visible on the droplets -->
-
-Holding something that restores thirst makes the droplets it would fill flash on the bar, and an outline on the droplets shows the current hydration. The droplets change colour while an effect applies to them: brown with Dehydration, grey-blue while overhydrated, green with Poison, cyan with Quenchness, mint with Hydrated.
-
-<!-- SCREENSHOT: thirst bar tinted brown under Dehydration, next to a normal one (two crops side by side) -->
+![Close-up of the HUD: full hunger bar and a half-empty thirst bar, with the hydration outline on the droplets](images/hud_2.png)
 
 ---
 
 ## What makes you thirsty
 
-The same activity that makes you hungry makes you thirsty: sprinting, jumping, fighting, breaking blocks, healing. Thirst drops a little faster than hunger, and the climate scales it:
+The same activity that makes you hungry makes you thirsty: sprinting, jumping, fighting, breaking blocks, healing. 
+Thirst drops a little faster than hunger, and the climate affects it:
 
-- **Hot and dry biomes** (desert, badlands, savanna) drain thirst faster. **Cold and wet ones** drain it slower. High ground is colder, so thirst drains a bit slower there too.
-- **The Nether** drains thirst three times faster. **The End** counts as cold, about like a snowy biome.
+- **Hot and dry biomes** (desert, badlands, savanna) drain thirst faster. 
+- **Cold and wet ones** drain it slower. High ground is colder, so thirst drains a bit slower there too.
+- **The Nether** drains thirst three times faster. 
+- **The End** counts as cold, about like a snowy biome.
 - **Fire Resistance** stops the loss, and **Fire Protection** on armor lowers it.
 - **Nausea** drains thirst.
-- **Peaceful**: thirst does not go down. It slowly fills up.
+- **Peaceful**: thirst does not go down. 
 
-With [Serene Seasons](#other-mods) installed, the season changes the biome temperature, so winter lowers the loss where it cools the biome.
+With Serene Seasons installed, seasonal weather affects biome climate. 
+See [Compatibility](Compatibility).
 
 ---
 
 ## When thirst runs low
 
-- **3 droplets or less**: you cannot sprint, even with a full hunger bar. A sprint in progress stops too, as with hunger.
+- **3 droplets or less**: you cannot sprint, even with a full hunger bar.
 - **Not full**: health regenerates slower. Fast regeneration needs a full bar, and any regeneration needs at least 16 points (8 droplets).
 - **Empty**: you take damage every 2 seconds. On Easy it stops at 5 hearts, on Normal at half a heart, and on Hard it can kill you.
 
@@ -55,8 +55,6 @@ Glass bottles and terracotta bowls also fill from flowing water. Buckets still n
 
 Chests in dungeons, mineshafts, shipwrecks, Nether fortresses and bastions can hold a few water bottles, acceptable or pure.
 
-<!-- SCREENSHOT: player sneaking at a river bank with empty hands, splash particles from drinking by hand -->
-
 ### Food
 
 Some food hydrates a little and some makes you thirstier. Plain food (bread, meat, most dishes) does nothing to thirst. The tooltip of every item that changes thirst shows how much, as droplets.
@@ -70,11 +68,9 @@ Some food hydrates a little and some makes you thirstier. Plain food (bread, mea
 | Cake, per slice | 1 | 1 |
 | Rotten flesh, spider eye, pufferfish, poisonous potato | -3 | -3 |
 
-<!-- SCREENSHOT: item tooltip of a melon slice showing the thirst droplets and hydration icons -->
-
 ### Juices, soda and milk
 
-Water keeps you alive, but better drinks reward a little more work. A juice needs water that is at least acceptable, so a clean source pays off.
+A juice needs water that is at least acceptable.
 
 | Drink | How to get it | Thirst | Hydration | Bonus |
 |---|---|---|---|---|
@@ -86,27 +82,31 @@ Water keeps you alive, but better drinks reward a little more work. A juice need
 | Cola | Soda water, cocoa beans and sugar | 4 | 5 | Speed and Haste, 40 seconds |
 | Milk Bottle | A milk bucket and 3 glass bottles make 3 | 3 | 4 | Cures what dirty water did to you and nothing else |
 
-All of them leave the bottle behind, and a little food comes with them. If another mod already makes the same drink, its recipe stays and this one turns off: Farmer's Delight covers apple, melon and milk, Expanded Delight apple and berry, Extra Delight berry, and Cultural Delights cola.
+All of them leave the bottle behind. If another mod already makes the same drink, its recipe stays and this one turns off: Farmer's Delight covers apple, melon and milk, Expanded Delight apple and berry, Extra Delight berry, and Cultural Delights cola.
 
 ### Canteen
 
-The Canteen carries 8 drinks of one kind. Craft it with up to 8 identical drinks at once, and you get each empty bottle back. It works with anything tagged as a drink, from this mod or from others: juice, soda, milk, a potion, water. It only holds one kind at a time, so water does not go in with juice. Waters of different purity do mix, and all of it drops to the dirtiest.
+The Canteen carries 8 drinks of one kind: juice, soda, milk, a potion, water, also from other mods. Craft it with up to 8 identical drinks and you get each empty bottle back. Waters of different purity mix, and all of it drops to the dirtiest.
 
 Right-click to take one sip, which counts as drinking that whole bottle: same thirst, food and effects. Right-click water to fill it, and it keeps the purity of that water. Right-click a tank or a cauldron to fill or empty it.
 
-Water is a real fluid inside the Canteen, so pipes and machines can fill it and empty it, 250 mB per sip. A Canteen with a juice inside has no fluid for them.
+Pipes and machines can fill and empty a Canteen of water, 250 mB per sip.
 
 ### Amphora
 
-The Amphora stores 4 buckets of water without changing it, so water keeps the purity you worked for. Bottles, buckets, terracotta bowls and Canteens go in and out with a right-click, and pipes and machines reach it too. Right-click with an empty hand to see what it holds.
+The Amphora stores 4 buckets of water without changing it, so water keeps the purity you worked for. Bottles, buckets, terracotta bowls and Canteens go in and out with a right-click, and so do pipes and machines. Right-click with an empty hand to see what it holds.
 
-Water of any purity goes in, and the whole Amphora drops to the dirtiest one, so one dirty bottle spoils it all. It takes other fluids as well, and it never takes items. To move it, break it with an empty hand: it drops as an item with its contents, and they stay when you place it. You cannot drink from it. Anything else shatters it: a tool or any other item in your hand, an arrow, a falling anvil, an explosion. It leaves a few bricks, and its water spills on the ground and dries up, with no source block.
+![Amphora recipe: 6 terracotta](images/amphora_recipe.png)
+
+Water of any purity goes in, and the whole Amphora drops to the dirtiest one, so one dirty bottle spoils it all. It takes other fluids too, never items. To move it, break it with an empty hand: it drops with its contents. You cannot drink from it. Anything else shatters it: a tool, an arrow, a falling anvil, an explosion. It leaves a few bricks, and its water spills and dries up.
 
 ### Charcoal Filter
 
-The Charcoal Filter purifies water by gravity. Create's Sand Filter is the fast option: it raises water two levels at a time, but you have to pump the water through it. Put it under a water cauldron or anything that holds water, such as an Amphora or a tank from another mod, and put a container under it. It pulls water from above, raises it one purity level, and passes it down at 1 mB per tick, so it is slow. Nothing has to push the water.
+The Charcoal Filter purifies water by gravity, with no pumps. Put it under a water cauldron or anything that holds water, such as an Amphora or a tank from another mod, and put a container under it. It pulls water from above, raises it one purity level, and passes it down at 1 mB per tick, so it is slow. With Create, the [Sand Filter](Compatibility#create) is the fast option.
 
-Filters stack: each one in a column adds a level, up to pure. It only takes water that has a purity. A cauldron under the filter only takes a whole bucket, and it does not keep the purity, so use an Amphora.
+![Charcoal Filter recipe: copper ingots, leaves, sand, charcoal and gravel](images/charcoal_filter_recipe.png)
+
+Filters stack: each one in a column adds a level, up to pure. A cauldron under the filter only takes a whole bucket and does not keep the purity, so use an Amphora.
 
 ### Drinking too much
 
@@ -130,8 +130,6 @@ Water has one of six purity levels. Bottles, bowls and buckets of water show it 
 Poisoned water still hydrates by default. A server can make Poison cancel the drink instead (`purity.toml` `general.quenchWhenDebuffed`).
 
 Water of level 2 or worse, drunk in a hot climate (a desert, a savanna, badlands, the Nether), also gives **Dehydration**. Thirst then drops faster for 30 seconds.
-
-<!-- SCREENSHOT: six water bottles in a row in the inventory, one per purity, showing the tint from brown to near white -->
 
 ### Where clean water is
 
@@ -158,9 +156,7 @@ Waters of different purity mix in any tank: the whole tank drops to the dirtiest
 | Furnace | Two levels up per cook |
 | Smoker | Two levels up per cook, twice as fast. Off by default: turn on the datapack `mod/droplets_of_thirst:datapacks/purify_smoking` |
 
-Cooking works on water bottles, water buckets and terracotta water bowls, and it reaches pure (5), or clean (4) with Create installed. The cauldron never gives pure water.
-
-<!-- SCREENSHOT: water cauldron on a lit campfire, player filling a bottle from it (tooltip "Clean") -->
+Cooking works on water bottles, water buckets and terracotta water bowls, and it reaches pure (5), or clean (4) with Create installed.
 
 With JEI installed, the "Water Purification" page shows the cauldron and its heat sources. The cooking recipes show in their own pages.
 
@@ -204,12 +200,4 @@ Gunpowder makes splash potions and dragon's breath makes lingering potions, as w
 
 ## Other mods
 
-- **Jade**: shows the purity of a water cauldron (the purity its water comes out with) and of water in tanks.
-- **JEI**: a "Hydration" page lists every item that changes thirst, and a "Water Purification" page shows the cauldron.
-- **AppleSkin**: turning off one of AppleSkin's food visuals also turns off its thirst counterpart. Droplets of Thirst draws its own hydration outline, drink preview and tooltip icons, with or without AppleSkin.
-- **Serene Seasons**: the season changes the climate of thirst loss.
-- **Traveler's Backpack**: drinking water through the hose hydrates like a water bottle, with the purity of the water in the tank. Water the hose sucks from the world keeps its purity.
-
-Tough As Nails, Legendary Survival Overhaul, Homeostatic, Survive and Thirst Was Taken 2 have their own thirst. With one of them installed, the game starts with a warning, and both thirst systems run until you turn one off. Thirst Was Taken and Thirst Was Reclaimed (mod id `thirst`) cannot be installed together with Droplets of Thirst.
-
-Create, Farmer's Delight and its addons, Cold Sweat, Vampirism, Supernatural, Reliquary and KubeJS also work with Droplets of Thirst. See [Minecraft 1.21.1](Minecraft-1.21.1).
+Create, Farmer's Delight and its addons, Cold Sweat, Serene Seasons, Traveler's Backpack, Vampirism, Supernatural, Reliquary, JEI, EMI, Jade, AppleSkin and KubeJS all work with Droplets of Thirst. See [Compatibility](Compatibility), which also lists the mods that do not work with it.
