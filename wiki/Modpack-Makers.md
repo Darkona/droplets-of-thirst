@@ -2,10 +2,10 @@
 
 Droplets of Thirst has two layers of configuration:
 
-- **Datapacks** hold everything that belongs to a registry id: item values, tags, biomes, dimensions, recipes, loot. They reload with `/reload` and the server sends clients what they need.
+- **Datapacks** hold everything that belongs to a registry id: item values, tags, biomes, dimensions, recipes, loot. They reload with `/reload`.
 - **TOML files** in `config/droplets_of_thirst/` hold global numbers and switches, plus a few per-item overrides. See [Configuration](Configuration).
 
-All paths below are inside a datapack (`data/<namespace>/...`). The mod logs and skips bad entries. They never crash the game or disconnect players.
+All paths below are inside a datapack (`data/<namespace>/...`). Bad entries are logged and skipped.
 
 The formats on this page are those of Minecraft 1.21.1: datapacks declare `"pack_format": 48` in `pack.mcmeta`. Minecraft 1.20.1 reads other formats, listed on [its page](Minecraft-1.20.1).
 
@@ -13,14 +13,14 @@ The formats on this page are those of Minecraft 1.21.1: datapacks declare `"pack
 
 ## Drink and food values: `droplets_of_thirst:drinks`
 
-A NeoForge [data map](https://docs.neoforged.net/docs/resources/server/datamaps/) on items. File: `data/<namespace>/data_maps/item/drinks.json`, in any namespace. NeoForge merges all packs in load order.
+A NeoForge [data map](https://docs.neoforged.net/docs/resources/server/datamaps/) on items. File: `data/<namespace>/data_maps/item/drinks.json`, in any namespace. All packs merge in load order.
 
 ```json
 {
   "values": {
-    "minecraft:apple": { "thirst": 2, "quenched": 3 },
-    "#c:drinks/juice": { "thirst": 8, "quenched": 13 },
-    "examplemod:spring_water": { "thirst": 6, "quenched": 8, "purity": 4 }
+    "minecraft:apple": { "thirst": 2, "hydration": 3 },
+    "#c:drinks/juice": { "thirst": 8, "hydration": 13 },
+    "examplemod:spring_water": { "thirst": 6, "hydration": 8, "purity": 4 }
   },
   "remove": ["minecraft:carrot"]
 }
@@ -29,65 +29,75 @@ A NeoForge [data map](https://docs.neoforged.net/docs/resources/server/datamaps/
 | Field | Type | Meaning |
 |---|---|---|
 | `thirst` | int -20 to 20 | Thirst restored, in points (2 points = 1 droplet on the HUD). Negative values remove thirst (salty) |
-| `quenched` | int, -20 or more | Quenched restored (the hidden reserve of thirst, like saturation). Negative values remove it |
+| `hydration` | int, -20 or more | Hydration restored (the hidden reserve of thirst, like saturation). Negative values remove it |
 | `purity` | int 0-5, optional | Purity of this drink when the stack stores none (0 contaminated to 5 pure). Drinks with a purity roll the purity effects. Without it, only water containers do |
 
 - Keys are item ids or `#tags`. An entry from a later pack replaces the earlier one for that item. `"replace": true` at the top clears everything loaded before this file, and `remove` drops entries loaded before it (ids or tags).
-- NeoForge logs an unknown item id as an error. For items of optional mods, put a condition on the entry:
+- For items of optional mods, put a condition on the entry so NeoForge does not log an error:
 
   ```json
   "examplemod:lemonade": {
     "neoforge:conditions": [{ "type": "neoforge:mod_loaded", "modid": "examplemod" }],
-    "thirst": 6, "quenched": 4
+    "thirst": 6, "hydration": 4
   }
   ```
 
-- Items that are eaten and items that are drunk use the same map. Droplets of Thirst tells them apart by the item itself: food hydrates when its food component feeds the player, a drink when it is finished.
-- Negative values make an item **salty**: eating or drinking it removes thirst and quenched (never below 0, and quenched stays at or below thirst). Salty items never count towards overhydration. They roll purity effects only if they are water containers. Their tooltip shows red droplets, and the HUD flashes in red the droplets they would take away.
-- The defaults are in `data/droplets_of_thirst/data_maps/item/drinks.json`: vanilla items and the terracotta water bowl. Water bottles and the terracotta water bowl give 4 and 5, the melon slice 4 and 4, rotten flesh, spider eyes, pufferfish and poisonous potatoes -3 and -3. To change a default, add your own entry (a later pack wins) or `remove` it.
-- The map is synced to clients. Tooltips and the HUD use the server's values.
+- Food and drinks use the same map: food hydrates when eaten, a drink when finished.
+- Negative values make an item **salty**: eating or drinking it removes thirst and hydration. Salty items never count towards overhydration. Their tooltip shows red droplets, and the HUD flashes in red the droplets they would take away.
+- The defaults are in `data/droplets_of_thirst/data_maps/item/drinks.json`. To change one, add your own entry (a later pack wins) or `remove` it.
 
 ### Block foods: `droplets_of_thirst:hydrating_blocks`
 
-Blocks eaten in place, like cake, have their own data map on blocks: `data/<namespace>/data_maps/block/hydrating_blocks.json`, with the same `thirst` and `quenched` fields. The mod ignores `purity` here, because food never rolls purity effects. A bite counts when a right click on the block raised the player's food level, so it works for any block that feeds the player directly (other mods' pies too). Negative values work here too.
+Blocks eaten in place, like cake, have their own data map: `data/<namespace>/data_maps/block/hydrating_blocks.json`, with the same `thirst` and `hydration` fields (no `purity`). It works for any block that feeds the player when right-clicked, other mods' pies too.
 
 ```json
 {
   "values": {
-    "minecraft:cake": { "thirst": 1, "quenched": 1 },
-    "#minecraft:candle_cakes": { "thirst": 1, "quenched": 1 }
+    "minecraft:cake": { "thirst": 1, "hydration": 1 },
+    "#minecraft:candle_cakes": { "thirst": 1, "hydration": 1 }
   }
 }
 ```
 
 ### Where an item's values come from
 
-Each item takes its values from the first of these sources that has them, and the mod ignores the others for that item:
+Each item takes its values from the first of these sources that has them:
 
 1. **Blacklist**: the item tag `#droplets_of_thirst:no_thirst` or `overrides.blacklist` in `items.toml`. The item restores no thirst at all.
 2. **TOML overrides**: `overrides.drinks` and `overrides.foods` in `items.toml`.
 3. **Datapacks**: the `droplets_of_thirst:drinks` data map.
 4. **Other mods' code**: `DropletsAPI.registerDrink`, then value providers of mods whose values depend on the stack. See [Mod developers](Mod-Developers).
-5. **Salty tag**: items in `#droplets_of_thirst:salty` get `salty.thirstPenalty` and `salty.quenchedPenalty` from `items.toml` (-2 and -2). Explicit values from 1-4 win, so a tagged item with its own entry keeps it.
+5. **Salty tag**: items in `#droplets_of_thirst:salty` get `salty.thirstPenalty` and `salty.hydrationPenalty` from `items.toml` (-2 and -2). Explicit values from 1-4 win, so a tagged item with its own entry keeps it.
 6. **Keywords** (`items.toml`, section `keywords`, off by default).
-7. **Estimated from recipes** (`items.toml`, section `inference`, off by default), only for items that nothing above gives values. Estimates are never negative. Tooltips add "(est.)", and `/droplets_of_thirst infer <item>` shows how the number was made. See [Configuration](Configuration#recipe-inference).
-
-The server resolves this table on world load and on `/reload`, and sends it to every client.
+7. **Estimated from recipes** (`items.toml`, section `inference`, off by default), only for items that nothing above covers. Tooltips add "(est.)", and `/droplets infer <item>` shows how the number was made. See [Configuration](Configuration#recipe-inference).
 
 ---
+
+## Canteen fluids: `droplets_of_thirst:drink_fluids`
+
+A data map that says which item one Canteen sip of a fluid counts as. File: `data/<namespace>/data_maps/fluid/drink_fluids.json`. Water needs no entry. The defaults cover Create tea and milk.
+
+```json
+{
+  "values": {
+    "create:tea": { "item": "create:builders_tea" }
+  }
+}
+```
+
+Tag an item `c:drinks` and players can craft it into a Canteen. A sip counts as drinking the item.
 
 ## Water purity in the world
 
 Water picked up from the world (buckets, bottles, bowls, drinking by hand, dispensers, the Traveler's Backpack hose) gets a purity from 0 to 5:
 
-1. **Poured water**: a source poured by a bucket keeps the purity it was poured with (see [Poured water](Configuration#poured-water)).
-2. **Salt water**: if `saltWaterPurity` is 0-5 and the biome is in `#droplets_of_thirst:salt_water`, the water gets that fixed value and nothing else applies.
-3. **Base purity**, the first that is set:
+1. **Salt water**: if `saltWaterPurity` is 0-5 and the biome is in `#droplets_of_thirst:salt_water`, the water gets that fixed value and nothing else applies.
+2. **Base purity**, the first that is set:
    1. `base` of the biome in the `droplets_of_thirst:biome_water` data map;
    2. the biome tags `#droplets_of_thirst:water_purity/5` down to `/0`, checked in that order;
    3. `base` of the dimension type in the `droplets_of_thirst:dimension_water` data map;
    4. `worldWaterBasePurity` in `purity.toml` (1).
-4. Plus the **altitude** delta, the **still/running** delta and the biome's `delta`. The result is kept between 0 and the biome's `max` (5 by default).
+3. Plus the **altitude** delta, the **still/running** delta and the biome's `delta`, kept between 0 and the biome's `max` (5 by default).
 
 Global settings in `purity.toml`, section `[world]`:
 
@@ -102,13 +112,11 @@ Global settings in `purity.toml`, section `[world]`:
 
 ### Cauldrons
 
-A water cauldron stores no purity. Whatever went into it (rain, dripstone, a bucket of contaminated or pure water), the water taken out of it (buckets, bottles, bowls) is always **murky (2)**. It is **clean (4)** while the cauldron stands on a block of `#droplets_of_thirst:cauldron_heat_sources` (blocks with a `lit` property count only when lit). For pure water, cook it. Jade shows the purity the water would have now.
-
-The same rule applies to any registered purity container that another mod lets you fill from a cauldron, and to pumps and pipes of other mods that drain the cauldron through NeoForge's fluid capability.
+A water cauldron stores no purity. Water taken out of it is always **murky (2)**, or **clean (4)** while the cauldron stands on a block of `#droplets_of_thirst:cauldron_heat_sources` (blocks with a `lit` property count only when lit). For pure water, cook it. The same applies to other mods' containers filled from a cauldron and to pumps and pipes that drain it.
 
 ### Biome tags
 
-- `data/droplets_of_thirst/tags/worldgen/biome/water_purity/0.json` to `/5.json`: plain biome tags. Droplets of Thirst ships none of them. The defaults come from the `droplets_of_thirst:biome_water` data map below, and biomes it does not list start at `worldWaterBasePurity`.
+- `data/droplets_of_thirst/tags/worldgen/biome/water_purity/0.json` to `/5.json`: plain biome tags. None ship. The defaults come from the `droplets_of_thirst:biome_water` data map below, and biomes it does not list start at `worldWaterBasePurity`.
 - `data/droplets_of_thirst/tags/worldgen/biome/salt_water.json`: ships with `#minecraft:is_ocean`. The mod does not use it when `saltWaterPurity` is -1.
 
 ```json
@@ -131,7 +139,7 @@ Biome data map, `data/<namespace>/data_maps/worldgen/biome/biome_water.json`. Th
 
 Oceans are fixed at 0 by `saltWaterPurity`.
 
-When a biome is in several tags, the entry listed last wins and replaces the earlier one completely. The shipped file lists the jungle, taiga, cold and mountain biomes first, then deserts and badlands, and swamps last. So a swamp or desert that a mod also tags as mountain keeps the swamp or desert values. Entries you add for the same biome or tag replace the shipped ones (a later datapack wins). `"replace": true` at the top of your file drops all of them.
+When a biome is in several tags, the entry listed last wins, so a swamp or desert that a mod also tags as mountain keeps the swamp or desert values. Entries you add for the same biome or tag replace the shipped ones. `"replace": true` at the top of your file drops all of them.
 
 ```json
 {
@@ -161,7 +169,7 @@ Dimension type data map, `data/<namespace>/data_maps/dimension_type/dimension_wa
 | `base` | int 0-5, optional | Base purity for biomes without their own |
 | `thirst_multiplier` | float 0-10, optional | Replaces the whole climate factor of thirst loss in this dimension type. Without it the Nether uses `netherMultiplier` from `gameplay.toml` |
 
-Droplets of Thirst sets `minecraft:the_end` to `thirst_multiplier` `0.6`, so the End counts as cold. A datapack entry for `minecraft:the_end` replaces it. Only the server reads the two world data maps.
+The mod sets `minecraft:the_end` to `thirst_multiplier` `0.6`, so the End counts as cold. A datapack entry for it replaces that.
 
 ---
 
@@ -173,7 +181,7 @@ Droplets of Thirst sets `minecraft:the_end` to `thirst_multiplier` `0.6`, so the
 
 ### Quenchness and its potions
 
-`droplets_of_thirst:quenchness` restores (level) thirst and (level) quenched every `effects.quenchnessIntervalTicks` (40), like Regeneration does for health. The potions are in the `minecraft:potion` registry, so loot tables, `set_potion` and commands can use them: `/give @p minecraft:potion[potion_contents={potion:"droplets_of_thirst:quenchness"}]`.
+`droplets_of_thirst:quenchness` restores (level) thirst and (level) hydration every `effects.quenchnessIntervalTicks` (40), like Regeneration does for health. The potions are in the `minecraft:potion` registry, so loot tables and commands can use them: `/give @p minecraft:potion[potion_contents={potion:"droplets_of_thirst:quenchness"}]`.
 
 | Potion | Effect | Brewing |
 |---|---|---|
@@ -181,18 +189,17 @@ Droplets of Thirst sets `minecraft:the_end` to `thirst_multiplier` `0.6`, so the
 | `droplets_of_thirst:long_quenchness` | Quenchness I, 1:30 | Quenchness + redstone |
 | `droplets_of_thirst:strong_quenchness` | Quenchness II, 0:22 | Quenchness + glowstone dust |
 
-The mod registers the mixes in code (NeoForge's `RegisterBrewingRecipesEvent`), so they are not data. To use another ingredient, set `effects.quenchnessPotion = false` and add your own mix with KubeJS or a mod.
-
+The mixes are code, not data. To use another ingredient, set `effects.quenchnessPotion = false` and add your own mix with KubeJS or a mod.
 
 ### Hydrated
 
-`droplets_of_thirst:hydrated` slows thirst loss: it multiplies all thirst exhaustion by `effects.hydratedMultiplier` (0.5) once per level, so Hydrated II quarters it. It shows in `/droplets_of_thirst debug exhaustion` as `hydrated`. Sources: `/effect give @p droplets_of_thirst:hydrated 60 0`, the purity effect lists (for example `"droplets_of_thirst:hydrated,600,0,100"` in `effects.pure`) and the full-hydration bonus (`[hydration] fullBonus`, off by default). There is no potion for it.
+`droplets_of_thirst:hydrated` slows thirst loss: it multiplies all thirst exhaustion by `effects.hydratedMultiplier` (0.5) once per level, so Hydrated II quarters it. Sources: `/effect give @p droplets_of_thirst:hydrated 60 0`, the purity effect lists (for example `"droplets_of_thirst:hydrated,600,0,100"` in `effects.pure`) and the full-hydration bonus (`[hydration] fullBonus`, off by default). There is no potion for it.
 
 ### Overhydrated
 
-`droplets_of_thirst:overhydrated` makes the player 10% slower per level (an attribute modifier on `minecraft:generic.movement_speed`, like Slowness). Drinking far past full gives it (`[overhydration]`, on by default), and `/effect` works too.
+`droplets_of_thirst:overhydrated` makes the player 10% slower per level. Drinking far past full gives it (`[overhydration]`, on by default), and `/effect` works too.
 
-Vanilla effects that change thirst: Nausea drains it (`depletion.nauseaDepletes`) and Fire Resistance reduces it (`fireResistancePercent`). With `effects.waterBreathingReducesThirst` (off), Water Breathing or Conduit Power reduce it while fully underwater. Hunger does not change thirst: `MIRROR_FOOD` mode leaves out its extra food exhaustion.
+Vanilla effects: Nausea drains thirst (`depletion.nauseaDepletes`) and Fire Resistance reduces it (`fireResistancePercent`). With `effects.waterBreathingReducesThirst` (off), Water Breathing or Conduit Power reduce it while fully underwater. The Hunger effect does not change thirst.
 
 ---
 
@@ -217,21 +224,23 @@ Every player has the attribute `droplets_of_thirst:thirst_drain` (base 1.0, 0 to
 
 | Tag | Registry | Default | Meaning |
 |---|---|---|---|
-| `droplets_of_thirst:purity_containers` | item | empty | Drinks that carry a water purity: they show it in the tooltip and roll its effects. They are not filled from the world |
+| `droplets_of_thirst:purity_containers` | item | Drinks of other mods, listed on [Minecraft 1.21.1](Minecraft-1.21.1#defaults-with-other-mods) | Drinks that carry a water purity: they show it in the tooltip and roll its effects. They are not filled from the world |
 | `droplets_of_thirst:no_thirst` | item | empty | Never restores thirst, whatever the config, datapacks or other mods say |
-| `droplets_of_thirst:salty` | item | rotten flesh, spider eye, pufferfish, poisonous potato | Items with no other values get the `items.toml` `salty` penalties. The four defaults have their own entries (-3) in the drinks data map, which win |
+| `droplets_of_thirst:salty` | item | rotten flesh, spider eye, pufferfish, poisonous potato, plus items of other mods listed on [Minecraft 1.21.1](Minecraft-1.21.1#defaults-with-other-mods) | Items with no other values get the `items.toml` `salty` penalties. The four defaults have their own entries (-3) in the drinks data map, which win |
 | `droplets_of_thirst:purity_opt_out` | item | empty | Never gets a purity: no purity tooltip, no purity effects, and its fluid is not given one. For other mods' water containers that break when water items carry extra data |
 | `droplets_of_thirst:cauldron_heat_sources` | block | `#minecraft:campfires`, `#minecraft:fire`, magma block, lava | Heat sources under a water cauldron: its water comes out clean (4) instead of murky (2). Blocks with a `lit` property only count while lit |
-| `droplets_of_thirst:pauses_thirst` | mob_effect | empty | While the player has one of these effects, thirst exhaustion stops building up. Drinking and regeneration still work |
+| `droplets_of_thirst:pauses_thirst` | mob_effect | `farmersdelight:nourishment`, `bakery:stuffed`, `brewery:saturated` | While the player has one of these effects, thirst exhaustion stops building up. Drinking and regeneration still work |
 | `droplets_of_thirst:stops_thirst` | mob_effect | Corail Tombstone's Ghostly Shape, if installed | While the player has one of these effects, thirst does not tick at all: no exhaustion, no dehydration damage, no regeneration cost |
 
-Files: `data/droplets_of_thirst/tags/item/<name>.json`, `tags/block/<name>.json`, `tags/mob_effect/<name>.json`. Use `{"id": "othermod:item", "required": false}` for optional mods. The mod reads effects when the player's effects change and once a second.
+`droplets_of_thirst:blood` (items that hydrate a vampire) and `droplets_of_thirst:rejects_dirty_water` are on [Minecraft 1.21.1](Minecraft-1.21.1#defaults-with-other-mods).
+
+Files: `data/droplets_of_thirst/tags/item/<name>.json`, `tags/block/<name>.json`, `tags/mob_effect/<name>.json`. Use `{"id": "othermod:item", "required": false}` for optional mods.
 
 ---
 
 ## Purification recipes
 
-Purification uses vanilla recipe types (`minecraft:smelting`, `minecraft:campfire_cooking`, `minecraft:smoking`) with NeoForge component ingredients. The ingredient matches water of one purity, and the result stores a higher one. JEI and other recipe viewers show them like any other recipe. JEI also gets a "Water Purification" page for the water cauldron, plain and over a heat source, which has no recipe. That page is hidden when `purity.enabled` is `false`. A "Hydration" page lists every item that changes thirst with the values the server resolved, so it shows your changes after `/reload`.
+Purification uses vanilla recipe types (`minecraft:smelting`, `minecraft:campfire_cooking`, `minecraft:smoking`) with NeoForge component ingredients. The ingredient matches water of one purity, and the result stores a higher one. JEI and EMI show them like any other recipe, plus a "Water Purification" page for the water cauldron (hidden when purity is off) and a "Hydration" page with the values the server resolved.
 
 The recipes ship as optional built-in datapacks, listed in the datapack screen when creating a world and in `/datapack list`:
 
@@ -241,12 +250,12 @@ The recipes ship as optional built-in datapacks, listed in the datapack screen w
 | `mod/droplets_of_thirst:datapacks/purify_campfire` | enabled | Campfire: one level up per cook, up to pure (5) |
 | `mod/droplets_of_thirst:datapacks/purify_smoking` | disabled | Smoker: as the furnace, twice as fast |
 
-Each pack covers water bottles, water buckets and terracotta water bowls.
+Each pack covers water bottles, water buckets, terracotta water bowls and Cold Sweat waterskins. With Create installed, cooking stops at clean (4).
 
 - Turn a method off or on per world with `/datapack disable "mod/droplets_of_thirst:datapacks/purify_campfire"` or `/datapack enable ...`. The choice is saved with the world.
 - Recipe ids follow `<item>_from_<method>_to_<level>`, for example `droplets_of_thirst:water_bottle_from_smelting_to_murky`. To change one, put a recipe with the same id in your own datapack above it.
 - Water with no purity stored counts as acceptable (3), and the recipes that take level 3 match it.
-- Every purification recipe carries the condition `{"type": "droplets_of_thirst:purity_enabled"}`, so none load when `purity.enabled` is `false`. Use it in your own purity recipes too.
+- Every purification recipe carries the condition `{"type": "droplets_of_thirst:purity_enabled"}`, so none load when `general.enabled` in `purity.toml` is `false`. Use it in your own purity recipes too.
 
 One level of purification for a modded water container:
 
@@ -282,7 +291,7 @@ Water with no purity stored does not match a `"droplets_of_thirst:purity": 3` in
 
 ## Chest loot
 
-Droplets of Thirst adds water bottles, acceptable (3) or pure (5), to the chests of dungeons, mineshafts, shipwrecks (supply), Nether fortresses and bastions. Each chest is one loot table in `data/droplets_of_thirst/loot_table/chests/` and one global loot modifier in `data/droplets_of_thirst/loot_modifiers/`. `data/neoforge/loot_modifiers/global_loot_modifiers.json` lists the modifiers and carries the load condition `droplets_of_thirst:loot_config`, which follows `gameplay.toml` `loot.enabled`. The modifiers for Brewin' and Chewin' and Farmer's Respite drinks (`add_loot_*_bc`, `add_loot_*_fr`) load only with those mods.
+Droplets of Thirst adds water bottles, acceptable (3) or pure (5), to the chests of dungeons, mineshafts, shipwrecks (supply), Nether fortresses and bastions. Each chest is one loot table in `data/droplets_of_thirst/loot_table/chests/` and one global loot modifier in `data/droplets_of_thirst/loot_modifiers/`, listed in `data/neoforge/loot_modifiers/global_loot_modifiers.json` with the load condition `droplets_of_thirst:loot_config` (`gameplay.toml` `loot.enabled`). The modifiers for Brewin' and Chewin' and Farmer's Respite drinks (`add_loot_*_bc`, `add_loot_*_fr`) load only with those mods.
 
 Loot tables and modifiers use a `functions` list with `"function"` as the key of each function, and a `conditions` list with `"condition"` as the key.
 
@@ -308,17 +317,17 @@ The purity of a bottle in a loot table goes on a `set_components` function with 
 
 ## Presets
 
-Two optional presets change the balance. The default is Droplets of Thirst's own. Each preset has two parts, and you apply them by hand, so nothing rewrites your config:
+Two optional presets change the balance. Each has two parts, applied by hand:
 
 | Part | casual | hardcore |
 |---|---|---|
 | Built-in datapack, disabled by default: enable it when creating the world or with `/datapack enable` | `mod/droplets_of_thirst:datapacks/preset_casual`: Nether climate factor 1.5 instead of 3 | `mod/droplets_of_thirst:datapacks/preset_hardcore`: Nether climate factor 4 |
-| TOML keys to copy into `config/droplets_of_thirst/` ([`examples/presets/`](https://github.com/Darkona/droplets-of-thirst/tree/main/examples/presets) in the repository) | `multiplier` 0.8, riding ×0.5, dehydration stops at 5 hearts on Normal and never kills, drinking by hand on, no poison: contaminated water 50% nausea and hunger, dirty 25%, murky 10% | `multiplier` 1.6, weather, day, sun and water multipliers, riding ×1, a rain sip every 2 s, drinking by hand with a 1 s cooldown, no running water bonus, world water starts contaminated, contaminated water 60% poison |
+| TOML keys to copy into `config/droplets_of_thirst/` ([`examples/presets/`](https://github.com/Darkona/droplets-of-thirst/tree/1.21.1/examples/presets) in the repository) | `multiplier` 0.8, riding ×0.5, dehydration stops at 5 hearts on Normal and never kills, drinking by hand on, no poison: contaminated water 50% nausea and hunger, dirty 25%, murky 10% | `multiplier` 1.6, weather, day, sun and water multipliers, riding ×1, a rain sip every 2 s, drinking by hand with a 1 s cooldown, no running water bonus, world water starts contaminated, contaminated water 60% poison |
 
-The TOML files only list the keys they change. Droplets of Thirst adds the rest with their defaults.
+The TOML files only list the keys they change.
 
 ---
 
 ## Resource packs
 
-The terracotta water bowl tints the water layer of its item model (tint index 1) with a colour handler in the mod's code, so a resource pack can redraw the bowl but cannot add the tint to other items. Water bottles are tinted through vanilla's potion tint.
+A resource pack can redraw the terracotta water bowl, whose water layer is tinted by purity (tint index 1), but cannot add the tint to other items. Water bottles are tinted through vanilla's potion tint.

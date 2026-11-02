@@ -1,88 +1,28 @@
 # Minecraft 1.21.1
 
-Droplets of Thirst for Minecraft 1.21.1 runs on **Minecraft 1.21.1 and NeoForge 21.1.252 or newer** (branch `1.21.1`, jar `droplets-of-thirst-1.21.1-1.0.0.jar`). Thirst, water purity, effects, config files, data maps, commands and the API work as the rest of this wiki describes.
-
-1.21.1 has the most integrations: Create, Farmer's Delight and its addons, Cold Sweat, Vampirism, Supernatural, Reliquary and KubeJS. It also works with Jade, JEI, AppleSkin, Serene Seasons and Traveler's Backpack. This page describes those integrations.
-
----
-
-## Players
-
-- **Sprinting**: with 3 droplets or less you cannot start a sprint. A sprint already in progress goes on.
-- **The Nether**: the Nether multiplier and the hot climate of dirty water apply in dimensions whose type is ultra-warm, as the Nether.
-- **Thirst Was Taken worlds** load with the players' thirst and the purity of their water. The four purity levels of Thirst Was Taken move to the six of Droplets of Thirst. Cauldrons lose their purity, because cauldrons no longer store one.
-- **With Create installed**, cooking stops at clean (4), and only the Sand Filter makes pure water (5). Without Create, cooking reaches pure.
-
-### Create
-
-<!-- SCREENSHOT: a Create setup with two Sand Filters in a row between a pump and a tank, goggles tooltip showing the purity of each tank -->
-
-- **Sand Filter**: a block that purifies water pumped through it, `sandFilterFiltrationAmount` levels per filter (1), up to `sandFilterMaxPurity` (5). Dirty water goes in on one side and purified water comes out on the other (down when placed, and a wrench turns it). Filters in a row facing the same way pass water on, one step each, with no pipes in between. With Create, it is the only way to get pure water. It keeps both tanks when you break it or pick it up with a wrench, and it has a Ponder scene.
-- **Fans**: washing (water in front of the fan) takes water bottles and terracotta water bowls up one level per pass, up to clean. Water buckets do not work, because Create gives back the bucket's crafting remainder next to the result. Smoking and blasting fans use the smoker and furnace purification recipes.
-- **Heated basins**: a mixer over a heated basin takes 250 mB of water up one level per mix, up to clean.
-- **Compacting a cactus** gives 250 mB of acceptable water (3) and green dye.
-- **Spouts, drains, pipes, pumps and hose pulleys** keep the purity of the water they move. An open pipe end that pulls water from the world or a cauldron takes the purity the water has there. Water it pours counts as poured water. An Item Drain empties terracotta water bowls.
-- **Goggles** show the purity of water and of fluids that carry it (Create's tea) in tanks and basins.
-- When installed, Create must be 6.0.6 or newer.
-
-### Farmer's Delight and its addons
-
-- **Drink values** for Farmer's Delight, Farmer's Respite, Brewin' and Chewin', Collector's Reap, Cook's Collection, Extra Delight, Ocean's Delight, Ender's Delight, Miner's Delight, Fruits Delight, Cultural Delights, Expanded Delight, Corn Delight, Rustic Delight, Crabber's Delight, End's Delight, My Nether's Delight and the Let's Do mods (Farm & Charm, HerbalBrews, Brewery). Each loads only when its mod is installed. Salty, pickled and strongly alcoholic items make you thirstier.
-- **Clean water for cooking**: recipes of these mods that use water accept only water of a minimum purity. Murky (2) or better for recipes that boil the water, acceptable (3) or better for cold ones (fermenting, mixing, aging). These recipes never accept contaminated or dirty water. Water with no purity stored counts as acceptable.
-- **Cooking pot**: the Farmer's Delight cooking pot (and Miner's Delight's copper pot) purifies water bottles, buckets, terracotta bowls and Cold Sweat waterskins, one level per cook, like a campfire.
-- **Kettles** boil water, so they refuse dirty water. The HerbalBrews tea kettle leaves water below murky in its water slot, and the Brewery brewing stations refuse it with a message.
-- **Taps, sinks and wells** (Extra Delight's taps and sinks, the Let's Do sink, the Farm & Charm timber well) give water with the purity of the world's water where they stand.
-- **Miner's Delight's water cup** carries a purity like a bottle, filled from the world, a cauldron or a Create spout.
-- **Nourishment** (Farmer's Delight), **Stuffed** (Let's Do Bakery) and **Saturated** (Let's Do Brewery) pause thirst loss while they last.
-- Chest loot of Brewin' and Chewin' and Farmer's Respite drinks, when those mods are installed.
-
-### Cold Sweat
-
-- The climate factor of thirst loss comes from Cold Sweat's body temperature instead of the biome: comfortable is normal thirst loss, burning is twice as much.
-- A hot body temperature also counts as a hot climate for dirty water.
-- Drinking water can cool the body (`coldsweat.drinkCooling`, off by default).
-- The **waterskin** hydrates like a drink of water (thirst 6, quenched 3) with the purity of the water it holds. Filling it from a source, a cauldron or a tank gives it that water's purity, and the cooking packs purify it like a bottle (it comes out full).
-- With Cold Sweat installed, thirst ignores Serene Seasons, because Cold Sweat's body temperature already follows the seasons.
-- When installed, Cold Sweat must be 2.4 or newer.
-
-### Vampires
-
-A vampire gets thirsty like anyone else, and only blood quenches its thirst. Its thirst bar has blood-red droplets.
-
-- Thirst goes down with the same activity and climate rules as for other players.
-- Water, other drinks, food, rain and drinking by hand give a vampire nothing: no thirst, no quenched and no purity effects. Hand drinking is off for vampires. The HUD shows no preview for these items.
-- Blood has no purity, so it never makes a vampire sick, and it never counts towards Overhydrated.
-- **Vampirism**: every drink of blood restores thirst: biting a creature, blood bottles, blood containers and blood food. One point of blood gives `vampirism.thirstPerBlood` thirst (1.0: the blood bar and the thirst bar are both 20, so a full blood refill is a full thirst bar) and quenched by the blood's saturation (`vampirism.quenchedPerBlood`). Altars and commands that fill the blood bar do not count. Vampirism stops a vampire from drinking a bottle while its blood bar is full, so blood and thirst usually go down together.
-- **Supernatural**: its blood bottle gives thirst 6 and quenched 6. Supernatural has no bite, so bottles are the way to drink blood.
-- Items in the item tag `droplets_of_thirst:blood` hydrate vampires with their values in the drinks data map. By default it holds `#supernatural:blood`.
-
-### Reliquary
-
-Drinking from the Emperor's Chalice hydrates like a drink of pure water (thirst 4, quenched 5, no extra pure water bonus). The Infernal Chalice does not hydrate. Reliquary's potions give thirst 2 and quenched 3.
+Droplets of Thirst for Minecraft 1.21.1 runs on **Minecraft 1.21.1 and NeoForge 21.1.252 or newer** (branch `1.21.1`, jar `droplets-of-thirst-1.21.1-1.1.0.jar`). The rest of this wiki describes this version. This page has what belongs to it: the config keys and defaults for other mods, the built-in datapacks, KubeJS and the API version. What each mod does for the player is on [Compatibility](Compatibility).
 
 ---
 
 ## Configuration
 
-These keys go with the mods above.
-
 ### `compat.toml`
 
 | Key | Default | Meaning |
 |---|---|---|
-| `create.sandFilterFiltrationAmount` | `1` | Purity levels gained in a Sand Filter (0-5) |
+| `create.sandFilterFiltrationAmount` | `2` | Purity levels gained in a Sand Filter (0-5) |
 | `create.sandFilterMbPerTick` | `10` | Millibuckets filtered per tick (1-1000) |
 | `create.sandFilterMaxPurity` | `5` | Highest purity a Sand Filter raises water to (0-5). Purer water passes unchanged |
-| `create.openEndedPipePurity` | `true` | Water an open pipe end pulls from the world or from a water cauldron keeps its purity there, as with buckets and the hose pulley. `false` = it reads as `defaultPurity` |
-| `coldsweat.useBodyTemperature` | `true` | The climate factor comes from Cold Sweat's body temperature (`bodyTemperatureCurve`) instead of the biome. The dimension's thirst multiplier and `netherMultiplier` still come first |
-| `coldsweat.bodyTemperatureCurve` | `["-100,0.8", "0,1.0", "50,1.3", "100,2.0", "150,3.0"]` | `"bodyTemperature,multiplier"` points in ascending order (Cold Sweat units: 0 comfortable, 100 burning, -100 freezing), straight lines between them, flat beyond the ends, times `depletion.multiplier` |
-| `coldsweat.drinkCooling` | `0.0` | How much drinking water (containers, by hand, the Traveler's Backpack hose) cools the body, in Cold Sweat units. `0` = off. Cold Sweat's own waterskin is left alone: it already changes the temperature by its water |
-| `coldsweat.drinkCoolingTicks` | `0` | `0`: `drinkCooling` lowers the body temperature once, and it drifts back with the surroundings. More: it lowers the base temperature for that many ticks instead, like Cold Sweat's cold foods (another drink restarts it) |
-| `delight.kettleMinPurity` | `2` | Lowest water purity that kettles take (0-5): the HerbalBrews tea kettle, the Brewery brewing stations and any block in `droplets_of_thirst:rejects_dirty_water`. `0` = any water |
-| `delight.worldPurityWaterSources` | `true` | Taps and sinks of Extra Delight, the Let's Do sink and the Farm & Charm timber well give water with the world's purity where they stand. `false` = water without a purity, read as `defaultPurity` |
+| `create.openEndedPipePurity` | `true` | Water an open pipe end takes from the world or a cauldron keeps its purity. `false` = it reads as `defaultPurity` |
+| `coldsweat.useBodyTemperature` | `true` | The climate factor comes from Cold Sweat's body temperature instead of the biome |
+| `coldsweat.bodyTemperatureCurve` | `["-100,0.8", "0,1.0", "50,1.3", "100,2.0", "150,3.0"]` | `"bodyTemperature,multiplier"` points in ascending order (Cold Sweat units: 0 comfortable, 100 burning, -100 freezing), times `depletion.multiplier` |
+| `coldsweat.drinkCooling` | `0.0` | How much drinking water cools the body, in Cold Sweat units. `0` = off. Cold Sweat's own waterskin is left alone |
+| `coldsweat.drinkCoolingTicks` | `0` | `0`: the body cools once and drifts back. More: the base temperature drops for that many ticks, like Cold Sweat's cold foods |
+| `delight.kettleMinPurity` | `2` | Lowest purity kettles take (0-5): the HerbalBrews tea kettle, the Brewery brewing stations and any block in `droplets_of_thirst:rejects_dirty_water`. `0` = any water |
+| `delight.worldPurityWaterSources` | `true` | Taps and sinks of Extra Delight, the Let's Do sink and the Farm & Charm timber well give water with the world's purity. `false` = no purity, read as `defaultPurity` |
 | `reliquary.emperorChaliceCooldown` | `0` | Ticks before the Emperor's Chalice can be used again after a drink. `0` = no cooldown |
-| `vampirism.thirstPerBlood` | `1.0` | Thirst a Vampirism vampire gets per point of blood it drinks (0-20). `1.0` = a full blood refill fills the thirst bar |
-| `vampirism.quenchedPerBlood` | `1.0` | Quenched per point of blood, times the blood's saturation in Vampirism (0.3 poor to 1.0 rich; a blood bottle is 0.45) |
+| `vampirism.thirstPerBlood` | `1.0` | Thirst per point of blood drunk (0-20). `1.0` = a full blood refill fills the thirst bar |
+| `vampirism.hydrationPerBlood` | `1.0` | Hydration per point of blood, times the blood's saturation (0.3 poor to 1.0 rich; a blood bottle is 0.45) |
 
 `sereneseasons.*` does nothing while Cold Sweat is installed.
 
@@ -93,11 +33,7 @@ These keys go with the mods above.
 | `purity.toml` `hotDirtyWater.useColdSweat` | `true` | With Cold Sweat installed, its body temperature also counts as hot |
 | `purity.toml` `hotDirtyWater.coldSweatMinBodyTemp` | `50.0` | Cold Sweat body temperature above which the player is hot (-150 to 150) |
 | `client.toml` `Bar Colors.vampire` | `#B3121B` | Droplet colour for vampires (Vampirism, Supernatural). It wins over every other colour |
-| `gameplay.toml` `effects.quenchnessPotion` | `true` | Switches the brewing mixes, which are registered in code. Not synced: keep the same value on the server and the clients, or the brewing stand may not accept prismarine crystals on the client |
-
-- The pure water bonus also counts Cold Sweat waterskins.
-- With purity off, Create goggles and the Sand Filter tooltip show no purity, the Sand Filter lets water through unchanged, and cactus compacting gives plain water. `sandFilterFiltrationAmount`, `sandFilterMaxPurity` and `openEndedPipePurity` do nothing.
-- Moving from Thirst Was Taken: `common.toml` `Create compatibility.*` moves to `compat.toml` `create.*`.
+| `gameplay.toml` `effects.quenchnessPotion` | `true` | Turns the brewing mixes on or off. Keep the same value on the server and the clients |
 
 ---
 
@@ -114,7 +50,7 @@ These keys go with the mods above.
 | `droplets_of_thirst:rejects_dirty_water` (block) | Brewery wooden, copper and netherite brewing stations. Blocks filled by clicking with water that boil it: water below `delight.kettleMinPurity` is refused |
 | `droplets_of_thirst:pauses_thirst` (mob_effect) | Farmer's Delight Nourishment, Let's Do Bakery Stuffed, Let's Do Brewery Saturated |
 
-The `droplets_of_thirst:drinks` data map ships entries for the mods listed under [Farmer's Delight](#farmers-delight-and-its-addons), Create, Cold Sweat and Reliquary, each with a `neoforge:mod_loaded` condition.
+The `droplets_of_thirst:drinks` data map ships entries for the food mods on [Compatibility](Compatibility#farmers-delight-and-its-addons), Create, Cold Sweat and Reliquary, each with a `neoforge:mod_loaded` condition.
 
 On 1.21.1 the tag folders are singular: `tags/item/`, `tags/block/`, `tags/fluid/`, `tags/mob_effect/`.
 
@@ -126,23 +62,13 @@ On 1.21.1 the tag folders are singular: `tags/item/`, `tags/block/`, `tags/fluid
 | `mod/droplets_of_thirst:datapacks/purify_campfire` | enabled | Campfire: one level up per cook, with the same caps |
 | `mod/droplets_of_thirst:datapacks/purify_smoking` | disabled | Smoker: as the furnace, twice as fast |
 | `mod/droplets_of_thirst:datapacks/purify_cooking_pot` | enabled | Farmer's Delight cooking pot and Miner's Delight copper pot: one level up per cook, with the campfire caps, for bottles, buckets, terracotta bowls and, with Cold Sweat, waterskins. Loads only with Farmer's Delight |
-| `mod/droplets_of_thirst:datapacks/clean_water_cooking` | enabled | Recipes of Farmer's Delight addons that use water accept only water of a minimum purity: 2 for boiled water, 3 for cold. It overwrites the addon recipes under their own ids (`extradelight:vat/kimchi_item`, `farm_and_charm:pot_cooking/nettle_tea`, …), each loaded only with its mod |
+| `mod/droplets_of_thirst:datapacks/clean_water_cooking` | enabled | Recipes of Farmer's Delight addons that use water accept only water of a minimum purity: 2 for boiled water, 3 for cold. It replaces the addon recipes under their own ids (`extradelight:vat/kimchi_item`, …), each loaded only with its mod |
 
-- Where a recipe changes with Create, its id ends in `_with_create` (result capped at 4, loads only with Create) or `_without_create` (loads only without Create, reaches 5), as in `water_bottle_from_smelting_to_clean_with_create`. The `pure` recipes exist only without Create and have no suffix. Recipes that exist only without Create carry `{"type": "neoforge:not", "value": {"type": "neoforge:mod_loaded", "modid": "create"}}`.
-- The `purify_cooking_pot` recipes end in `_manual_only`, so Slice & Dice does not turn them into Create basin recipes.
-- The Create recipes live in the mod's own data (`droplets_of_thirst:compat/create/...`) and load only with Create and with purity on: fan washing (`create:splashing`), heated mixing (`create:mixing`, `heat_requirement: heated`), cactus compacting, and the Item Drain for terracotta bowls. Cactus compacting has a second copy, `droplets_of_thirst:compat/create/cactus_without_purity`, with `{"type": "neoforge:not", "value": {"type": "droplets_of_thirst:purity_enabled"}}`, so it still gives plain water with purity off.
-- The cooking packs also purify Cold Sweat's filled waterskin (`droplets_of_thirst:filled_waterskin_from_smelting_to_murky`, …). These recipes load only with Cold Sweat. No recipe takes a waterskin with no purity stored, but a waterskin filled with Droplets of Thirst installed always gets one.
-- With JEI, the "Water Purification" page also shows the Sand Filter, one step per purity with the `compat.toml` amount and maximum.
+- Recipes that change with Create have ids ending in `_with_create` (result capped at 4, loads only with Create) or `_without_create` (loads only without Create, reaches 5), as in `water_bottle_from_smelting_to_clean_with_create`. The `pure` recipes exist only without Create and have no suffix. The `purify_cooking_pot` recipes end in `_manual_only`.
+- The Create recipes are in `droplets_of_thirst:compat/create/...`: fan washing (`create:splashing`), heated mixing (`create:mixing`, `heat_requirement: heated`), cactus compacting and the Item Drain for terracotta bowls. They load only with Create and with purity on. `droplets_of_thirst:compat/create/cactus_without_purity` loads with purity off and gives plain water.
+- The cooking packs also purify Cold Sweat's filled waterskin, with recipes that load only with Cold Sweat. A waterskin filled with Droplets of Thirst installed always has a purity.
 
 ---
-
-## Mod compatibility
-
-Minimum versions when installed: Create 6.0.6, Farmer's Delight 1.3, Cold Sweat 2.4, Serene Seasons 10.1, Traveler's Backpack 10.1, Reliquary 2.0, JEI 19.21, Brewin' and Chewin' 4.5, Extra Delight 2.6.5, Farm & Charm 1.1.26, HerbalBrews 1.1.4, Brewery 2.1, Fruits Delight 1.2.14, Cultural Delights 0.18, Expanded Delight 0.1.4, Miner's Delight 1.4, Corn Delight 1.2.10, Rustic Delight 1.7, Crabber's Delight 1.3, End's Delight 2.6, My Nether's Delight 1.10. Built against Create 6.0.10, Cold Sweat 2.4.3.1, JEI 19.21.0.247 and KubeJS 2101.7.2.
-
-- **Jade** 15.10.6 and newer work: a Jade plugin shows the purity. Tank purity needs Jade on the server too.
-- **JEI** pages also show in EMI when JEI is installed next to it.
-- **Expanded Delight** turns off two melon juice recipes of Farmer's Delight and Farmer's Respite. With Expanded Delight installed they stay off, and its Juicer makes the juice.
 
 ---
 
@@ -187,9 +113,11 @@ StartupEvents.postInit(() => {
 
 ---
 
+---
+
 ## Mod developers
 
 - Fluids go through `IFluidHandler` and `FluidStack`. A water cauldron seen through NeoForge's fluid capability reports its water with the cauldron purity.
-- The mod also posts `EatEvent` when another mod calls `Player#eat` directly.
-- Built-in bar styles include the vampire style (priority 400).
-- The Maven version is `1.21.1-1.0.0`. Declare the dependency in `neoforge.mods.toml` with `type = "optional"`.
+- `EatEvent` is also posted when another mod calls `Player#eat` directly.
+- The vampire bar style has priority 400.
+- The Maven version is `1.21.1-1.1.0`. Declare the dependency in `neoforge.mods.toml` with `type = "optional"`.
