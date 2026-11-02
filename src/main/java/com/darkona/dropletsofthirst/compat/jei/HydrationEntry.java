@@ -1,8 +1,10 @@
 package com.darkona.dropletsofthirst.compat.jei;
 
+import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.api.ThirstValues;
 import com.darkona.dropletsofthirst.content.thirst.ThirstHelper;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -27,6 +29,12 @@ public record HydrationEntry(ItemStack stack, ThirstValues values)
         entries.subList(0, drinks).sort(BY_ID);
         entries.subList(drinks, entries.size()).sort(BY_ID);
         return entries;
+    }
+
+    public Component valuesText()
+    {
+        String key = DropletsOfThirst.ID + (values.estimated() ? ".jei.hydration.values_estimated" : ".jei.hydration.values");
+        return Component.translatable(key, values.thirst(), values.quenched());
     }
 
     private static void add(List<HydrationEntry> entries, Collection<Item> items)

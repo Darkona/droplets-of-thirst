@@ -2,6 +2,12 @@
 
 Changes by feature, newest version first. Upstream issues are cited as `thirst#NN` (ghen-git/Thirst-Mod).
 
+## Unreleased
+
+- EMI now shows the Hydration and Water Purification pages by itself, without JEI.
+- Jade now lists the purity and amount of water bottles, buckets and other water containers stored in a block while it shows that block's contents. `Tooltip.jadeStoredWaterPurity` in `client.toml` turns it off.
+- In creative mode, filling a bottle, bucket or bowl with water no longer leaves a copy without purity in the inventory.
+
 ## 1.20.1-1.1.0 (Minecraft 1.20.1, Forge 47 and NeoForge 47.1), 2026-11-02
 
 Brings 1.20.1 up to 1.21.1-1.1.0. One jar, `droplets-of-thirst-1.20.1-1.1.0.jar`, as before.

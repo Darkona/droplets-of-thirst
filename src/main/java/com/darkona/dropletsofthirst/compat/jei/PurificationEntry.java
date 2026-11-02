@@ -1,5 +1,7 @@
 package com.darkona.dropletsofthirst.compat.jei;
 
+import com.darkona.dropletsofthirst.DropletsOfThirst;
+import com.darkona.dropletsofthirst.config.CompatConfig;
 import com.darkona.dropletsofthirst.content.purity.CauldronPurity;
 import com.darkona.dropletsofthirst.compat.create.CreateCompat;
 import com.darkona.dropletsofthirst.index.DropletsTags;
@@ -7,6 +9,7 @@ import com.darkona.dropletsofthirst.content.purity.WaterPurity;
 import com.darkona.dropletsofthirst.index.DropletsItems;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -43,6 +46,13 @@ public record PurificationEntry(String method, List<ItemStack> inputs, List<Item
                     entries.add(new PurificationEntry("sand_filter", List.of(), List.of(), water(purity), water(filtered), new ItemStack(filter), List.of()));
             }
         return entries;
+    }
+
+    public Component description()
+    {
+        if (method.equals("sand_filter"))
+            return Component.translatable(DropletsOfThirst.ID + ".jei.purification.sand_filter", CompatConfig.SAND_FILTER_FILTRATION_AMOUNT.get(), WaterPurity.getPurityText(CompatConfig.SAND_FILTER_MAX_PURITY.get()));
+        return Component.translatable(DropletsOfThirst.ID + ".jei.purification." + method);
     }
 
     private static PurificationEntry containers(String method, int purity, ItemStack machine, List<ItemStack> below)

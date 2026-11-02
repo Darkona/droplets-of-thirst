@@ -124,6 +124,13 @@ versionRange="[15.56,)"
 ordering="NONE"
 side="CLIENT"
 
+[[dependencies.${mod_id}]]
+modId="emi"
+mandatory=false
+versionRange="[1.1,)"
+ordering="NONE"
+side="CLIENT"
+
 # Thirst Was Taken and Thirst Was Reclaimed (mod id "thirst"): no version is accepted, so the game refuses to start with
 # both installed. Droplets of Thirst is its continuation.
 [[dependencies.${mod_id}]]
