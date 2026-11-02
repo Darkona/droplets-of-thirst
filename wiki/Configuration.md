@@ -18,7 +18,7 @@ This page lists the keys both versions share. Each version has more keys, for th
 | `compat.toml` | common | One section per optional mod |
 | `client.toml` | client | HUD and tooltips; each player's own |
 
-The gameplay files are common configs. They exist before a world loads, because tooltips and stack sizes need them, and one file serves every world. On a dedicated server, the server's values win. The server sends the values the client needs to each player on join, after `/reload` and after a config change: the sprint rule, hand drinking and its two-hands rule, the drink tables, the purity containers, `purity.enabled`, `defaultPurity`, the pure water bonus, filling from flowing water and the water bottle stack size.
+The gameplay files are common configs. They exist before a world loads, because tooltips and stack sizes need them, and one file serves every world. On a dedicated server, the server's values win. The server sends the values the client needs to each player on join, after `/reload` and after a config change: the sprint rule, hand drinking and its two-hands rule, the drink tables, the purity containers, `general.enabled` in `purity.toml`, `defaultPurity`, the pure water bonus, filling from flowing water and the water bottle stack size.
 
 ---
 
@@ -58,14 +58,12 @@ Thirst loss per tick is `activity × M`, where `M = climate × fire protection �
 | `nauseaPerTick` | `0.06` | Exhaustion per tick while nauseous |
 | `multiplier` | `1.2` | How much faster thirst goes down than hunger. Part of the climate factor (0-10) |
 | `inPeaceful` | `false` | Thirst goes down in Peaceful |
-| `netherMultiplier` | `3.0` | Replaces the climate factor where water evaporates (the Nether), unless the dimension type has its own `thirst_multiplier` (1-5) |
+| `netherMultiplier` | `3.0` | Replaces the climate factor in ultra-warm dimensions (the Nether), unless the dimension type has its own `thirst_multiplier` (1-5) |
 | `fireResistancePercent` | `0` | Thirst loss with Fire Resistance, in percent (0 = none) |
 | `nauseaDepletes` | `true` | Nausea makes thirst go down |
 | `fireProtectionPerLevel` / `fireProtectionMaxLevels` | `0.046875` / `12` | Thirst loss removed per level of Fire Protection on armor, and the most levels counted |
 
 `MIRROR_FOOD` stays the default because it also counts exhaustion from other mods and from vanilla actions that `OWN` does not see.
-
-"Where water evaporates" is the environment attribute `minecraft:gameplay/water_evaporates`, so a biome or dimension from a datapack or mod that sets it counts as the Nether.
 
 ### `[depletion.climate]`
 
@@ -92,7 +90,7 @@ In `OWN` mode these are the sources, with vanilla's hunger numbers. In `MIRROR_F
 | `sprintPerMeter` | `0.1` | OWN: per meter sprinted on the ground |
 | `swimPerMeter` | `0.01` | OWN: per meter swum or walked in water |
 | `jump` / `sprintJump` | `0.05` / `0.2` | OWN: per jump |
-| `attack` | `0.1` | OWN: per attack or spear stab that lands, as vanilla charges hunger (a swing at an invulnerable target, or one another mod cancels, costs nothing) |
+| `attack` | `0.1` | OWN: per attack that lands, as vanilla charges hunger (a swing at an invulnerable target, or one another mod cancels, costs nothing) |
 | `blockBreak` | `0.005` | OWN: per block broken (a break another mod cancels costs nothing) |
 | `damageMultiplier` | `1.0` | OWN: times the exhaustion of the damage type taken |
 | `healPerHealth` | `6.0` | OWN: per health point regenerated from food |
@@ -148,7 +146,7 @@ The maximum thirst stays 20: the HUD, its overlays and the commands assume it.
 |---|---|---|
 | `dehydrationMultiplier` | `1.0` | Multiplier (0-10) of the exhaustion the Dehydration effect adds every tick (0.005 per level) |
 | `quenchnessIntervalTicks` | `40` | Quenchness restores (level) thirst and (level) hydration every this many ticks (1-1200) |
-| `quenchnessPotion` | `true` | Brewing recipes of the Potion of Quenchness. It is the load condition `droplets_of_thirst:quenchness_potion` of those recipes: a change applies when datapacks load (a restart or `/reload`), and only the server's value counts |
+| `quenchnessPotion` | `true` | Brewing recipes of the Potion of Quenchness (awkward potion + prismarine crystals). The mixes are registered in code when the game starts, so a change needs a restart. Not synced: keep the same value on the server and the clients |
 | `hydratedMultiplier` | `0.5` | Thirst loss with Hydrated, applied once per level (0.5: Hydrated I halves it, II quarters it; 0-1) |
 | `waterBreathingReducesThirst` | `false` | While fully underwater with Water Breathing or Conduit Power, thirst loss is also multiplied by `underwaterBreathingMultiplier` |
 | `underwaterBreathingMultiplier` | `0.5` | See above (0-10), on top of `climate.underwater` |

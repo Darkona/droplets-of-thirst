@@ -9,7 +9,6 @@ It has most integrations of the 1.21.1 version: Create, Farmer's Delight and its
 ## Players
 
 - **As on 1.21.1**: with 3 droplets or less you cannot start a sprint, and a sprint in progress goes on. The Nether multiplier applies in ultra-warm dimensions. With Create installed, cooking stops at clean (4) and only the Sand Filter makes pure water.
-- **Thirst Was Taken worlds** (1.20.1) load with the players' thirst and the purity of their water. Thirst Was Taken's four levels move to the six of Droplets of Thirst: dirty to contaminated, slightly dirty to dirty, acceptable to acceptable, purified to pure.
 - **Other thirst mods**: Thirst Was Taken or Thirst Was Reclaimed next to Droplets of Thirst stops the game at the loading screen. Tough As Nails, Legendary Survival Overhaul, Homeostatic and Survive only show a warning on the loading screen and in the log, and both thirst systems run.
 - **Dispensers**: a vanilla bucket that a full dispenser drops after filling comes out with no purity. Buckets that go back into the dispenser keep it.
 
@@ -40,7 +39,7 @@ The player's thirst is a capability (`droplets_of_thirst:player_thirst`), kept o
 
 - **Pack format**: `"pack_format": 15`. Folders are plural, as in vanilla 1.20.1: `recipes/`, `loot_tables/`, `tags/items/`, `tags/blocks/`, `tags/fluids/`. Effect tags stay in `tags/mob_effect/`.
 - **Data maps**: `droplets_of_thirst:drinks`, `hydrating_blocks`, `biome_water` and `dimension_water` read the same files as on 1.21.1 (`data/<namespace>/data_maps/...`), with the same fields, `replace`, `remove` and tags. Droplets of Thirst reads them itself. Conditions on an entry can be `neoforge:conditions` or `forge:conditions`. Both use the Forge condition types (`mod_loaded`, `not`, `and`, `or`, `item_exists`, `tag_empty`, `true`, `false`).
-- **Biome tags**: the default `biome_water` uses the 1.20.1 tags `#forge:is_desert`, `#forge:is_swamp`, `#forge:is_snowy`, `#forge:is_mountain` and the vanilla `#minecraft:is_jungle`, `#minecraft:is_taiga`, `#minecraft:is_badlands`, `#minecraft:is_mountain`. There is no windswept tag, so it lists the four windswept biomes by id. The purity of every vanilla biome is the same as on 26.3.
+- **Biome tags**: the default `biome_water` uses the 1.20.1 tags `#forge:is_desert`, `#forge:is_swamp`, `#forge:is_snowy`, `#forge:is_mountain` and the vanilla `#minecraft:is_jungle`, `#minecraft:is_taiga`, `#minecraft:is_badlands`, `#minecraft:is_mountain`. There is no windswept tag, so it lists the four windswept biomes by id. The purity of every vanilla biome is the same as on 1.21.1.
 - **Recipes**: a purity ingredient is `{"type": "forge:partial_nbt", "item": "minecraft:potion", "nbt": {"Potion": "minecraft:water", "droplets_of_thirst:purity": 3}}`. Water with no purity stored is `{"type": "forge:nbt", "item": "minecraft:potion", "nbt": {"Potion": "minecraft:water"}}` (for a bucket or a bowl, `forge:nbt` without `nbt`). Results take `"nbt"`, and recipe conditions go in `"conditions"` with `forge:` types, for example `{"type": "droplets_of_thirst:purity_enabled"}` or `{"type": "forge:not", "value": {"type": "forge:mod_loaded", "modid": "create"}}`.
 
   ```json
