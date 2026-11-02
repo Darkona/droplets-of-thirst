@@ -18,60 +18,29 @@ This page lists the keys both versions share. Each version has more keys, for th
 | `compat.toml` | common | One section per optional mod |
 | `client.toml` | client | HUD and tooltips; each player's own |
 
-The gameplay files are common configs. They exist before a world loads, because tooltips and stack sizes need them, and one file serves every world. On a dedicated server, the server's values win. The server sends the values the client needs to each player on join, after `/reload` and after a config change: the sprint rule, hand drinking and its two-hands rule, the drink tables, the purity containers, `purity.enabled`, `defaultPurity`, the pure water bonus, filling from flowing water and the water bottle stack size.
+The gameplay files are common configs. They exist before a world loads, because tooltips and stack sizes need them, and one file serves every world. On a dedicated server, the server's values win. The server sends the values the client needs to each player on join, after `/reload` and after a config change: the sprint rule, hand drinking and its two-hands rule, the drink tables, the purity containers, `general.enabled` in `purity.toml`, `defaultPurity`, the pure water bonus, filling from flowing water and the water bottle stack size.
 
 ---
 
 ## Commands
 
-All commands need operator rights (permission level 2). `/thirst` is an alias of `/droplets_of_thirst`.
+All commands need operator rights (permission level 2).
 
 | Command | What it does |
 |---|---|
-| `/droplets_of_thirst query <player>` | Shows the player's thirst and hydration |
-| `/droplets_of_thirst set <player> <thirst> <hydration>` | Sets them (0-20; hydration is capped at thirst) |
-| `/droplets_of_thirst enable <players> <true\|false>` | Turns thirst on or off for those players. Off, their thirst does not change |
-| `/droplets_of_thirst debug exhaustion [player]` | Mode, every factor of the thirst loss multiplier, the `thirst_drain` attribute, the total, exhaustion, thirst and hydration |
-| `/droplets_of_thirst debug purity` | Purity of the water you look at (or the block at your feet): poured water, salt water rule, base and where it comes from, altitude, still/running and biome deltas, cap |
-| `/droplets_of_thirst config check` | Every config problem found, or "no problems found" |
-| `/droplets_of_thirst infer <item>` | How recipe inference estimates the item: each recipe, each ingredient's value, multiplier, result count, the estimate and why it would not be used |
+| `/droplets query <player>` | Shows the player's thirst and hydration |
+| `/droplets set <player> <thirst> <hydration>` | Sets them (0-20; hydration is capped at thirst) |
+| `/droplets enable <players> <true\|false>` | Turns thirst on or off for those players. Off, their thirst does not change |
+| `/droplets debug exhaustion [player]` | Mode, every factor of the thirst loss multiplier, the `thirst_drain` attribute, the total, exhaustion, thirst and hydration |
+| `/droplets debug purity` | Purity of the water you look at (or the block at your feet): salt water rule, base and where it comes from, altitude, still/running and biome deltas, cap |
+| `/droplets config check` | Every config problem found, or "no problems found" |
+| `/droplets infer <item>` | How recipe inference estimates the item: each recipe, each ingredient's value, multiplier, result count, the estimate and why it would not be used |
 
-<!-- SCREENSHOT: chat output of /droplets_of_thirst debug exhaustion in a desert at noon -->
+<!-- SCREENSHOT: chat output of /droplets debug exhaustion in a desert at noon -->
 
 ### Checking a config
 
-Some problems do not show in a single key: unknown effect or item ids, overlapping altitude bands, curve points out of order, invalid keyword patterns, `slowRegenMinThirst` above `fullRegenMinThirst`. The mod logs them as one warning each time the world loads, after `/reload` and after a config file changes. It skips the bad entries, and nothing crashes. `/droplets_of_thirst config check` lists the same problems.
-
----
-
-## Moving from Thirst Was Taken
-
-On first start, if a new file does not exist yet, the mod copies its values from the old files (`common.toml`, `item_settings.toml`, `container.toml`, `keyword.toml`, also from Thirst Was Taken's `config/thirst/`). Then it renames the old files to `*.toml.old` and stops reading them. A warning in the log lists what moved. Modpacks that ship `defaultconfigs/` must use the new file names and keys.
-
-| Old file and key | New file and key |
-|---|---|
-| `common.toml` `General.thirstDepletionModifier` | `gameplay.toml` `depletion.multiplier` |
-| `General.thirstDepletionInPeace` | `depletion.inPeaceful` |
-| `General.netherThirstDeletionModifier` | `depletion.netherMultiplier` |
-| `General.fireResistanceDehydration` | `depletion.fireResistancePercent` |
-| `General.depletesWhenNausea` | `depletion.nauseaDepletes` |
-| `General.moveSlowWhenThirsty` | `sprint.blockedWhenThirsty` |
-| `General.DrinkRainWater` | `drinking.rain` |
-| `General.EnableLoot` | `loot.enabled` |
-| `Drinking Mechanics.waterBottleStacksize` | `drinking.waterBottleStackSize` |
-| `Drinking Mechanics.ExtraHydrationConvertToHydration` | `drinking.extraThirstToHydration` |
-| `Drinking Mechanics.dehydrationHaltsHealthRegen` | `regeneration.haltedWhenThirsty` |
-| `Drinking Mechanics.healthRegenDepletesHydration` | `regeneration.depletesThirst` |
-| `Drinking Mechanics.healthRegenDehydrationIsBiomeDependent` | `regeneration.climateDependent` |
-| `Drinking Mechanics.canDrinkByHand`, `DrinkBothHandNeeded`, `handDrinkingHydration`, `handDrinkingHydration`, `handDrinkingCooldown` | `hand.enabled`, `hand.bothHandsEmpty`, `hand.thirst`, `hand.hydration`, `hand.cooldownTicks` |
-| `World.*` | `purity.toml` `world.*` (same key names) |
-| `Purity-related Effects.defaultPurity`, `quenchThirstWhenDebuffed` | `purity.toml` `general.defaultPurity`, `general.quenchWhenDebuffed` |
-| `Purity-related Effects.*Percentage` (8 values) | `purity.toml` `[effects]` lists (see below) |
-| `item_settings.toml` `drinks`, `foods`, `itemsBlacklist` | `items.toml` `overrides.drinks`, `overrides.foods`, `overrides.blacklist` |
-| `container.toml` `Containers` | `items.toml` `containers.containers` |
-| `keyword.toml` (all keys) | `items.toml` `keywords.*` (`enabled`, `drinkThirst`, `drinkHydration`, `soupThirst`, …, `blacklist`, `drink`, `soup`, `fruit`) |
-
-Thirst Was Taken had four purity levels. Its purity values move to the six of Droplets of Thirst: 0 to 0, 1 to 1, 2 to 3, 3 to 5.
+Some problems do not show in a single key: unknown effect or item ids, overlapping altitude bands, curve points out of order, invalid keyword patterns, `slowRegenMinThirst` above `fullRegenMinThirst`. The mod logs them as one warning each time the world loads, after `/reload` and after a config file changes. It skips the bad entries, and nothing crashes. `/droplets config check` lists the same problems.
 
 ---
 
@@ -79,7 +48,7 @@ Thirst Was Taken had four purity levels. Its purity values move to the six of Dr
 
 ### `[depletion]`
 
-Thirst loss per tick is `activity × M`, where `M = climate × fire protection × fire resistance × rain/thunder × day/night × sun × altitude × water × Hydrated × droplets_of_thirst:thirst_drain`. Every `exhaustionPerPoint` (4.0) of exhaustion removes one hydration point, or one thirst point when hydration is 0. `M` (except the attribute) is recomputed once a second per player and right away after armor, effect, dimension or config changes. `/droplets_of_thirst debug exhaustion` shows each factor.
+Thirst loss per tick is `activity × M`, where `M = climate × fire protection × fire resistance × rain/thunder × day/night × sun × altitude × water × Hydrated × droplets_of_thirst:thirst_drain`. Every `exhaustionPerPoint` (4.0) of exhaustion removes one hydration point, or one thirst point when hydration is 0. `M` (except the attribute) is recomputed once a second per player and right away after armor, effect, dimension or config changes. `/droplets debug exhaustion` shows each factor.
 
 | Key | Default | Meaning |
 |---|---|---|
@@ -89,23 +58,19 @@ Thirst loss per tick is `activity × M`, where `M = climate × fire protection �
 | `nauseaPerTick` | `0.06` | Exhaustion per tick while nauseous |
 | `multiplier` | `1.2` | How much faster thirst goes down than hunger. Part of the climate factor (0-10) |
 | `inPeaceful` | `false` | Thirst goes down in Peaceful |
-| `netherMultiplier` | `3.0` | Replaces the climate factor where water evaporates (the Nether), unless the dimension type has its own `thirst_multiplier` (1-5) |
+| `netherMultiplier` | `3.0` | Replaces the climate factor in ultra-warm dimensions (the Nether), unless the dimension type has its own `thirst_multiplier` (1-5) |
 | `fireResistancePercent` | `0` | Thirst loss with Fire Resistance, in percent (0 = none) |
 | `nauseaDepletes` | `true` | Nausea makes thirst go down |
 | `fireProtectionPerLevel` / `fireProtectionMaxLevels` | `0.046875` / `12` | Thirst loss removed per level of Fire Protection on armor, and the most levels counted |
 
 `MIRROR_FOOD` stays the default because it also counts exhaustion from other mods and from vanilla actions that `OWN` does not see.
 
-"Where water evaporates" is the environment attribute `minecraft:gameplay/water_evaporates`, so a biome or dimension from a datapack or mod that sets it counts as the Nether.
-
 ### `[depletion.climate]`
 
 | Key | Default | Meaning |
 |---|---|---|
-| `formula` | `LEGACY` | `LEGACY`: `multiplier × temperature / humidity` of the biome, softened below 1. `CURVE`: `multiplier × temperatureCurve(temperature) × humidityCurve(downfall)` |
-| `legacyHarshness` | `0.5` | LEGACY: part of a multiplier below 1 that is kept (0.5 = halfway to 1) |
-| `temperatureCurve` | `["-0.5,0.7", "0.8,1.0", "2.0,1.5"]` | CURVE: `"temperature,multiplier"` points in ascending order, straight lines between them, flat beyond the ends |
-| `humidityCurve` | `["0.0,1.2", "0.4,1.0", "1.0,0.8"]` | CURVE: the same for the biome's downfall (0 dry to 1 wet) |
+| `temperatureCurve` | `["-0.5,0.7", "0.8,1.0", "2.0,1.5"]` | The climate multiplier is `multiplier × temperatureCurve(temperature) × humidityCurve(downfall)` of the biome. `"temperature,multiplier"` points in ascending order, straight lines between them, flat beyond the ends |
+| `humidityCurve` | `["0.0,1.2", "0.4,1.0", "1.0,0.8"]` | The same for the biome's downfall (0 dry to 1 wet) |
 | `rain` / `thunder` | `1.0` / `1.0` | When rain falls on the player (thunder replaces rain in a storm) |
 | `day` / `night` | `1.0` / `1.0` | In dimensions with a day cycle |
 | `sun` | `1.0` | Day, not raining, sky visible |
@@ -125,7 +90,7 @@ In `OWN` mode these are the sources, with vanilla's hunger numbers. In `MIRROR_F
 | `sprintPerMeter` | `0.1` | OWN: per meter sprinted on the ground |
 | `swimPerMeter` | `0.01` | OWN: per meter swum or walked in water |
 | `jump` / `sprintJump` | `0.05` / `0.2` | OWN: per jump |
-| `attack` | `0.1` | OWN: per attack or spear stab that lands, as vanilla charges hunger (a swing at an invulnerable target, or one another mod cancels, costs nothing) |
+| `attack` | `0.1` | OWN: per attack that lands, as vanilla charges hunger (a swing at an invulnerable target, or one another mod cancels, costs nothing) |
 | `blockBreak` | `0.005` | OWN: per block broken (a break another mod cancels costs nothing) |
 | `damageMultiplier` | `1.0` | OWN: times the exhaustion of the damage type taken |
 | `healPerHealth` | `6.0` | OWN: per health point regenerated from food |
@@ -140,8 +105,8 @@ In `OWN` mode these are the sources, with vanilla's hunger numbers. In `MIRROR_F
 | `depletesThirst` | `true` | Regenerating health makes thirst go down |
 | `climateDependent` | `true` | That loss is scaled by the climate factor |
 | `fullRegenMinThirst` | `20` | With `haltedWhenThirsty`: thirst needed for fast (saturation) regeneration |
-| `slowRegenMinThirst` / `slowRegenIntervalTicks` | `19` / `8` | Below that, saturation still heals every 8 ticks with at least 19 thirst |
-| `hungerRegenMinThirst` | `19` | Thirst needed for normal (food level) regeneration |
+| `slowRegenMinThirst` / `slowRegenIntervalTicks` | `16` / `8` | Below that, saturation still heals with at least 16 thirst, once every 8 healing attempts. Vanilla makes one attempt every 10 ticks, so 8 means every 80 ticks |
+| `hungerRegenMinThirst` | `16` | Thirst needed for normal (food level) regeneration |
 | `peacefulRegenAmount` / `peacefulRegenIntervalTicks` | `1` / `11` | Thirst restored in Peaceful (unless `depletion.inPeaceful`) |
 
 ### `[damage]`
@@ -159,7 +124,7 @@ In `OWN` mode these are the sources, with vanilla's hunger numbers. In `MIRROR_F
 | `sprint.blockedWhenThirsty` | `true` | No sprinting with `minThirst` or less. A sprint in progress stops too |
 | `sprint.minThirst` | `6` | 3 droplets |
 | `drinking.extraThirstToHydration` | `true` | Thirst restored above full turns into hydration |
-| `drinking.waterBottleStackSize` | `64` | Stack size of water bottles (1-99) |
+| `drinking.waterBottleStackSize` | `16` | Stack size of water bottles (1-99) |
 | `drinking.canFillFromFlowingWater` | `true` | Glass bottles and terracotta bowls fill from flowing water. `false` = source blocks only, as in vanilla. Buckets always need a source |
 | `drinking.rain` | `true` | Drink rain by looking up |
 | `drinking.rainMaxPitch` | `-80` | How far up to look (-90 = straight up) |
@@ -181,7 +146,7 @@ The maximum thirst stays 20: the HUD, its overlays and the commands assume it.
 |---|---|---|
 | `dehydrationMultiplier` | `1.0` | Multiplier (0-10) of the exhaustion the Dehydration effect adds every tick (0.005 per level) |
 | `quenchnessIntervalTicks` | `40` | Quenchness restores (level) thirst and (level) hydration every this many ticks (1-1200) |
-| `quenchnessPotion` | `true` | Brewing recipes of the Potion of Quenchness. It is the load condition `droplets_of_thirst:quenchness_potion` of those recipes: a change applies when datapacks load (a restart or `/reload`), and only the server's value counts |
+| `quenchnessPotion` | `true` | Brewing recipes of the Potion of Quenchness (awkward potion + prismarine crystals). The mixes are registered in code when the game starts, so a change needs a restart. Not synced: keep the same value on the server and the clients |
 | `hydratedMultiplier` | `0.5` | Thirst loss with Hydrated, applied once per level (0.5: Hydrated I halves it, II quarters it; 0-1) |
 | `waterBreathingReducesThirst` | `false` | While fully underwater with Water Breathing or Conduit Power, thirst loss is also multiplied by `underwaterBreathingMultiplier` |
 | `underwaterBreathingMultiplier` | `0.5` | See above (0-10), on top of `climate.underwater` |
@@ -233,16 +198,6 @@ Every purity value in the config files is one of these six levels:
 | `pureWater.hydrationBonus` | `3` | Hydration added the same way: a bottle then gives 8 instead of 5 |
 | `world.*` | | See [Water purity in the world](Modpack-Makers#water-purity-in-the-world) |
 
-### Poured water
-
-Water poured into the world keeps its purity. Sea water poured into a meadow stays sea water when you fill a bucket there again. No key controls it: it follows `general.enabled`.
-
-- A water source left by a bucket (a player's or a dispenser's) or by NeoForge's `FluidUtil.tryPlaceFluid` (the fluid containers of many mods) is remembered with the purity of the water poured. Water without a stored purity counts as `defaultPurity`.
-- Anything that takes or drinks water there reads that purity: bottles, bowls, buckets, drinking by hand, dispensers, the Traveler's Backpack hose.
-- The infinite source that forms between two poured sources takes the worst purity beside it. Picking up a poured source hands its purity to the water sources beside it, so the one that refills its place is not clean either.
-- The mod ignores a remembered position that no longer holds a water source, and forgets it when it reads it. Water placed in other ways (commands, mods that place the block directly) has the world's purity, unless it is next to poured water.
-- The data is saved per chunk with the world and never goes to clients. `/droplets_of_thirst debug purity` shows "poured water" when it applies.
-
 ### Thirst only (purity off)
 
 For the thirst bar alone, set `general.enabled = false`. The server sends its value to clients, so players do not change their own file. With purity off:
@@ -252,7 +207,7 @@ For the thirst bar alone, set `general.enabled = false`. The server sends its va
 - Drinking any water restores thirst and never gives purity effects, including the Dehydration of `hotDirtyWater`. `DrinkEvent` reports `NO_PURITY`.
 - The purification recipes do not load, and the JEI "Water Purification" page is hidden. Minecraft checks recipes when datapacks load, so this part applies after `/reload` or a restart.
 - The terracotta bowls stay, as plain water containers, because registered items cannot depend on a config.
-- `/droplets_of_thirst debug purity` only says that purity is off. For other mods, `DropletsAPI.isPurityEnabled()` returns `false` and `withPurity` returns an unchanged copy.
+- `/droplets debug purity` only says that purity is off. For other mods, `DropletsAPI.isPurityEnabled()` returns `false` and `withPurity` returns an unchanged copy.
 - The other keys of this file do nothing.
 - The mod ignores and hides purity that items already have from before. These items may not stack with new water until they are used up.
 
@@ -269,11 +224,10 @@ One list per purity: `contaminated`, `dirty`, `murky`, `acceptable`, `clean`, `p
 | `clean` | `[]` |
 | `pure` | `[]` |
 
-- Any mob effect id works, also from other mods, including `droplets_of_thirst:dehydration` and `droplets_of_thirst:hydrated` (for example `"droplets_of_thirst:hydrated,600,0,100"` in `pure`). An unknown id is skipped and listed by `/droplets_of_thirst config check`.
+- Any mob effect id works, also from other mods, including `droplets_of_thirst:dehydration` and `droplets_of_thirst:hydrated` (for example `"droplets_of_thirst:hydrated,600,0,100"` in `pure`). An unknown id is skipped and listed by `/droplets config check`.
 - Nausea lasts 10 seconds (200 ticks) per drink by default. Vanilla builds up the screen distortion only while more than 3 seconds of Nausea are left, and it needs 7.5 seconds to reach full strength. A shorter Nausea is barely a wobble. Drinking again resets it to 10 seconds. It does not add up.
 - The whole list shares one roll per drink. An entry applies when the roll is below its chance, so a 40% entry always comes together with the 100% ones.
 - `blocksHydration` (`true`/`false`, default `false`): when that entry applies, the drink restores no thirst, unless `general.quenchWhenDebuffed` is `true` (the default).
-- Old configs: the eight `*Percentage` values of Thirst Was Taken are turned into these lists once, with the old effects and the current durations. Its four levels go to `contaminated`, `dirty`, `acceptable` and `pure`, and `murky` and `clean` keep their defaults.
 
 ### `[hotDirtyWater]`
 
@@ -338,7 +292,7 @@ Off by default. When it is on, the server looks at the recipes that make an item
 - Inference cuts loops (ingot to block to ingot) and anything deeper than `maxDepth`.
 - Items that are drunk go to the drink table and the rest to the food table. Tooltips show "(est.)". The values are sent to clients like the rest of the table.
 
-It runs when the world loads, after `/reload` and when `items.toml` changes. It never runs during play. The log shows one line with the number of estimated items and the time it took. The config warning and `/droplets_of_thirst config check` list the recipes that inference could not read.
+It runs when the world loads, after `/reload` and when `items.toml` changes. It never runs during play. The log shows one line with the number of estimated items and the time it took. The config warning and `/droplets config check` list the recipes that inference could not read.
 
 ---
 

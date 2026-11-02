@@ -65,7 +65,7 @@ DropletsView thirst = DropletsAPI.view(player);  // live view, no copy
 int points = thirst.thirst();                    // 0..20 (thirst.maxThirst())
 int quenched = thirst.quenched();                // like saturation, never above thirst
 float exhaustion = thirst.exhaustion();          // towards the next point lost
-boolean on = thirst.isEnabled();                 // /droplets_of_thirst enable
+boolean on = thirst.isEnabled();                 // /droplets enable
 float multiplier = thirst.lastModifier();        // cached climate/armor/effects/mods multiplier
 ```
 
@@ -78,7 +78,7 @@ if (values != null && !values.estimated()) { ... }       // estimated = guessed 
 int purity = DropletsAPI.getPurity(stack);               // MIN_PURITY (0) .. MAX_PURITY (5)
 PurityLevel named = PurityLevel.byLevel(purity);          // CONTAMINATED .. PURE, null if out of range
 ItemStack pure = DropletsAPI.withPurity(stack, PurityLevel.PURE.level());  // a copy
-int here = DropletsAPI.getWaterPurity(level, pos);       // server side; poured water keeps its purity
+int here = DropletsAPI.getWaterPurity(level, pos);       // server side
 ```
 
 `getItemPurity`, `getFluidPurity`, `withItemPurity` and `withFluidPurity` do the same as the `getPurity` and `withPurity` overloads, for callers that cannot pick an overload by type (scripting languages).
@@ -177,7 +177,7 @@ DropletsAPI.registerExhaustionModifier(ResourceLocation.fromNamespaceAndPath("my
 DropletsAPI.refreshExhaustionModifier(player);
 ```
 
-`/droplets_of_thirst debug exhaustion` shows the combined effect of registered modifiers as "other mods".
+`/droplets debug exhaustion` shows the combined effect of registered modifiers as "other mods".
 
 ---
 
@@ -248,10 +248,10 @@ public static void immuneToDirtyWater(PurityEffectEvent event) {
 
 ## Transfer API
 
-Water carries its purity as the `droplets_of_thirst:purity` data component, on item stacks and on fluids. Through NeoForge's transfer API (`ResourceHandler`, `FluidResource`), the water of a bucket and the water a cauldron reports carry their purity. A pump or pipe that drains a water cauldron gets murky water, or clean water over a heat source. Keep the component when you move water between tanks, and the water keeps its purity.
+Water carries its purity as the `droplets_of_thirst:purity` data component, on item stacks and on fluids. Through NeoForge's fluid capability (`IFluidHandler`, `FluidStack`), the water of a bucket and the water a cauldron reports carry their purity. A pump or pipe that drains a water cauldron gets murky water, or clean water over a heat source. Keep the component when you move water between tanks, and the water keeps its purity.
 
 ---
 
 ## Deprecated
 
-`RegisterThirstValueEvent` (posted on each table rebuild) still works, but the API jar does not have it. Use `registerDrink`, `registerDrinkProvider` and `registerContainer`. `IThirst`, `PlayerThirst`, `ModAttachment` and `ThirstHelper` are internal. Read through `DropletsAPI.view` and change thirst through `DropletsAPI`, which keeps the invariants and posts the events.
+`RegisterThirstValueEvent` (posted on each table rebuild) still works, but the API jar does not have it. Use `registerDrink`, `registerDrinkProvider` and `registerContainer`. `PlayerThirst` and `ThirstHelper` are internal. Read through `DropletsAPI.view` and change thirst through `DropletsAPI`, which keeps the invariants and posts the events.

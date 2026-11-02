@@ -10,20 +10,27 @@ Droplets of Thirst for Minecraft 1.21.1 runs on **Minecraft 1.21.1 and NeoForge 
 
 - **Sprinting**: with 3 droplets or less you cannot start a sprint. A sprint already in progress goes on.
 - **The Nether**: the Nether multiplier and the hot climate of dirty water apply in dimensions whose type is ultra-warm, as the Nether.
-- **Thirst Was Taken worlds** load with the players' thirst and the purity of their water. The four purity levels of Thirst Was Taken move to the six of Droplets of Thirst. Cauldrons lose their purity, because cauldrons no longer store one.
-- **With Create installed**, cooking stops at clean (4), and only the Sand Filter makes pure water (5). Without Create, cooking reaches pure.
+- **With Create installed**, cooking stops at clean (4), and pure water (5) comes from a filter: the Sand Filter or the Charcoal Filter. Without Create, cooking reaches pure.
 
 ### Create
 
 <!-- SCREENSHOT: a Create setup with two Sand Filters in a row between a pump and a tank, goggles tooltip showing the purity of each tank -->
 
-- **Sand Filter**: a block that purifies water pumped through it, `sandFilterFiltrationAmount` levels per filter (1), up to `sandFilterMaxPurity` (5). Dirty water goes in on one side and purified water comes out on the other (down when placed, and a wrench turns it). Filters in a row facing the same way pass water on, one step each, with no pipes in between. With Create, it is the only way to get pure water. It keeps both tanks when you break it or pick it up with a wrench, and it has a Ponder scene.
+- **Sand Filter**: a block that purifies water pumped through it, `sandFilterFiltrationAmount` levels per filter (2), up to `sandFilterMaxPurity` (5). Dirty water goes in on one side and purified water comes out on the other (down when placed, and a wrench turns it). Filters in a row facing the same way pass water on with no pipes in between. With Create, a filter is the only way to get pure water. The Charcoal Filter does it too, one level at a time and by gravity. It keeps both tanks when you break it or pick it up with a wrench, and it has a Ponder scene.
 - **Fans**: washing (water in front of the fan) takes water bottles and terracotta water bowls up one level per pass, up to clean. Water buckets do not work, because Create gives back the bucket's crafting remainder next to the result. Smoking and blasting fans use the smoker and furnace purification recipes.
 - **Heated basins**: a mixer over a heated basin takes 250 mB of water up one level per mix, up to clean.
 - **Compacting a cactus** gives 250 mB of acceptable water (3) and green dye.
-- **Spouts, drains, pipes, pumps and hose pulleys** keep the purity of the water they move. An open pipe end that pulls water from the world or a cauldron takes the purity the water has there. Water it pours counts as poured water. An Item Drain empties terracotta water bowls.
+- **Spouts, drains, pipes, pumps and hose pulleys** keep the purity of the water they move. An open pipe end that pulls water from the world or a cauldron takes the purity the water has there. An Item Drain empties terracotta water bowls.
 - **Goggles** show the purity of water and of fluids that carry it (Create's tea) in tanks and basins.
 - When installed, Create must be 6.0.6 or newer.
+
+### Supplementaries
+
+- The Jar and the Faucet (Supplementaries 4.0.2 and Moonlight 3.7.2 or newer) keep the purity of water. A Faucet on a water block or a water cauldron gives water with its purity, a Jar keeps the purity of the bottles emptied into it and of water pumped in, and the bottles and pipes it fills get the purity back. A Jar that already holds water ignores the purity of a bottle emptied into it.
+
+### Mekanism and Immersive Engineering
+
+- Mekanism's Electric Pump (10.7.19 or newer) and Immersive Engineering's Fluid Pump (12.4.2 or newer) give water with the purity of the place it was taken from, as Create's open pipe does. A pump holds one purity at a time, so it waits to empty before taking water of a different purity. Heavy water from the Mekanism filter has no purity.
 
 ### Farmer's Delight and its addons
 
@@ -70,7 +77,7 @@ These keys go with the mods above.
 
 | Key | Default | Meaning |
 |---|---|---|
-| `create.sandFilterFiltrationAmount` | `1` | Purity levels gained in a Sand Filter (0-5) |
+| `create.sandFilterFiltrationAmount` | `2` | Purity levels gained in a Sand Filter (0-5) |
 | `create.sandFilterMbPerTick` | `10` | Millibuckets filtered per tick (1-1000) |
 | `create.sandFilterMaxPurity` | `5` | Highest purity a Sand Filter raises water to (0-5). Purer water passes unchanged |
 | `create.openEndedPipePurity` | `true` | Water an open pipe end pulls from the world or from a water cauldron keeps its purity there, as with buckets and the hose pulley. `false` = it reads as `defaultPurity` |
@@ -95,9 +102,10 @@ These keys go with the mods above.
 | `client.toml` `Bar Colors.vampire` | `#B3121B` | Droplet colour for vampires (Vampirism, Supernatural). It wins over every other colour |
 | `gameplay.toml` `effects.quenchnessPotion` | `true` | Switches the brewing mixes, which are registered in code. Not synced: keep the same value on the server and the clients, or the brewing stand may not accept prismarine crystals on the client |
 
+- The **Boiler** purifies water bottles, buckets, terracotta bowls, waterskins and Canteens while it has fuel, one level every 10 seconds, up to acceptable.
+- A **Canteen** of water works like a waterskin: it takes the temperature of the water you fill it from, the Boiler heats it, the Icebox chills it, and each sip warms or cools you. A full Canteen does as much as a full waterskin, and the water keeps its temperature in your pack. Juices have no temperature.
 - The pure water bonus also counts Cold Sweat waterskins.
 - With purity off, Create goggles and the Sand Filter tooltip show no purity, the Sand Filter lets water through unchanged, and cactus compacting gives plain water. `sandFilterFiltrationAmount`, `sandFilterMaxPurity` and `openEndedPipePurity` do nothing.
-- Moving from Thirst Was Taken: `common.toml` `Create compatibility.*` moves to `compat.toml` `create.*`.
 
 ---
 
@@ -138,7 +146,7 @@ On 1.21.1 the tag folders are singular: `tags/item/`, `tags/block/`, `tags/fluid
 
 ## Mod compatibility
 
-Minimum versions when installed: Create 6.0.6, Farmer's Delight 1.3, Cold Sweat 2.4, Serene Seasons 10.1, Traveler's Backpack 10.1, Reliquary 2.0, JEI 19.21, Brewin' and Chewin' 4.5, Extra Delight 2.6.5, Farm & Charm 1.1.26, HerbalBrews 1.1.4, Brewery 2.1, Fruits Delight 1.2.14, Cultural Delights 0.18, Expanded Delight 0.1.4, Miner's Delight 1.4, Corn Delight 1.2.10, Rustic Delight 1.7, Crabber's Delight 1.3, End's Delight 2.6, My Nether's Delight 1.10. Built against Create 6.0.10, Cold Sweat 2.4.3.1, JEI 19.21.0.247 and KubeJS 2101.7.2.
+Minimum versions when installed: Create 6.0.6, Farmer's Delight 1.3, Cold Sweat 2.4.4, Serene Seasons 10.1, Traveler's Backpack 10.1, Reliquary 2.0, JEI 19.21, Brewin' and Chewin' 4.5, Extra Delight 2.6.5, Farm & Charm 1.1.26, HerbalBrews 1.1.4, Brewery 2.1, Fruits Delight 1.2.14, Cultural Delights 0.18, Expanded Delight 0.1.4, Miner's Delight 1.4, Corn Delight 1.2.10, Rustic Delight 1.7, Crabber's Delight 1.3, End's Delight 2.6, My Nether's Delight 1.10. Built against Create 6.0.10, Cold Sweat 2.4.3.1, JEI 19.21.0.247 and KubeJS 2101.7.2.
 
 - **Jade** 15.10.6 and newer work: a Jade plugin shows the purity. Tank purity needs Jade on the server too.
 - **JEI** pages also show in EMI when JEI is installed next to it.
