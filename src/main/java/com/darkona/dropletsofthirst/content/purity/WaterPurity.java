@@ -332,9 +332,9 @@ public class WaterPurity
         return purity == PurityLevel.PURE.level() && enabled() ? SyncedValues.pureThirstBonus() : 0;
     }
 
-    public static int waterQuenchedBonus(int purity)
+    public static int waterHydrationBonus(int purity)
     {
-        return purity == PurityLevel.PURE.level() && enabled() ? SyncedValues.pureQuenchedBonus() : 0;
+        return purity == PurityLevel.PURE.level() && enabled() ? SyncedValues.pureHydrationBonus() : 0;
     }
 
     public static int drinkPurity(ItemStack item)

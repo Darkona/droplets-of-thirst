@@ -62,33 +62,33 @@ public final class DropletsServiceImpl implements DropletsService
     public boolean setThirst(Player player, int thirst)
     {
         PlayerThirst data = server(player);
-        return data != null && data.change(player, thirst, data.getQuenched(), ThirstChangeEvent.Cause.API);
+        return data != null && data.change(player, thirst, data.getHydration(), ThirstChangeEvent.Cause.API);
     }
 
     @Override
-    public boolean setQuenched(Player player, int quenched)
+    public boolean setQuenched(Player player, int hydration)
     {
         PlayerThirst data = server(player);
-        return data != null && data.change(player, data.getThirst(), quenched, ThirstChangeEvent.Cause.API);
+        return data != null && data.change(player, data.getThirst(), hydration, ThirstChangeEvent.Cause.API);
     }
 
     @Override
-    public boolean addThirst(Player player, int thirst, int quenched)
+    public boolean addThirst(Player player, int thirst, int hydration)
     {
         PlayerThirst data = server(player);
-        return data != null && data.change(player, data.getThirst() + thirst, data.getQuenched() + quenched, ThirstChangeEvent.Cause.API);
+        return data != null && data.change(player, data.getThirst() + thirst, data.getHydration() + hydration, ThirstChangeEvent.Cause.API);
     }
 
     @Override
-    public boolean drink(Player player, int thirst, int quenched, int purity)
+    public boolean drink(Player player, int thirst, int hydration, int purity)
     {
-        return server(player) != null && PlayerThirst.drink(player, ItemStack.EMPTY, thirst, quenched, purity);
+        return server(player) != null && PlayerThirst.drink(player, ItemStack.EMPTY, thirst, hydration, purity);
     }
 
     @Override
-    public boolean eat(Player player, int thirst, int quenched)
+    public boolean eat(Player player, int thirst, int hydration)
     {
-        return server(player) != null && PlayerThirst.eat(player, ItemStack.EMPTY, thirst, quenched);
+        return server(player) != null && PlayerThirst.eat(player, ItemStack.EMPTY, thirst, hydration);
     }
 
     @Override
@@ -136,9 +136,9 @@ public final class DropletsServiceImpl implements DropletsService
     }
 
     @Override
-    public void registerDrink(ItemLike item, int thirst, int quenched, int purity)
+    public void registerDrink(ItemLike item, int thirst, int hydration, int purity)
     {
-        ThirstHelper.registerDrink(item, thirst, quenched, purity);
+        ThirstHelper.registerDrink(item, thirst, hydration, purity);
     }
 
     @Override

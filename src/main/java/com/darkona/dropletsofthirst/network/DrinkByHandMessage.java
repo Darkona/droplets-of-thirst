@@ -59,7 +59,7 @@ public record DrinkByHandMessage() implements CustomPacketPayload
                 player.swing(InteractionHand.MAIN_HAND, true);
                 PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new HandDrankMessage(player.getId()));
             }
-            PlayerThirst.drink(player, ItemStack.EMPTY, GameplayConfig.HAND_DRINKING_THIRST.get(), GameplayConfig.HAND_DRINKING_QUENCHED.get(), WaterPurity.getBlockPurity(level, pos));
+            PlayerThirst.drink(player, ItemStack.EMPTY, GameplayConfig.HAND_DRINKING_THIRST.get(), GameplayConfig.HAND_DRINKING_HYDRATION.get(), WaterPurity.getBlockPurity(level, pos));
         });
     }
 

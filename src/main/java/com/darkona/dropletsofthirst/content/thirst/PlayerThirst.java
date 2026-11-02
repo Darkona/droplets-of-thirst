@@ -52,7 +52,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
     private static final int CANCELLED = 2;
 
     int thirst = MAX_THIRST;
-    int quenched = RESPAWN_QUENCHED;
+    int hydration = RESPAWN_HYDRATION;
     float exhaustion = 0;
     int damageTimer = 0;
     float prevTickExhaustion = 0.0F;
@@ -71,14 +71,14 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
     boolean pausedByEffect;
     boolean stoppedByEffect;
     boolean nauseous;
-    private enum Shown { THIRST, QUENCHED, RULES }
+    private enum Shown { THIRST, HYDRATION, RULES }
     private final ShownFields<Shown> shown = new ShownFields<>(Shown.class);
     int syncedRules = SYNC_SPRINT_BLOCKED | SYNC_BOTH_HANDS | SPRINT_MIN_THIRST << SYNC_SPRINT_MIN_SHIFT;
     int handDrinkReadyTick = 0;
     int fullHydrationTicks;
     float overflow;
     private final FractionalCarry bloodThirst = new FractionalCarry();
-    private final FractionalCarry bloodQuenched = new FractionalCarry();
+    private final FractionalCarry bloodHydration = new FractionalCarry();
 
     public PlayerThirst() {}
 
@@ -105,17 +105,17 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
     public void setThirst(int value)
     {
         thirst = Mth.clamp(value, 0, MAX_THIRST);
-        quenched = Math.min(quenched, thirst);
+        hydration = Math.min(hydration, thirst);
     }
 
-    public int getQuenched()
+    public int getHydration()
     {
-        return quenched;
+        return hydration;
     }
 
-    public void setQuenched(int value)
+    public void setHydration(int value)
     {
-        quenched = Mth.clamp(value, 0, thirst);
+        hydration = Mth.clamp(value, 0, thirst);
     }
 
     public float getExhaustion()
@@ -137,7 +137,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
     @Override
     public int quenched()
     {
-        return quenched;
+        return hydration;
     }
 
     @Override
@@ -158,29 +158,29 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
         return exhaustionModifier;
     }
 
-    public boolean change(Player player, int newThirst, int newQuenched, ThirstChangeEvent.Cause cause)
+    public boolean change(Player player, int newThirst, int newHydration, ThirstChangeEvent.Cause cause)
     {
-        return apply(player, newThirst, newQuenched, cause) == CHANGED;
+        return apply(player, newThirst, newHydration, cause) == CHANGED;
     }
 
-    private int apply(Player player, int newThirst, int newQuenched, ThirstChangeEvent.Cause cause)
+    private int apply(Player player, int newThirst, int newHydration, ThirstChangeEvent.Cause cause)
     {
         newThirst = Mth.clamp(newThirst, 0, MAX_THIRST);
-        newQuenched = Mth.clamp(newQuenched, 0, newThirst);
-        if (newThirst == thirst && newQuenched == quenched)
+        newHydration = Mth.clamp(newHydration, 0, newThirst);
+        if (newThirst == thirst && newHydration == hydration)
             return UNCHANGED;
-        ThirstChangeEvent.Pre pre = NeoForge.EVENT_BUS.post(new ThirstChangeEvent.Pre(player, cause, thirst, quenched, newThirst, newQuenched));
+        ThirstChangeEvent.Pre pre = NeoForge.EVENT_BUS.post(new ThirstChangeEvent.Pre(player, cause, thirst, hydration, newThirst, newHydration));
         if (pre.isCanceled())
             return CANCELLED;
         newThirst = Mth.clamp(pre.getNewThirst(), 0, MAX_THIRST);
-        newQuenched = Mth.clamp(pre.getNewQuenched(), 0, newThirst);
-        if (newThirst == thirst && newQuenched == quenched)
+        newHydration = Mth.clamp(pre.getNewQuenched(), 0, newThirst);
+        if (newThirst == thirst && newHydration == hydration)
             return UNCHANGED;
         int oldThirst = thirst;
-        int oldQuenched = quenched;
+        int oldHydration = hydration;
         thirst = newThirst;
-        quenched = newQuenched;
-        NeoForge.EVENT_BUS.post(new ThirstChangeEvent.Post(player, cause, oldThirst, oldQuenched, thirst, quenched));
+        hydration = newHydration;
+        NeoForge.EVENT_BUS.post(new ThirstChangeEvent.Post(player, cause, oldThirst, oldHydration, thirst, hydration));
         return CHANGED;
     }
 
@@ -198,26 +198,26 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
             eat(player, item, values.thirst(), values.quenched());
     }
 
-    public static boolean drinkBlood(Player player, ItemStack source, float thirst, float quenched)
+    public static boolean drinkBlood(Player player, ItemStack source, float thirst, float hydration)
     {
         if (player.level().isClientSide)
             return false;
         PlayerThirst data = player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
         int wholeThirst = data.bloodThirst.add(thirst);
-        int wholeQuenched = data.bloodQuenched.add(quenched);
-        return (wholeThirst != 0 || wholeQuenched != 0) && drink(player, source, wholeThirst, wholeQuenched, DropletsAPI.NO_PURITY, false);
+        int wholeHydration = data.bloodHydration.add(hydration);
+        return (wholeThirst != 0 || wholeHydration != 0) && drink(player, source, wholeThirst, wholeHydration, DropletsAPI.NO_PURITY, false);
     }
 
-    public static boolean drinkWater(Player player, int thirst, int quenched, int purity)
+    public static boolean drinkWater(Player player, int thirst, int hydration, int purity)
     {
-        return drink(player, ItemStack.EMPTY, thirst + WaterPurity.waterThirstBonus(purity), quenched + WaterPurity.waterQuenchedBonus(purity), purity);
+        return drink(player, ItemStack.EMPTY, thirst + WaterPurity.waterThirstBonus(purity), hydration + WaterPurity.waterHydrationBonus(purity), purity);
     }
 
-    public static boolean eat(Player player, ItemStack item, int thirst, int quenched)
+    public static boolean eat(Player player, ItemStack item, int thirst, int hydration)
     {
         if (player.level().isClientSide || !VampireThirst.canHydrate(item, player))
             return false;
-        EatEvent.Pre pre = NeoForge.EVENT_BUS.post(new EatEvent.Pre(player, item, thirst, quenched));
+        EatEvent.Pre pre = NeoForge.EVENT_BUS.post(new EatEvent.Pre(player, item, thirst, hydration));
         if (pre.isCanceled())
             return false;
         boolean hydrated = player.getData(DropletsAttachmentTypes.PLAYER_THIRST).hydrate(player, pre.getThirst(), pre.getQuenched(), true, ThirstChangeEvent.Cause.EAT);
@@ -225,18 +225,18 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
         return hydrated;
     }
 
-    public static boolean drink(Player player, ItemStack item, int thirst, int quenched, int purity)
+    public static boolean drink(Player player, ItemStack item, int thirst, int hydration, int purity)
     {
-        return VampireThirst.canHydrate(item, player) && drink(player, item, thirst, quenched, purity, true);
+        return VampireThirst.canHydrate(item, player) && drink(player, item, thirst, hydration, purity, true);
     }
 
-    private static boolean drink(Player player, ItemStack item, int thirst, int quenched, int purity, boolean overflows)
+    private static boolean drink(Player player, ItemStack item, int thirst, int hydration, int purity, boolean overflows)
     {
         if (player.level().isClientSide)
             return false;
         if (!WaterPurity.enabled())
             purity = DropletsAPI.NO_PURITY;
-        DrinkEvent.Pre pre = NeoForge.EVENT_BUS.post(new DrinkEvent.Pre(player, item, thirst, quenched, purity));
+        DrinkEvent.Pre pre = NeoForge.EVENT_BUS.post(new DrinkEvent.Pre(player, item, thirst, hydration, purity));
         if (pre.isCanceled())
             return false;
         boolean hydrated = PurityEffects.give(player, pre.getPurity())
@@ -245,21 +245,21 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
         return hydrated;
     }
 
-    public boolean hydrate(Player player, int thirst, int quenched, boolean overflows, ThirstChangeEvent.Cause cause)
+    public boolean hydrate(Player player, int thirst, int hydration, boolean overflows, ThirstChangeEvent.Cause cause)
     {
-        int extra = GameplayConfig.EXTRA_THIRST_TO_QUENCHED.get() ? Math.max(this.thirst + thirst - MAX_THIRST, 0) : 0;
-        return absorb(player, thirst, quenched, this.thirst + thirst, this.quenched + quenched + extra, overflows, cause);
+        int extra = GameplayConfig.EXTRA_THIRST_TO_HYDRATION.get() ? Math.max(this.thirst + thirst - MAX_THIRST, 0) : 0;
+        return absorb(player, thirst, hydration, this.thirst + thirst, this.hydration + hydration + extra, overflows, cause);
     }
 
-    private boolean absorb(Player player, int thirst, int quenched, int newThirst, int newQuenched, boolean overflows, ThirstChangeEvent.Cause cause)
+    private boolean absorb(Player player, int thirst, int hydration, int newThirst, int newHydration, boolean overflows, ThirstChangeEvent.Cause cause)
     {
         int wasted = 0;
-        if (overflows && thirst >= 0 && quenched >= 0 && GameplayConfig.OVERHYDRATION.get() && shouldTickThirst && !player.getAbilities().invulnerable)
+        if (overflows && thirst >= 0 && hydration >= 0 && GameplayConfig.OVERHYDRATION.get() && shouldTickThirst && !player.getAbilities().invulnerable)
         {
             int fitThirst = Mth.clamp(newThirst, 0, MAX_THIRST);
-            wasted = thirst + quenched - (fitThirst - this.thirst) - (Mth.clamp(newQuenched, 0, fitThirst) - this.quenched);
+            wasted = thirst + hydration - (fitThirst - this.thirst) - (Mth.clamp(newHydration, 0, fitThirst) - this.hydration);
         }
-        int result = apply(player, newThirst, newQuenched, cause);
+        int result = apply(player, newThirst, newHydration, cause);
         if (wasted > 0 && result != CANCELLED)
             overflow(player, wasted);
         return result == CHANGED;
@@ -355,22 +355,22 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
 
         if (pointSpent)
         {
-            if (quenched > 0)
-                change(player, thirst, quenched - 1, ThirstChangeEvent.Cause.DEPLETION);
+            if (hydration > 0)
+                change(player, thirst, hydration - 1, ThirstChangeEvent.Cause.DEPLETION);
             else if (difficulty != Difficulty.PEACEFUL || GameplayConfig.DEPLETES_IN_PEACEFUL.get())
-                change(player, thirst - 1, quenched, ThirstChangeEvent.Cause.DEPLETION);
+                change(player, thirst - 1, hydration, ThirstChangeEvent.Cause.DEPLETION);
         }
 
         if(difficulty == Difficulty.PEACEFUL && !GameplayConfig.DEPLETES_IN_PEACEFUL.get() && player.tickCount % GameplayConfig.PEACEFUL_REGEN_INTERVAL_TICKS.get() == 0)
-            change(player, thirst + GameplayConfig.PEACEFUL_REGEN_AMOUNT.get(), quenched, ThirstChangeEvent.Cause.PEACEFUL);
+            change(player, thirst + GameplayConfig.PEACEFUL_REGEN_AMOUNT.get(), hydration, ThirstChangeEvent.Cause.PEACEFUL);
 
         if(thirst < MAX_THIRST && GameplayConfig.RAIN_DRINKING.get() && player.tickCount % GameplayConfig.RAIN_INTERVAL_TICKS.get() == 0
                 && Mth.wrapDegrees(player.getXRot()) <= GameplayConfig.RAIN_MAX_PITCH.get() && player.level().isRainingAt(player.blockPosition().above())
                 && !VampireThirst.isVampire(player))
         {
             int rainThirst = GameplayConfig.RAIN_THIRST.get();
-            int rainQuenched = GameplayConfig.RAIN_QUENCHED.get();
-            absorb(player, rainThirst, rainQuenched, thirst + rainThirst, quenched + rainQuenched, true, ThirstChangeEvent.Cause.RAIN);
+            int rainHydration = GameplayConfig.RAIN_HYDRATION.get();
+            absorb(player, rainThirst, rainHydration, thirst + rainThirst, hydration + rainHydration, true, ThirstChangeEvent.Cause.RAIN);
         }
 
         if (thirst <= 0)
@@ -397,7 +397,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
 
     private void fullHydrationBonus(Player player)
     {
-        if(thirst < MAX_THIRST || quenched < GameplayConfig.FULL_HYDRATION_MIN_QUENCHED.get())
+        if(thirst < MAX_THIRST || hydration < GameplayConfig.FULL_HYDRATION_MIN_HYDRATION.get())
         {
             fullHydrationTicks = 0;
             return;
@@ -490,11 +490,11 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
         if(player instanceof FakePlayer || player.connection == null)
             return;
         shown.show(Shown.THIRST, thirst);
-        shown.show(Shown.QUENCHED, quenched);
+        shown.show(Shown.HYDRATION, hydration);
         shown.show(Shown.RULES, flags);
         if(!shown.shouldSend())
             return;
-        PacketDistributor.sendToPlayer(player, new PlayerThirstSyncMessage(thirst, quenched, exhaustion, flags));
+        PacketDistributor.sendToPlayer(player, new PlayerThirstSyncMessage(thirst, hydration, exhaustion, flags));
     }
 
     public void setSyncedRules(int flags)
@@ -581,7 +581,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
     public @UnknownNullability CompoundTag serializeNBT(HolderLookup.@NotNull Provider provider) {
         CompoundTag nbt = new CompoundTag();
         nbt.putInt("thirst", thirst);
-        nbt.putInt("quenched", quenched);
+        nbt.putInt("quenched", hydration);
         nbt.putFloat("exhaustion", exhaustion);
         nbt.putBoolean("enable",shouldTickThirst);
         nbt.putFloat("overflow", overflow);
@@ -591,7 +591,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
     @Override
     public void deserializeNBT(HolderLookup.@NotNull Provider provider, CompoundTag nbt) {
         setThirst(nbt.getInt("thirst"));
-        setQuenched(nbt.getInt("quenched"));
+        setHydration(nbt.getInt("quenched"));
         exhaustion = nbt.getFloat("exhaustion");
         shouldTickThirst = !nbt.contains("enable") || nbt.getBoolean("enable");
         overflow = nbt.getFloat("overflow");
@@ -599,7 +599,7 @@ public class PlayerThirst implements DropletsView, INBTSerializable<CompoundTag>
 
     public static final int MAX_THIRST = 20;
     public static final int RESPAWN_THIRST = 20;
-    public static final int RESPAWN_QUENCHED = 5;
+    public static final int RESPAWN_HYDRATION = 5;
 
     public static final float HUNGER_EXHAUSTION_PER_LEVEL = 0.005F;
 

@@ -6,11 +6,11 @@ This page describes the defaults. A modpack can change every number here through
 
 ## The thirst bar
 
-The thirst bar sits right above the hunger bar: 10 droplets, 20 points of thirst. Like hunger, thirst has a hidden reserve, **quenched**. The droplets start to empty only when quenched runs out. Quenched is never higher than thirst.
+The thirst bar sits right above the hunger bar: 10 droplets, 20 points of thirst. Like hunger, thirst has a hidden reserve, **hydration**. The droplets start to empty only when hydration runs out. Hydration is never higher than thirst.
 
-<!-- SCREENSHOT: close-up of the HUD: full hunger bar and a half-empty thirst bar, with the quenched outline visible on the droplets -->
+<!-- SCREENSHOT: close-up of the HUD: full hunger bar and a half-empty thirst bar, with the hydration outline visible on the droplets -->
 
-Holding something that restores thirst makes the droplets it would fill flash on the bar, and an outline on the droplets shows the current quenched. The droplets change colour while an effect applies to them: brown with Dehydration, grey-blue while overhydrated, green with Poison, cyan with Quenchness, mint with Hydrated.
+Holding something that restores thirst makes the droplets it would fill flash on the bar, and an outline on the droplets shows the current hydration. The droplets change colour while an effect applies to them: brown with Dehydration, grey-blue while overhydrated, green with Poison, cyan with Quenchness, mint with Hydrated.
 
 <!-- SCREENSHOT: thirst bar tinted brown under Dehydration, next to a normal one (two crops side by side) -->
 
@@ -42,7 +42,7 @@ You respawn with full thirst.
 
 ## Drinking
 
-| Source | Thirst | Quenched | Notes |
+| Source | Thirst | Hydration | Notes |
 |---|---|---|---|
 | Water bottle | 4 | 5 | Two droplets. Pure water (5) gives 6 and 8 |
 | Terracotta water bowl | 4 | 5 | Same as a bottle. The empty bowl goes back to your inventory |
@@ -61,7 +61,7 @@ Chests in dungeons, mineshafts, shipwrecks, Nether fortresses and bastions can h
 
 Some food hydrates a little and some makes you thirstier. Plain food (bread, meat, most dishes) does nothing to thirst. The tooltip of every item that changes thirst shows how much, as droplets.
 
-| Food | Thirst | Quenched |
+| Food | Thirst | Hydration |
 |---|---|---|
 | Melon slice | 4 | 4 |
 | Beetroot soup | 3 | 3 |
@@ -70,13 +70,13 @@ Some food hydrates a little and some makes you thirstier. Plain food (bread, mea
 | Cake, per slice | 1 | 1 |
 | Rotten flesh, spider eye, pufferfish, poisonous potato | -3 | -3 |
 
-<!-- SCREENSHOT: item tooltip of a melon slice showing the thirst droplets and quenched icons -->
+<!-- SCREENSHOT: item tooltip of a melon slice showing the thirst droplets and hydration icons -->
 
 ### Juices, soda and milk
 
 Water keeps you alive, but better drinks reward a little more work. A juice needs water that is at least acceptable, so a clean source pays off.
 
-| Drink | How to get it | Thirst | Quenched | Bonus |
+| Drink | How to get it | Thirst | Hydration | Bonus |
 |---|---|---|---|---|
 | Apple Juice | Apple and a water bottle | 7 | 9 | Hydrated, 1 minute |
 | Melon Juice | 2 melon slices and a water bottle | 8 | 10 | Hydrated, 2 minutes |
@@ -125,7 +125,7 @@ Water has one of six purity levels. Bottles, bowls and buckets of water show it 
 | 2 | Murky | 25% chance of Nausea and Hunger |
 | 3 | Acceptable | 5% chance of Nausea and Hunger |
 | 4 | Clean | Nothing |
-| 5 | Pure | Nothing, and it hydrates more: 6 thirst and 8 quenched per bottle |
+| 5 | Pure | Nothing, and it hydrates more: 6 thirst and 8 hydration per bottle |
 
 Poisoned water still hydrates by default. A server can make Poison cancel the drink instead (`purity.toml` `general.quenchWhenDebuffed`).
 
@@ -187,7 +187,7 @@ Everything is also in the Droplets of Thirst creative tab. The tab lists each wa
 
 | Effect | What it does | Source |
 |---|---|---|
-| Quenchness | Restores 1 thirst and 1 quenched every 2 seconds per level | Potion of Quenchness |
+| Quenchness | Restores 1 thirst and 1 hydration every 2 seconds per level | Potion of Quenchness |
 | Hydrated | Thirst drains at half the speed per level | Juices, `/effect`, or datapacks and config |
 | Dehydration | Thirst drains faster, like Hunger does for food | Dirty water in a hot climate |
 | Overhydrated | 10% slower per level | Drinking far past full |
@@ -206,7 +206,7 @@ Gunpowder makes splash potions and dragon's breath makes lingering potions, as w
 
 - **Jade**: shows the purity of a water cauldron (the purity its water comes out with) and of water in tanks.
 - **JEI**: a "Hydration" page lists every item that changes thirst, and a "Water Purification" page shows the cauldron.
-- **AppleSkin**: turning off one of AppleSkin's food visuals also turns off its thirst counterpart. Droplets of Thirst draws its own quenched outline, drink preview and tooltip icons, with or without AppleSkin.
+- **AppleSkin**: turning off one of AppleSkin's food visuals also turns off its thirst counterpart. Droplets of Thirst draws its own hydration outline, drink preview and tooltip icons, with or without AppleSkin.
 - **Serene Seasons**: the season changes the climate of thirst loss.
 - **Traveler's Backpack**: drinking water through the hose hydrates like a water bottle, with the purity of the water in the tank. Water the hose sucks from the world keeps its purity.
 

@@ -17,7 +17,7 @@ public final class AppleSkinCompat
         return options.present() ? options : null;
     }
 
-    public static boolean quenchedOverlay()
+    public static boolean hydrationOverlay()
     {
         AppleSkinOptions options = followed();
         return options == null || options.saturationOverlay();

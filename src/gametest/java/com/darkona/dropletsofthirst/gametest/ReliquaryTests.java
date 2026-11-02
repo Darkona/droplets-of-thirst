@@ -30,12 +30,12 @@ public class ReliquaryTests
         ServerPlayer player = player(helper);
         thirst(player).change(player, 10, 0, ThirstChangeEvent.Cause.COMMAND);
         int before = thirst(player).getThirst();
-        int quenched = thirst(player).getQuenched();
+        int hydration = thirst(player).getHydration();
         drink(helper, player, new ItemStack(ModItems.INFERNAL_CHALICE.get()));
         helper.assertValueEqual(thirst(player).getThirst(), before, "thirst after the Infernal Chalice");
         drink(helper, player, new ItemStack(ModItems.EMPEROR_CHALICE.get()));
         helper.assertValueEqual(thirst(player).getThirst(), before + 4, "thirst after the Emperor's Chalice");
-        helper.assertValueEqual(thirst(player).getQuenched(), quenched + 5, "quenched after the Emperor's Chalice");
+        helper.assertValueEqual(thirst(player).getHydration(), hydration + 5, "hydration after the Emperor's Chalice");
         helper.assertValueEqual(ThirstHelper.getDrinkPurity(new ItemStack(ModItems.EMPEROR_CHALICE.get())), 5, "purity of the Emperor's Chalice");
         helper.succeed();
     }

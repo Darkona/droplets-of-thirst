@@ -71,7 +71,7 @@ Tested with Create 6.0.8, Jade 11.13.3, JEI 15.56, AppleSkin 2.5.1, Cold Sweat 2
 - **Miner's Delight**'s mod id on 1.20.1 is `miners_delight`: its water cup is `miners_delight:water_cup`. Create spouts and drains fill and empty it through Miner's Delight's own recipes.
 - **Brewin' and Chewin' kegs** do not take water that carries a purity, and the clean water rule does not apply to them. Water with no purity stored works as before.
 - **Create mixing** recipes of Fruits Delight (jams, juices, teas) and Rustic Delight's coffee accept water of any purity.
-- **Vampires** work as on 1.21.1: their thirst goes down and only blood quenches it. Vampirism 1.10.17 counts every drink of blood, as on 1.21.1. Supernatural 2.12.1 has no blood tag, so `droplets_of_thirst:blood` lists its blood bottle directly (thirst 6, quenched 6). The red droplets follow Supernatural's own vampire check.
+- **Vampires** work as on 1.21.1: their thirst goes down and only blood quenches it. Vampirism 1.10.17 counts every drink of blood, as on 1.21.1. Supernatural 2.12.1 has no blood tag, so `droplets_of_thirst:blood` lists its blood bottle directly (thirst 6, hydration 6). The red droplets follow Supernatural's own vampire check.
 
 Not on 1.20.1:
 

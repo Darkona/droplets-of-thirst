@@ -30,7 +30,7 @@ public final class CompatConfig
     public static final ModConfigSpec.IntValue RELIQUARY_EMPEROR_CHALICE_COOLDOWN;
 
     public static final ModConfigSpec.DoubleValue VAMPIRISM_THIRST_PER_BLOOD;
-    public static final ModConfigSpec.DoubleValue VAMPIRISM_QUENCHED_PER_BLOOD;
+    public static final ModConfigSpec.DoubleValue VAMPIRISM_HYDRATION_PER_BLOOD;
 
     public static final ModConfigSpec.IntValue KETTLE_MIN_PURITY;
     public static final ModConfigSpec.BooleanValue WORLD_PURITY_WATER_SOURCES;
@@ -76,8 +76,8 @@ public final class CompatConfig
                 "blood containers, blood food) also restores thirst; the altars and /vampirism commands that fill the blood bar do not").push("vampirism");
         VAMPIRISM_THIRST_PER_BLOOD = BUILDER.comment("Thirst points per point of blood drunk; the blood bar and the thirst bar are both 20, so 1.0 = a full blood refill fills the thirst bar")
                 .defineInRange("thirstPerBlood", 1.0, 0.0, 20.0);
-        VAMPIRISM_QUENCHED_PER_BLOOD = BUILDER.comment("Quenched per point of blood drunk, times the blood's saturation in Vampirism (0.3 poor to 1.0 rich; a blood bottle is 0.45)")
-                .defineInRange("quenchedPerBlood", 1.0, 0.0, 20.0);
+        VAMPIRISM_HYDRATION_PER_BLOOD = BUILDER.comment("Hydration per point of blood drunk, times the blood's saturation in Vampirism (0.3 poor to 1.0 rich; a blood bottle is 0.45)")
+                .defineInRange("hydrationPerBlood", 1.0, 0.0, 20.0);
         BUILDER.pop();
 
         BUILDER.comment("Farmer's Delight addons and Let's Do mods").push("delight");

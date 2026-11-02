@@ -15,7 +15,7 @@ public final class ClientConfig
 
     public static final ModConfigSpec.BooleanValue HIDE_BAR_WHEN_FULL;
     public static final ModConfigSpec.IntValue HIDE_BAR_DELAY_TICKS;
-    public static final ModConfigSpec.BooleanValue SHOW_QUENCHED_OVERLAY;
+    public static final ModConfigSpec.BooleanValue SHOW_HYDRATION_OVERLAY;
     public static final ModConfigSpec.BooleanValue SHOW_DRINK_PREVIEW;
     public static final ModConfigSpec.BooleanValue SHOW_EXHAUSTION_UNDERLAY;
     public static final ModConfigSpec.BooleanValue BUFF_WAVE;
@@ -37,8 +37,8 @@ public final class ClientConfig
         BUILDER.pop();
 
         BUILDER.push("Tooltip");
-        SHOW_TOOLTIP_ICONS = BUILDER.comment("Show the thirst and quenched an item gives as icons in its tooltip; when off, only estimated values are shown, as text").define("showTooltipIcons", true);
-        FOLLOW_APPLESKIN = BUILDER.comment("With AppleSkin installed, also hide the quenched outline, drink preview, exhaustion underlay and tooltip icons when its food counterpart is turned off in AppleSkin's config (tooltip icons then also follow its hold-Shift option)").define("followAppleSkin", true);
+        SHOW_TOOLTIP_ICONS = BUILDER.comment("Show the thirst and hydration an item gives as icons in its tooltip; when off, only estimated values are shown, as text").define("showTooltipIcons", true);
+        FOLLOW_APPLESKIN = BUILDER.comment("With AppleSkin installed, also hide the hydration outline, drink preview, exhaustion underlay and tooltip icons when its food counterpart is turned off in AppleSkin's config (tooltip icons then also follow its hold-Shift option)").define("followAppleSkin", true);
         BUILDER.pop();
 
         BUILDER.push("Thirst Bar");
@@ -46,9 +46,9 @@ public final class ClientConfig
         THIRST_BAR_X_OFFSET = BUILDER.comment("How many pixels should the thirst bar be shifted horizontally from its original position").define("thirstBarXOffset", 0);
         HIDE_BAR_WHEN_FULL = BUILDER.comment("Hide the thirst bar while thirst is full (20) and the player holds nothing that restores thirst. The other bars above it move down").define("hideBarWhenFull", false);
         HIDE_BAR_DELAY_TICKS = BUILDER.comment("Ticks the bar stays visible after thirst becomes full before it is hidden (20 ticks = 1 second)").defineInRange("hideBarDelayTicks", 60, 0, 1200);
-        SHOW_QUENCHED_OVERLAY = BUILDER.comment("Outline the droplets by the current quenched (like AppleSkin's saturation outline)").define("showQuenchedOverlay", true);
-        SHOW_DRINK_PREVIEW = BUILDER.comment("While holding something that restores thirst, flash the thirst and quenched it would give").define("showDrinkPreview", true);
-        SHOW_EXHAUSTION_UNDERLAY = BUILDER.comment("Show thirst exhaustion as a bar under the droplets (fills up until the next quenched or thirst point is lost)").define("showExhaustionUnderlay", false);
+        SHOW_HYDRATION_OVERLAY = BUILDER.comment("Outline the droplets by the current hydration (like AppleSkin's saturation outline)").define("showHydrationOverlay", true);
+        SHOW_DRINK_PREVIEW = BUILDER.comment("While holding something that restores thirst, flash the thirst and hydration it would give").define("showDrinkPreview", true);
+        SHOW_EXHAUSTION_UNDERLAY = BUILDER.comment("Show thirst exhaustion as a bar under the droplets (fills up until the next hydration or thirst point is lost)").define("showExhaustionUnderlay", false);
         BUFF_WAVE = BUILDER.comment("Droplets bounce one at a time, like hearts under Regeneration, while a positive thirst effect (Quenchness, Hydrated) is active").define("buffWave", true);
         BUILDER.pop();
 

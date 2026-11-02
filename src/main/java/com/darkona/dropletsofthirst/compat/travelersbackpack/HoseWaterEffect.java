@@ -36,7 +36,7 @@ final class HoseWaterEffect extends EffectFluid
         if (level.isClientSide() || !(entity instanceof Player player))
             return;
         ItemStack bottle = PotionContents.createItemStack(Items.POTION, Potions.WATER);
-        PlayerThirst.drinkWater(player, ThirstHelper.getThirst(bottle), ThirstHelper.getQuenched(bottle), WaterPurity.getPurity(fluid));
+        PlayerThirst.drinkWater(player, ThirstHelper.getThirst(bottle), ThirstHelper.getHydration(bottle), WaterPurity.getPurity(fluid));
     }
 
     @Override

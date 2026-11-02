@@ -81,9 +81,9 @@ public class ThirstHelper
         return Map.copyOf(providers);
     }
 
-    public static void registerDrink(ItemLike item, int thirst, int quenched, int purity)
+    public static void registerDrink(ItemLike item, int thirst, int hydration, int purity)
     {
-        CODE_DRINKS.add(new CodeDrink(Objects.requireNonNull(item), new int[]{Mth.clamp(thirst, -PlayerThirst.MAX_THIRST, PlayerThirst.MAX_THIRST), Math.max(quenched, -PlayerThirst.MAX_THIRST), Mth.clamp(purity, -1, WaterPurity.MAX_PURITY)}));
+        CODE_DRINKS.add(new CodeDrink(Objects.requireNonNull(item), new int[]{Mth.clamp(thirst, -PlayerThirst.MAX_THIRST, PlayerThirst.MAX_THIRST), Math.max(hydration, -PlayerThirst.MAX_THIRST), Mth.clamp(purity, -1, WaterPurity.MAX_PURITY)}));
     }
 
     public static void registerProvider(ItemLike item, DrinkValueProvider provider)
@@ -123,7 +123,7 @@ public class ThirstHelper
         {
             Item item = BuiltInRegistries.ITEM.get(entry.getKey());
             DrinkValues value = entry.getValue();
-            tables.claim(item, new int[]{value.thirst(), value.quenched(), value.purity().orElse(-1)}, isFoodItem(item));
+            tables.claim(item, new int[]{value.thirst(), value.hydration(), value.purity().orElse(-1)}, isFoodItem(item));
         }
 
         for (String id : ItemsConfig.CONTAINERS.get())
@@ -150,7 +150,7 @@ public class ThirstHelper
             containers.add(container.empty() == null ? new ContainerWithPurity(container.filled().asItem())
                     : new ContainerWithPurity(container.empty().asItem(), container.filled().asItem()));
 
-        int[] salty = {ItemsConfig.SALTY_THIRST.get(), ItemsConfig.SALTY_QUENCHED.get(), -1};
+        int[] salty = {ItemsConfig.SALTY_THIRST.get(), ItemsConfig.SALTY_HYDRATION.get(), -1};
         for (Holder<Item> item : BuiltInRegistries.ITEM.getTagOrEmpty(DropletsTags.SALTY))
             tables.claim(item.value(), salty, isFoodItem(item.value()));
 
@@ -322,9 +322,9 @@ public class ThirstHelper
         Pattern drink = keyword(ItemsConfig.KEYWORD_DRINK.get());
         Pattern soup = keyword(ItemsConfig.KEYWORD_SOUP.get());
         Pattern fruit = keyword(ItemsConfig.KEYWORD_FRUIT.get());
-        int[] drinkValues = {ItemsConfig.KEYWORD_DRINK_THIRST.get(), ItemsConfig.KEYWORD_DRINK_QUENCHED.get(), -1};
-        int[] soupValues = {ItemsConfig.KEYWORD_SOUP_THIRST.get(), ItemsConfig.KEYWORD_SOUP_QUENCHED.get(), -1};
-        int[] fruitValues = {ItemsConfig.KEYWORD_FRUIT_THIRST.get(), ItemsConfig.KEYWORD_FRUIT_QUENCHED.get(), -1};
+        int[] drinkValues = {ItemsConfig.KEYWORD_DRINK_THIRST.get(), ItemsConfig.KEYWORD_DRINK_HYDRATION.get(), -1};
+        int[] soupValues = {ItemsConfig.KEYWORD_SOUP_THIRST.get(), ItemsConfig.KEYWORD_SOUP_HYDRATION.get(), -1};
+        int[] fruitValues = {ItemsConfig.KEYWORD_FRUIT_THIRST.get(), ItemsConfig.KEYWORD_FRUIT_HYDRATION.get(), -1};
 
         for (Item item : BuiltInRegistries.ITEM)
         {
@@ -384,11 +384,11 @@ public class ThirstHelper
 
     @Deprecated(forRemoval = true, since = "1.3.8")
     @SuppressWarnings("unused")
-    public static void addFood(Item item, int thirst, int quenched) {}
+    public static void addFood(Item item, int thirst, int hydration) {}
 
     @Deprecated(forRemoval = true, since = "1.3.8")
     @SuppressWarnings("unused")
-    public static void addDrink(Item item, int thirst, int quenched) {}
+    public static void addDrink(Item item, int thirst, int hydration) {}
 
     public static int getThirst(ItemStack itemStack)
     {
@@ -396,7 +396,7 @@ public class ThirstHelper
         return values == null ? 0 : values.thirst();
     }
 
-    public static int getQuenched(ItemStack itemStack)
+    public static int getHydration(ItemStack itemStack)
     {
         ThirstValues values = valuesOf(itemStack);
         return values == null ? 0 : values.quenched();
@@ -418,7 +418,7 @@ public class ThirstHelper
         return provider == null ? null : provider.values(stack);
     }
 
-    private record PureValues(ThirstValues base, int thirst, int quenched, ThirstValues values) {}
+    private record PureValues(ThirstValues base, int thirst, int hydration, ThirstValues values) {}
 
     private static volatile PureValues lastPure = new PureValues(new ThirstValues(0, 0), 0, 0, new ThirstValues(0, 0));
 
@@ -429,13 +429,13 @@ public class ThirstHelper
             return values;
         int purity = WaterPurity.getPurity(stack);
         int thirst = WaterPurity.waterThirstBonus(purity);
-        int quenched = WaterPurity.waterQuenchedBonus(purity);
-        if (thirst == 0 && quenched == 0)
+        int hydration = WaterPurity.waterHydrationBonus(purity);
+        if (thirst == 0 && hydration == 0)
             return values;
         PureValues last = lastPure;
-        if (last.thirst() != thirst || last.quenched() != quenched || !last.base().equals(values))
-            lastPure = last = new PureValues(values, thirst, quenched,
-                    new ThirstValues(values.thirst() + thirst, values.quenched() + quenched, values.purity(), values.estimated()));
+        if (last.thirst() != thirst || last.hydration() != hydration || !last.base().equals(values))
+            lastPure = last = new PureValues(values, thirst, hydration,
+                    new ThirstValues(values.thirst() + thirst, values.quenched() + hydration, values.purity(), values.estimated()));
         return last.values();
     }
 

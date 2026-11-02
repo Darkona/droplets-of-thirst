@@ -4,6 +4,7 @@ Changes by feature, newest version first. Upstream issues are cited as `thirst#N
 
 ## 1.21.1-1.1.0 (Minecraft 1.21.1, NeoForge), 2026-11-02
 
+- Quenched is now called **hydration** in the game, the commands, the data maps (field `hydration`), the config keys (`hydrationBonus`, `rainHydration`, `respawnHydration` and the others) and the textures (`textures/gui/hydration_icons.png`). Datapacks and resource packs that use the old names need updating, and config keys with the old names go back to their defaults. Saved thirst is kept, and the API keeps the name `quenched`.
 - Droplets of Thirst now supports Minecraft 1.21.1 and 1.20.1 only. The other versions are no longer maintained or available on GitHub.
 - Water of any purity now mixes in tanks and Canteens, and the whole tank drops to the dirtiest purity. It works with any mod tank built on the NeoForge fluid tank.
 - With Supplementaries and Moonlight, the Jar and the Faucet keep the purity of water: the Faucet takes it from water blocks and cauldrons, the Jar keeps it when filled by pipes or bottles and passes it to the bottles it fills.
@@ -23,7 +24,7 @@ Changes by feature, newest version first. Upstream issues are cited as `thirst#N
 - Milk Bottle: a milk bucket fills 3 bottles, and each one cures only what dirty water did to you.
 - Each of these recipes turns off when another mod already makes the same drink (Farmer's Delight, Expanded Delight, Extra Delight, Cultural Delights).
 - French, Polish, Russian, Japanese, Korean and both Chinese translations are complete, including effect and potion names.
-- The server only sends thirst to the client when thirst or quenched change. Between changes the client works out the exhaustion bar by itself and settles on the server's value at each change. The periodic resend is gone.
+- The server only sends thirst to the client when thirst or hydration change. Between changes the client works out the exhaustion bar by itself and settles on the server's value at each change. The periodic resend is gone.
 - Nausea and Dehydration no longer drain thirst while an effect from `pauses_thirst` or `stops_thirst` is active, and activity from a `stops_thirst` effect is no longer charged when it ends.
 - Keywords now reach real foods: soups, fruits and food-type drinks that have no values. Before, they only matched items that cannot be eaten.
 - The config comment and wiki now say what `slowRegenIntervalTicks` counts: healing attempts, one every 10 ticks.

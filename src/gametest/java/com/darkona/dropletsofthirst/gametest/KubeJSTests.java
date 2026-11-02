@@ -39,7 +39,7 @@ public class KubeJSTests
         ThirstValues values = DropletsAPI.getDrinkValues(new ItemStack(lemonade));
         helper.assertTrue(values != null, "kubejs:lemonade has no thirst values" + HINT);
         helper.assertValueEqual(values.thirst(), 6, "lemonade thirst");
-        helper.assertValueEqual(values.quenched(), 4, "lemonade quenched");
+        helper.assertValueEqual(values.quenched(), 4, "lemonade hydration");
         helper.assertValueEqual(values.purity(), PurityLevel.CLEAN.level(), "lemonade purity");
         helper.succeed();
     }
@@ -50,11 +50,11 @@ public class KubeJSTests
         ServerPlayer player = player(helper);
         thirst(player).change(player, 10, 0, ThirstChangeEvent.Cause.COMMAND);
         DropletsAPI.drink(player, 4, 2, PurityLevel.PURE.level());
-        helper.assertValueEqual(DropletsAPI.view(player).quenched(), 2, "quenched without the tag");
+        helper.assertValueEqual(DropletsAPI.view(player).quenched(), 2, "hydration without the tag");
         player.addTag("hydro");
         DropletsAPI.drink(player, 4, 2, PurityLevel.PURE.level());
         helper.assertValueEqual(DropletsAPI.view(player).thirst(), 18, "thirst after two drinks");
-        helper.assertValueEqual(DropletsAPI.view(player).quenched(), 6, "quenched with the tag (2 and 2 from the script)" + HINT);
+        helper.assertValueEqual(DropletsAPI.view(player).quenched(), 6, "hydration with the tag (2 and 2 from the script)" + HINT);
         helper.succeed();
     }
 
@@ -116,7 +116,7 @@ public class KubeJSTests
         player.setShiftKeyDown(true);
         rightClick(player, Items.CLOCK);
         helper.assertValueEqual(DropletsAPI.view(player).thirst(), 20, "thirst after refilling with the clock");
-        helper.assertValueEqual(DropletsAPI.view(player).quenched(), 20, "quenched after refilling with the clock");
+        helper.assertValueEqual(DropletsAPI.view(player).quenched(), 20, "hydration after refilling with the clock");
         helper.succeed();
     }
 

@@ -4,7 +4,7 @@ Droplets of Thirst has a small public API in `com.darkona.dropletsofthirst.api`.
 
 Start at `DropletsAPI`. Every public method has documentation. `DropletsAPI.API_VERSION` (1) goes up when the API changes incompatibly.
 
-This page shows the API on Minecraft 1.21.1 (NeoForge, Mojang names, `ResourceLocation`). Minecraft 1.20.1 has the same classes and methods, with the types of its Minecraft version. The [home page](Home) links the page of your version.
+This page shows the API on Minecraft 1.21.1 (NeoForge, Mojang names, `ResourceLocation`). Minecraft 1.20.1 has the same classes and methods, with the types of its Minecraft version. The [home page](Home) links the page of your version. The API keeps the older name `quenched` for hydration in its methods and parameters.
 
 ---
 
@@ -125,7 +125,7 @@ DropletsAPI.registerDrink(MyItems.SPRING_WATER, 6, 2, PurityLevel.CLEAN.level())
 
 The item decides if it hydrates as food or as a drink. If it can be eaten, it hydrates when eaten.
 
-Values are points, like thirst: 2 points = 1 droplet on the HUD. Thirst goes from -20 to 20 and quenched from -20 up. Negative values make the item **salty**, so eating or drinking it removes thirst and quenched:
+Values are points, like thirst: 2 points = 1 droplet on the HUD. Thirst goes from -20 to 20 and hydration from -20 up. Negative values make the item **salty**, so eating or drinking it removes thirst and hydration:
 
 ```java
 DropletsAPI.registerDrink(MyItems.SALTED_FISH, -2, -2);
@@ -208,7 +208,7 @@ All events are on `NeoForge.EVENT_BUS`, in `com.darkona.dropletsofthirst.api.eve
 
 | Event | When | You can |
 |---|---|---|
-| `ThirstChangeEvent.Pre` | Thirst or quenched is about to change. `getCause()`: `DEPLETION`, `DRINK`, `EAT`, `RAIN`, `PEACEFUL`, `DEATH`, `COMMAND`, `API` | cancel, `setNewThirst`, `setNewQuenched` |
+| `ThirstChangeEvent.Pre` | Thirst or hydration is about to change. `getCause()`: `DEPLETION`, `DRINK`, `EAT`, `RAIN`, `PEACEFUL`, `DEATH`, `COMMAND`, `API` | cancel, `setNewThirst`, `setNewQuenched` |
 | `ThirstChangeEvent.Post` | After the change | read old and new values |
 | `EatEvent.Pre` | Before food hydrates: food items (not drunk and not a water container), block foods of `droplets_of_thirst:hydrating_blocks` (`getItem()` empty) and `DropletsAPI.eat`. `getSaltiness()`, `isSalty()` | cancel, `setThirst`, `setQuenched` |
 | `EatEvent.Post` | After it | read the values and `hydrated()` |

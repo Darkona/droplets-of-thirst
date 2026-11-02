@@ -149,7 +149,7 @@ public class ThirstTests
         thirst.change(player, 4, 0, ThirstChangeEvent.Cause.COMMAND);
         PlayerThirst.consume(waterBottle(PurityLevel.PURE.level()), player);
         helper.assertValueEqual(thirst.getThirst(), 10, "thirst after a pure water bottle (4 + 2 pure)");
-        helper.assertValueEqual(thirst.getQuenched(), 8, "quenched after a pure water bottle (5 + 3 pure)");
+        helper.assertValueEqual(thirst.getHydration(), 8, "hydration after a pure water bottle (5 + 3 pure)");
         helper.assertValueEqual(lastCause, ThirstChangeEvent.Cause.DRINK, "cause of drinking a water bottle");
         helper.succeed();
     }
@@ -163,7 +163,7 @@ public class ThirstTests
         thirst.change(player, 4, 0, ThirstChangeEvent.Cause.COMMAND);
         PlayerThirst.consume(waterBottle(PurityLevel.CLEAN.level()), player);
         helper.assertValueEqual(thirst.getThirst(), 8, "thirst after a clean water bottle (4)");
-        helper.assertValueEqual(thirst.getQuenched(), 5, "quenched after a clean water bottle (5)");
+        helper.assertValueEqual(thirst.getHydration(), 5, "hydration after a clean water bottle (5)");
 
         ThirstValues values = ThirstHelper.drinkValuesOf(waterBottle(pure));
         helper.assertTrue(values != null && values.thirst() == 6 && values.quenched() == 8, "values shown for a pure water bottle: " + values);
@@ -177,7 +177,7 @@ public class ThirstTests
         thirst.change(player, 4, 0, ThirstChangeEvent.Cause.COMMAND);
         PlayerThirst.drinkWater(player, 3, 2, pure);
         helper.assertValueEqual(thirst.getThirst(), 9, "thirst after a hose sip of pure water (3 + 2)");
-        helper.assertValueEqual(thirst.getQuenched(), 5, "quenched after a hose sip of pure water (2 + 3)");
+        helper.assertValueEqual(thirst.getHydration(), 5, "hydration after a hose sip of pure water (2 + 3)");
         helper.succeed();
     }
 
@@ -222,11 +222,11 @@ public class ThirstTests
         try
         {
             thirst.setThirst(20);
-            thirst.setQuenched(20);
+            thirst.setHydration(20);
             thirst.tick(player);
             helper.assertTrue(thirst.serializeNBT(level.registryAccess()).getFloat("overflow") == 0.0F, "rain at full thirst overflows");
             thirst.setThirst(10);
-            thirst.setQuenched(0);
+            thirst.setHydration(0);
             thirst.tick(player);
             helper.assertTrue(thirst.getThirst() == 11, "rain gives a sip below full, thirst " + thirst.getThirst());
         }
@@ -318,14 +318,14 @@ public class ThirstTests
     }
 
     @GameTest(template = "empty")
-    public static void quenchedNeverExceedsThirst(GameTestHelper helper)
+    public static void hydrationNeverExceedsThirst(GameTestHelper helper)
     {
         ServerPlayer player = player(helper);
         PlayerThirst thirst = thirst(player);
         thirst.change(player, 4, 10, ThirstChangeEvent.Cause.COMMAND);
-        helper.assertValueEqual(thirst.getQuenched(), 4, "quenched set above thirst");
+        helper.assertValueEqual(thirst.getHydration(), 4, "hydration set above thirst");
         thirst.change(player, 2, 2, ThirstChangeEvent.Cause.COMMAND);
-        helper.assertValueEqual(thirst.getQuenched(), 2, "quenched after thirst went down");
+        helper.assertValueEqual(thirst.getHydration(), 2, "hydration after thirst went down");
         helper.succeed();
     }
 
@@ -337,7 +337,7 @@ public class ThirstTests
         thirst.change(player, 1, 1, ThirstChangeEvent.Cause.COMMAND);
         thirst.hydrate(player, -6, -6, true, ThirstChangeEvent.Cause.EAT);
         helper.assertValueEqual(thirst.getThirst(), 0, "thirst after salty food");
-        helper.assertValueEqual(thirst.getQuenched(), 0, "quenched after salty food");
+        helper.assertValueEqual(thirst.getHydration(), 0, "hydration after salty food");
         helper.assertFalse(player.hasEffect(DropletsMobEffects.OVERHYDRATED), "salty food overhydrated");
         helper.succeed();
     }
@@ -465,7 +465,7 @@ public class ThirstTests
         CommandSourceStack source = player.createCommandSourceStack().withPermission(2).withSuppressedOutput();
         var dispatcher = helper.getLevel().getServer().getCommands().getDispatcher();
         helper.assertValueEqual(dispatcher.execute("droplets set @s 4 10", source), 4, "result of set");
-        helper.assertValueEqual(thirst(player).getQuenched(), 4, "quenched after set 4 10");
+        helper.assertValueEqual(thirst(player).getHydration(), 4, "hydration after set 4 10");
         helper.assertValueEqual(dispatcher.execute("droplets query @s", source), 4, "result of query");
         helper.assertValueEqual(dispatcher.execute("droplets enable @s false", source), 1, "result of enable");
         helper.assertFalse(thirst(player).getShouldTickThirst(), "thirst still enabled after enable false");
@@ -476,10 +476,10 @@ public class ThirstTests
     public static void estimatedLineIsKeptWhileTheValuesStay(GameTestHelper helper)
     {
         Component line = PlayerThirstManager.estimatedLine(3, 2);
-        helper.assertValueEqual(line, Component.translatable("droplets_of_thirst.tooltip.estimated", 3, 2).withStyle(ChatFormatting.GRAY), "line for 3 thirst and 2 quenched");
+        helper.assertValueEqual(line, Component.translatable("droplets_of_thirst.tooltip.estimated", 3, 2).withStyle(ChatFormatting.GRAY), "line for 3 thirst and 2 hydration");
         helper.assertTrue(PlayerThirstManager.estimatedLine(3, 2) == line, "the line is built again for the same values");
-        helper.assertValueEqual(PlayerThirstManager.estimatedLine(4, 2), Component.translatable("droplets_of_thirst.tooltip.estimated", 4, 2).withStyle(ChatFormatting.GRAY), "line for 4 thirst and 2 quenched");
-        helper.assertValueEqual(PlayerThirstManager.estimatedLine(4, 1).getString(), Component.translatable("droplets_of_thirst.tooltip.estimated", 4, 1).getString(), "text for 4 thirst and 1 quenched");
+        helper.assertValueEqual(PlayerThirstManager.estimatedLine(4, 2), Component.translatable("droplets_of_thirst.tooltip.estimated", 4, 2).withStyle(ChatFormatting.GRAY), "line for 4 thirst and 2 hydration");
+        helper.assertValueEqual(PlayerThirstManager.estimatedLine(4, 1).getString(), Component.translatable("droplets_of_thirst.tooltip.estimated", 4, 1).getString(), "text for 4 thirst and 1 hydration");
         helper.succeed();
     }
 
@@ -506,7 +506,7 @@ public class ThirstTests
         player.addTag(IMMORTAL_TAG);
         NeoForge.EVENT_BUS.post(new LivingDeathEvent(player, player.damageSources().generic()));
         helper.assertValueEqual(thirst.getThirst(), 7, "thirst after a cancelled death");
-        helper.assertValueEqual(thirst.getQuenched(), 3, "quenched after a cancelled death");
+        helper.assertValueEqual(thirst.getHydration(), 3, "hydration after a cancelled death");
         helper.succeed();
     }
 
@@ -518,10 +518,10 @@ public class ThirstTests
         thirst.change(player, 7, 3, ThirstChangeEvent.Cause.COMMAND);
         NeoForge.EVENT_BUS.post(new PlayerEvent.PlayerRespawnEvent(player, true));
         helper.assertValueEqual(thirst.getThirst(), 7, "thirst after coming back from the End");
-        helper.assertValueEqual(thirst.getQuenched(), 3, "quenched after coming back from the End");
+        helper.assertValueEqual(thirst.getHydration(), 3, "hydration after coming back from the End");
         NeoForge.EVENT_BUS.post(new PlayerEvent.PlayerRespawnEvent(player, false));
         helper.assertValueEqual(thirst.getThirst(), GameplayConfig.RESPAWN_THIRST.get(), "thirst after respawning");
-        helper.assertValueEqual(thirst.getQuenched(), GameplayConfig.RESPAWN_QUENCHED.get(), "quenched after respawning");
+        helper.assertValueEqual(thirst.getHydration(), GameplayConfig.RESPAWN_HYDRATION.get(), "hydration after respawning");
         helper.assertValueEqual(lastCause, ThirstChangeEvent.Cause.DEATH, "cause of the respawn values");
         helper.succeed();
     }

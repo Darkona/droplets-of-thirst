@@ -28,10 +28,10 @@ All commands need operator rights (permission level 2).
 
 | Command | What it does |
 |---|---|
-| `/droplets query <player>` | Shows the player's thirst and quenched |
-| `/droplets set <player> <thirst> <quenched>` | Sets them (0-20; quenched is capped at thirst) |
+| `/droplets query <player>` | Shows the player's thirst and hydration |
+| `/droplets set <player> <thirst> <hydration>` | Sets them (0-20; hydration is capped at thirst) |
 | `/droplets enable <players> <true\|false>` | Turns thirst on or off for those players. Off, their thirst does not change |
-| `/droplets debug exhaustion [player]` | Mode, every factor of the thirst loss multiplier, the `thirst_drain` attribute, the total, exhaustion, thirst and quenched |
+| `/droplets debug exhaustion [player]` | Mode, every factor of the thirst loss multiplier, the `thirst_drain` attribute, the total, exhaustion, thirst and hydration |
 | `/droplets debug purity` | Purity of the water you look at (or the block at your feet): salt water rule, base and where it comes from, altitude, still/running and biome deltas, cap |
 | `/droplets config check` | Every config problem found, or "no problems found" |
 | `/droplets infer <item>` | How recipe inference estimates the item: each recipe, each ingredient's value, multiplier, result count, the estimate and why it would not be used |
@@ -48,7 +48,7 @@ Some problems do not show in a single key: unknown effect or item ids, overlappi
 
 ### `[depletion]`
 
-Thirst loss per tick is `activity × M`, where `M = climate × fire protection × fire resistance × rain/thunder × day/night × sun × altitude × water × Hydrated × droplets_of_thirst:thirst_drain`. Every `exhaustionPerPoint` (4.0) of exhaustion removes one quenched point, or one thirst point when quenched is 0. `M` (except the attribute) is recomputed once a second per player and right away after armor, effect, dimension or config changes. `/droplets debug exhaustion` shows each factor.
+Thirst loss per tick is `activity × M`, where `M = climate × fire protection × fire resistance × rain/thunder × day/night × sun × altitude × water × Hydrated × droplets_of_thirst:thirst_drain`. Every `exhaustionPerPoint` (4.0) of exhaustion removes one hydration point, or one thirst point when hydration is 0. `M` (except the attribute) is recomputed once a second per player and right away after armor, effect, dimension or config changes. `/droplets debug exhaustion` shows each factor.
 
 | Key | Default | Meaning |
 |---|---|---|
@@ -125,19 +125,19 @@ In `OWN` mode these are the sources, with vanilla's hunger numbers. In `MIRROR_F
 |---|---|---|
 | `sprint.blockedWhenThirsty` | `true` | No sprinting with `minThirst` or less. A sprint in progress stops too |
 | `sprint.minThirst` | `6` | 3 droplets |
-| `drinking.extraThirstToQuenched` | `true` | Thirst restored above full turns into quenched |
+| `drinking.extraThirstToHydration` | `true` | Thirst restored above full turns into hydration |
 | `drinking.waterBottleStackSize` | `16` | Stack size of water bottles (1-99) |
 | `drinking.canFillFromFlowingWater` | `true` | Glass bottles and terracotta bowls fill from flowing water. `false` = source blocks only, as in vanilla. Buckets always need a source |
 | `drinking.rain` | `true` | Drink rain by looking up |
 | `drinking.rainMaxPitch` | `-80` | How far up to look (-90 = straight up) |
 | `drinking.rainIntervalTicks` | `11` | Ticks between two sips |
-| `drinking.rainThirst` / `rainQuenched` | `1` / `1` | Restored per sip |
+| `drinking.rainThirst` / `rainHydration` | `1` / `1` | Restored per sip |
 | `hand.enabled` | `true` | Drink water in the world by sneaking and right-clicking with an empty hand |
 | `hand.bothHandsEmpty` | `true` | Both hands must be empty |
-| `hand.thirst` / `hand.quenched` | `1` / `1` | Restored per sip |
+| `hand.thirst` / `hand.hydration` | `1` / `1` | Restored per sip |
 | `hand.cooldownTicks` | `10` | Minimum ticks between two sips |
 | `hand.effects` | `true` | Arm swing and splash particles when drinking by hand (visual only) |
-| `death.respawnThirst` / `respawnQuenched` | `20` / `5` | Values after respawning. `-1` keeps what the player died with |
+| `death.respawnThirst` / `respawnHydration` | `20` / `5` | Values after respawning. `-1` keeps what the player died with |
 | `loot.enabled` | `true` | Drinks are added to vanilla chest loot. It is a load condition of the loot data, so a change applies after `/reload` or on the next world load |
 
 The maximum thirst stays 20: the HUD, its overlays and the commands assume it.
@@ -147,7 +147,7 @@ The maximum thirst stays 20: the HUD, its overlays and the commands assume it.
 | Key | Default | Meaning |
 |---|---|---|
 | `dehydrationMultiplier` | `1.0` | Multiplier (0-10) of the exhaustion the Dehydration effect adds every tick (0.005 per level) |
-| `quenchnessIntervalTicks` | `40` | Quenchness restores (level) thirst and (level) quenched every this many ticks (1-1200) |
+| `quenchnessIntervalTicks` | `40` | Quenchness restores (level) thirst and (level) hydration every this many ticks (1-1200) |
 | `quenchnessPotion` | `true` | Brewing recipes of the Potion of Quenchness. It is the load condition `droplets_of_thirst:quenchness_potion` of those recipes: a change applies when datapacks load (a restart or `/reload`), and only the server's value counts |
 | `hydratedMultiplier` | `0.5` | Thirst loss with Hydrated, applied once per level (0.5: Hydrated I halves it, II quarters it; 0-1) |
 | `waterBreathingReducesThirst` | `false` | While fully underwater with Water Breathing or Conduit Power, thirst loss is also multiplied by `underwaterBreathingMultiplier` |
@@ -157,14 +157,14 @@ The maximum thirst stays 20: the HUD, its overlays and the commands assume it.
 
 | Key | Default | Meaning |
 |---|---|---|
-| `fullBonus` | `false` | Staying fully hydrated gives Hydrated I: thirst 20 and at least `minQuenched` for `fullBonusSeconds`. Refreshed while it holds, checked once a second |
-| `minQuenched` | `10` | Quenched needed (0-20) |
+| `fullBonus` | `false` | Staying fully hydrated gives Hydrated I: thirst 20 and at least `minHydration` for `fullBonusSeconds`. Refreshed while it holds, checked once a second |
+| `minHydration` | `10` | Hydration needed (0-20) |
 | `fullBonusSeconds` | `30` | Seconds fully hydrated before the effect is given (1-3600) |
 | `fullBonusDurationTicks` | `200` | Duration of the effect, so it lasts this long after the player stops being fully hydrated (40-12000) |
 
 ### `[overhydration]`
 
-Thirst and quenched drunk past full (items, hand drinking, rain, `DropletsAPI.drink`, but not the Quenchness effect) add up as overflow. At the threshold the player gets `droplets_of_thirst:overhydrated` (10% slower movement per level) and the overflow starts over.
+Thirst and hydration drunk past full (items, hand drinking, rain, `DropletsAPI.drink`, but not the Quenchness effect) add up as overflow. At the threshold the player gets `droplets_of_thirst:overhydrated` (10% slower movement per level) and the overflow starts over.
 
 | Key | Default | Meaning |
 |---|---|---|
@@ -197,7 +197,7 @@ Every purity value in the config files is one of these six levels:
 | `general.defaultPurity` | `3` | Purity of water with none stored (0-5) |
 | `general.quenchWhenDebuffed` | `true` | Drinking still restores thirst when a purity effect blocks hydration |
 | `pureWater.thirstBonus` | `2` | Thirst added when drinking pure water (5) from a container: a bottle then gives 6 instead of 4. Bottles, buckets, bowls, the Traveler's Backpack hose and other purity containers count. A sip by hand does not, and neither do other drinks with a purity |
-| `pureWater.quenchedBonus` | `3` | Quenched added the same way: a bottle then gives 8 instead of 5 |
+| `pureWater.hydrationBonus` | `3` | Hydration added the same way: a bottle then gives 8 instead of 5 |
 | `world.*` | | See [Water purity in the world](Modpack-Makers#water-purity-in-the-world) |
 
 ### Thirst only (purity off)
@@ -266,20 +266,20 @@ Only read with Serene Seasons installed.
 
 | Key | Default | Meaning |
 |---|---|---|
-| `overrides.drinks` / `overrides.foods` | `[]` | `[["namespace:item" or "#tag", thirst, quenched], ...]`. They win over datapacks and other mods. Thirst -20 to 20, quenched -20 or more. Negative values remove them (salty) |
+| `overrides.drinks` / `overrides.foods` | `[]` | `[["namespace:item" or "#tag", thirst, hydration], ...]`. They win over datapacks and other mods. Thirst -20 to 20, hydration -20 or more. Negative values remove them (salty) |
 | `overrides.blacklist` | `[]` | Items that never restore thirst |
 | `containers.containers` | `[]` | Drinks that carry a water purity, added to the item tag `droplets_of_thirst:purity_containers` |
-| `salty.thirstPenalty` / `salty.quenchedPenalty` | `-2` / `-2` | Values (-20 to 20) of items in the item tag `droplets_of_thirst:salty` that get none from overrides, datapacks or other mods |
+| `salty.thirstPenalty` / `salty.hydrationPenalty` | `-2` / `-2` | Values (-20 to 20) of items in the item tag `droplets_of_thirst:salty` that get none from overrides, datapacks or other mods |
 | `keywords.enabled` | `false` | Give values to items whose translation key matches a pattern |
-| `keywords.drinkThirst` / `drinkQuenched` | `10` / `14` | Values of items matching `keywords.drink` |
-| `keywords.soupThirst` / `soupQuenched` | `4` / `5` | Values of items matching `keywords.soup` |
-| `keywords.fruitThirst` / `fruitQuenched` | `2` / `3` | Values of items matching `keywords.fruit` |
+| `keywords.drinkThirst` / `drinkHydration` | `10` / `14` | Values of items matching `keywords.drink` |
+| `keywords.soupThirst` / `soupHydration` | `4` / `5` | Values of items matching `keywords.soup` |
+| `keywords.fruitThirst` / `fruitHydration` | `2` / `3` | Values of items matching `keywords.fruit` |
 | `keywords.blacklist`, `drink`, `soup`, `fruit` | regular expressions | Items matching `blacklist` are never picked. The others list words such as `juice`, `tea`, `stew`, `berry` |
 | `inference.enabled` | `false` | Estimate values from recipe ingredients (see below) |
 | `inference.onlyConsumables` | `true` | Only items that are eaten or drunk get an estimate. Others still pass their value on |
 | `inference.maxDepth` | `4` | Recipe steps followed down from an item (1-16) |
 | `inference.craftingMultiplier` / `cookingMultiplier` / `otherMultiplier` | `1.0` | Multiplier of crafting table recipes, of furnace, blast furnace, smoker and campfire recipes, and of every other recipe type |
-| `inference.maxThirst` / `maxQuenched` | `8` / `10` | Caps of an estimate |
+| `inference.maxThirst` / `maxHydration` | `8` / `10` | Caps of an estimate |
 | `inference.minThirst` | `1` | Estimates below this thirst are dropped |
 | `inference.blacklist` | `[]` | `"namespace:item"`, `"#namespace:tag"` or `"@namespace"`: never estimated, and worth 0 as an ingredient |
 | `inference.ignoredRecipeTypes` | `["minecraft:stonecutting", "minecraft:smithing"]` | Recipe types that are not used |
@@ -288,8 +288,8 @@ Only read with Serene Seasons installed.
 
 Off by default. When it is on, the server looks at the recipes that make an item and gives values to items that have none from any other source. The blacklist, overrides, datapacks, other mods' code and keywords always win.
 
-- An ingredient is worth the average thirst and quenched of the items it accepts that have values, explicit or estimated. Ingredients worth nothing (a bowl, a glass bottle) add nothing, and salty ones count as 0.
-- A recipe is worth the sum of its ingredients times the multiplier of its category, divided by how many items it makes, capped by `maxThirst`/`maxQuenched`. When several recipes make the item, the highest one wins.
+- An ingredient is worth the average thirst and hydration of the items it accepts that have values, explicit or estimated. Ingredients worth nothing (a bowl, a glass bottle) add nothing, and salty ones count as 0.
+- A recipe is worth the sum of its ingredients times the multiplier of its category, divided by how many items it makes, capped by `maxThirst`/`maxHydration`. When several recipes make the item, the highest one wins.
 - Any recipe type works, also other mods' machines, if the recipe lists its item ingredients and result the standard way. Inference does not see the fluids of a recipe. It skips special recipes (suspicious stew, fireworks).
 - Inference cuts loops (ingot to block to ingot) and anything deeper than `maxDepth`.
 - Items that are drunk go to the drink table and the rest to the food table. Tooltips show "(est.)". The values are sent to clients like the rest of the table.
@@ -304,13 +304,13 @@ It runs when the world loads, after `/reload` and when `items.toml` changes. It 
 |---|---|---|
 | `Purity tooltip.onlyShowPurityWhenShifting` | `false` | Shows the purity line of water containers only while Shift is held |
 | `Purity tooltip.tintWaterByPurity` | `true` | Tints the water in bottles and terracotta bowls by its purity, from brown (0) to near white (5). Off draws them as in vanilla. Nothing is tinted while purity is off |
-| `Tooltip.showTooltipIcons` | `true` | Thirst and quenched of items as icons in the tooltip, `(est.)` for estimated values. Off, estimated values are shown as a text line |
-| `Tooltip.followAppleSkin` | `true` | With AppleSkin installed, the quenched outline, drink preview, exhaustion underlay and tooltip icons are also hidden when their food counterpart is off in AppleSkin's config. The tooltip icons then also follow its "hold Shift" option. Nothing is drawn through AppleSkin |
+| `Tooltip.showTooltipIcons` | `true` | Thirst and hydration of items as icons in the tooltip, `(est.)` for estimated values. Off, estimated values are shown as a text line |
+| `Tooltip.followAppleSkin` | `true` | With AppleSkin installed, the hydration outline, drink preview, exhaustion underlay and tooltip icons are also hidden when their food counterpart is off in AppleSkin's config. The tooltip icons then also follow its "hold Shift" option. Nothing is drawn through AppleSkin |
 | `Thirst Bar.thirstBarXOffset` / `thirstBarYOffset` | `0` | Moves the thirst bar, in pixels |
 | `Thirst Bar.hideBarWhenFull` | `false` | Hides the thirst bar while thirst is 20 and the player holds nothing that restores thirst. The bars above it move down |
 | `Thirst Bar.hideBarDelayTicks` | `60` | Ticks the bar stays visible after thirst becomes full (0-1200) |
-| `Thirst Bar.showQuenchedOverlay` | `true` | Outline on the droplets for the current quenched, like AppleSkin's saturation outline |
-| `Thirst Bar.showDrinkPreview` | `true` | While holding something that restores thirst (either hand), flashes the thirst and quenched it would give |
+| `Thirst Bar.showHydrationOverlay` | `true` | Outline on the droplets for the current hydration, like AppleSkin's saturation outline |
+| `Thirst Bar.showDrinkPreview` | `true` | While holding something that restores thirst (either hand), flashes the thirst and hydration it would give |
 | `Thirst Bar.showExhaustionUnderlay` | `false` | Bar under the droplets that fills with thirst exhaustion until the next point is lost |
 | `Thirst Bar.buffWave` | `true` | Droplets bounce one at a time, like hearts under Regeneration, while Quenchness or Hydrated is active |
 | `Bar Colors.dehydration` | `#8B5A2B` | Droplet colour while Dehydration is active |

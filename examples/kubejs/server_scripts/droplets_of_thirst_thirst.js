@@ -7,15 +7,15 @@ ItemEvents.rightClicked('minecraft:clock', event => {
   const player = event.player
   const thirst = DropletsAPI.view(player)   // live view, nothing is copied
   if (player.shiftKeyDown) {
-    DropletsAPI.setThirst(player, thirst.maxThirst())        // clamped to 0..20, quenched follows down
+    DropletsAPI.setThirst(player, thirst.maxThirst())        // clamped to 0..20, hydration follows down
     DropletsAPI.setQuenched(player, thirst.maxThirst())      // clamped to 0..thirst
   } else {
     // thirst() and quenched() are points, like food: 20 points = 10 droplets
-    player.tell(`Thirst ${thirst.thirst()}/${thirst.maxThirst()}, quenched ${thirst.quenched()}`)
+    player.tell(`Thirst ${thirst.thirst()}/${thirst.maxThirst()}, hydration ${thirst.quenched()}`)
   }
 })
 
-// Hydrate when eating something. drink() follows the same rules as a bottle: extra thirst can become quenched,
+// Hydrate when eating something. drink() follows the same rules as a bottle: extra thirst can become hydration,
 // and it posts the drink events. Use addThirst() for a change that is not a drink.
 // Droplets of Thirst already hydrates food it knows: this is for values a datapack cannot express.
 ItemEvents.foodEaten('minecraft:golden_carrot', event => {

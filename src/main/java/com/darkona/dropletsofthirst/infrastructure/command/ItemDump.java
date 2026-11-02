@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 public final class ItemDump
 {
     public static final String ALL = "*";
-    public static final String HEADER = "id,mod,is_drink,nutrition,saturation,effects,always_edible,current_thirst,current_quenched,tags";
+    public static final String HEADER = "id,mod,is_drink,nutrition,saturation,effects,always_edible,current_thirst,current_hydration,tags";
 
     private ItemDump() {}
 

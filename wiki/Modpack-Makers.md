@@ -18,9 +18,9 @@ A NeoForge [data map](https://docs.neoforged.net/docs/resources/server/datamaps/
 ```json
 {
   "values": {
-    "minecraft:apple": { "thirst": 2, "quenched": 3 },
-    "#c:drinks/juice": { "thirst": 8, "quenched": 13 },
-    "examplemod:spring_water": { "thirst": 6, "quenched": 8, "purity": 4 }
+    "minecraft:apple": { "thirst": 2, "hydration": 3 },
+    "#c:drinks/juice": { "thirst": 8, "hydration": 13 },
+    "examplemod:spring_water": { "thirst": 6, "hydration": 8, "purity": 4 }
   },
   "remove": ["minecraft:carrot"]
 }
@@ -29,7 +29,7 @@ A NeoForge [data map](https://docs.neoforged.net/docs/resources/server/datamaps/
 | Field | Type | Meaning |
 |---|---|---|
 | `thirst` | int -20 to 20 | Thirst restored, in points (2 points = 1 droplet on the HUD). Negative values remove thirst (salty) |
-| `quenched` | int, -20 or more | Quenched restored (the hidden reserve of thirst, like saturation). Negative values remove it |
+| `hydration` | int, -20 or more | Hydration restored (the hidden reserve of thirst, like saturation). Negative values remove it |
 | `purity` | int 0-5, optional | Purity of this drink when the stack stores none (0 contaminated to 5 pure). Drinks with a purity roll the purity effects. Without it, only water containers do |
 
 - Keys are item ids or `#tags`. An entry from a later pack replaces the earlier one for that item. `"replace": true` at the top clears everything loaded before this file, and `remove` drops entries loaded before it (ids or tags).
@@ -38,24 +38,24 @@ A NeoForge [data map](https://docs.neoforged.net/docs/resources/server/datamaps/
   ```json
   "examplemod:lemonade": {
     "neoforge:conditions": [{ "type": "neoforge:mod_loaded", "modid": "examplemod" }],
-    "thirst": 6, "quenched": 4
+    "thirst": 6, "hydration": 4
   }
   ```
 
 - Items that are eaten and items that are drunk use the same map. Droplets of Thirst tells them apart by the item itself: food hydrates when its food component feeds the player, a drink when it is finished.
-- Negative values make an item **salty**: eating or drinking it removes thirst and quenched (never below 0, and quenched stays at or below thirst). Salty items never count towards overhydration. They roll purity effects only if they are water containers. Their tooltip shows red droplets, and the HUD flashes in red the droplets they would take away.
+- Negative values make an item **salty**: eating or drinking it removes thirst and hydration (never below 0, and hydration stays at or below thirst). Salty items never count towards overhydration. They roll purity effects only if they are water containers. Their tooltip shows red droplets, and the HUD flashes in red the droplets they would take away.
 - The defaults are in `data/droplets_of_thirst/data_maps/item/drinks.json`: vanilla items and the terracotta water bowl. Water bottles and the terracotta water bowl give 4 and 5, the melon slice 4 and 4, rotten flesh, spider eyes, pufferfish and poisonous potatoes -3 and -3. To change a default, add your own entry (a later pack wins) or `remove` it.
 - The map is synced to clients. Tooltips and the HUD use the server's values.
 
 ### Block foods: `droplets_of_thirst:hydrating_blocks`
 
-Blocks eaten in place, like cake, have their own data map on blocks: `data/<namespace>/data_maps/block/hydrating_blocks.json`, with the same `thirst` and `quenched` fields. The mod ignores `purity` here, because food never rolls purity effects. A bite counts when a right click on the block raised the player's food level, so it works for any block that feeds the player directly (other mods' pies too). Negative values work here too.
+Blocks eaten in place, like cake, have their own data map on blocks: `data/<namespace>/data_maps/block/hydrating_blocks.json`, with the same `thirst` and `hydration` fields. The mod ignores `purity` here, because food never rolls purity effects. A bite counts when a right click on the block raised the player's food level, so it works for any block that feeds the player directly (other mods' pies too). Negative values work here too.
 
 ```json
 {
   "values": {
-    "minecraft:cake": { "thirst": 1, "quenched": 1 },
-    "#minecraft:candle_cakes": { "thirst": 1, "quenched": 1 }
+    "minecraft:cake": { "thirst": 1, "hydration": 1 },
+    "#minecraft:candle_cakes": { "thirst": 1, "hydration": 1 }
   }
 }
 ```
@@ -68,7 +68,7 @@ Each item takes its values from the first of these sources that has them, and th
 2. **TOML overrides**: `overrides.drinks` and `overrides.foods` in `items.toml`.
 3. **Datapacks**: the `droplets_of_thirst:drinks` data map.
 4. **Other mods' code**: `DropletsAPI.registerDrink`, then value providers of mods whose values depend on the stack. See [Mod developers](Mod-Developers).
-5. **Salty tag**: items in `#droplets_of_thirst:salty` get `salty.thirstPenalty` and `salty.quenchedPenalty` from `items.toml` (-2 and -2). Explicit values from 1-4 win, so a tagged item with its own entry keeps it.
+5. **Salty tag**: items in `#droplets_of_thirst:salty` get `salty.thirstPenalty` and `salty.hydrationPenalty` from `items.toml` (-2 and -2). Explicit values from 1-4 win, so a tagged item with its own entry keeps it.
 6. **Keywords** (`items.toml`, section `keywords`, off by default).
 7. **Estimated from recipes** (`items.toml`, section `inference`, off by default), only for items that nothing above gives values. Estimates are never negative. Tooltips add "(est.)", and `/droplets_of_thirst infer <item>` shows how the number was made. See [Configuration](Configuration#recipe-inference).
 
@@ -186,7 +186,7 @@ Droplets of Thirst sets `minecraft:the_end` to `thirst_multiplier` `0.6`, so the
 
 ### Quenchness and its potions
 
-`droplets_of_thirst:quenchness` restores (level) thirst and (level) quenched every `effects.quenchnessIntervalTicks` (40), like Regeneration does for health. The potions are in the `minecraft:potion` registry, so loot tables, `set_potion` and commands can use them: `/give @p minecraft:potion[potion_contents={potion:"droplets_of_thirst:quenchness"}]`.
+`droplets_of_thirst:quenchness` restores (level) thirst and (level) hydration every `effects.quenchnessIntervalTicks` (40), like Regeneration does for health. The potions are in the `minecraft:potion` registry, so loot tables, `set_potion` and commands can use them: `/give @p minecraft:potion[potion_contents={potion:"droplets_of_thirst:quenchness"}]`.
 
 | Potion | Effect | Brewing |
 |---|---|---|

@@ -15,7 +15,7 @@ ItemEvents.rightClicked('minecraft:potion', event => {
 
   // What the item restores, resolved from config, datapacks and registered drinks; null if nothing
   const values = DropletsAPI.getDrinkValues(stack)
-  if (values != null) player.tell(`Restores thirst ${values.thirst()}, quenched ${values.quenched()}`)
+  if (values != null) player.tell(`Restores thirst ${values.thirst()}, hydration ${values.quenched()}`)
 
   // Purity of the water at a position: server side only (biome and dimension data are not synced).
   // Water poured with a bucket keeps the purity of what was poured.

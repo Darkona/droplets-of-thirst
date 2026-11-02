@@ -8,7 +8,7 @@ public final class SyncedValues
     private static volatile int purityEnabled = -1;
     private static volatile int canFillFromFlowingWater = -1;
     private static volatile int pureThirstBonus = -1;
-    private static volatile int pureQuenchedBonus = -1;
+    private static volatile int pureHydrationBonus = -1;
 
     private SyncedValues() {}
 
@@ -42,21 +42,21 @@ public final class SyncedValues
         return value >= 0 ? value : PurityConfig.PURE_THIRST_BONUS.get();
     }
 
-    public static int pureQuenchedBonus()
+    public static int pureHydrationBonus()
     {
-        int value = pureQuenchedBonus;
-        return value >= 0 ? value : PurityConfig.PURE_QUENCHED_BONUS.get();
+        int value = pureHydrationBonus;
+        return value >= 0 ? value : PurityConfig.PURE_HYDRATION_BONUS.get();
     }
 
     public static void useServerValues(int defaultPurity, int waterBottleStackSize, boolean purityEnabled, boolean canFillFromFlowingWater,
-                                       int pureThirstBonus, int pureQuenchedBonus)
+                                       int pureThirstBonus, int pureHydrationBonus)
     {
         SyncedValues.defaultPurity = defaultPurity;
         SyncedValues.waterBottleStackSize = waterBottleStackSize;
         SyncedValues.purityEnabled = purityEnabled ? 1 : 0;
         SyncedValues.canFillFromFlowingWater = canFillFromFlowingWater ? 1 : 0;
         SyncedValues.pureThirstBonus = pureThirstBonus;
-        SyncedValues.pureQuenchedBonus = pureQuenchedBonus;
+        SyncedValues.pureHydrationBonus = pureHydrationBonus;
     }
 
     public static void clear()
@@ -66,6 +66,6 @@ public final class SyncedValues
         purityEnabled = -1;
         canFillFromFlowingWater = -1;
         pureThirstBonus = -1;
-        pureQuenchedBonus = -1;
+        pureHydrationBonus = -1;
     }
 }

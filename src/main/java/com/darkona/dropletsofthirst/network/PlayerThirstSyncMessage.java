@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
 
-public record PlayerThirstSyncMessage(int thirst, int quenched, float exhaustion, int flags) implements CustomPacketPayload
+public record PlayerThirstSyncMessage(int thirst, int hydration, float exhaustion, int flags) implements CustomPacketPayload
 {
 
     public static final CustomPacketPayload.Type<PlayerThirstSyncMessage> TYPE = new Type<>(DropletsOfThirst.asResource("thirstsync"));
@@ -20,7 +20,7 @@ public record PlayerThirstSyncMessage(int thirst, int quenched, float exhaustion
             ByteBufCodecs.INT,
             PlayerThirstSyncMessage::thirst,
             ByteBufCodecs.INT,
-            PlayerThirstSyncMessage::quenched,
+            PlayerThirstSyncMessage::hydration,
             ByteBufCodecs.FLOAT,
             PlayerThirstSyncMessage::exhaustion,
             ByteBufCodecs.VAR_INT,
@@ -34,7 +34,7 @@ public record PlayerThirstSyncMessage(int thirst, int quenched, float exhaustion
             Player player = context.player();
             PlayerThirst cap = player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
             cap.setThirst(message.thirst);
-            cap.setQuenched(message.quenched);
+            cap.setHydration(message.hydration);
             cap.setExhaustion(message.exhaustion);
             cap.setSyncedRules(message.flags);
         });

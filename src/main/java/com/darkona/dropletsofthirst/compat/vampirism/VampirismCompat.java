@@ -34,6 +34,6 @@ public final class VampirismCompat
     static void bloodDrunk(Player player, ItemStack source, int blood, float saturation)
     {
         PlayerThirst.drinkBlood(player, source, (float) (blood * CompatConfig.VAMPIRISM_THIRST_PER_BLOOD.get()),
-                (float) (blood * saturation * CompatConfig.VAMPIRISM_QUENCHED_PER_BLOOD.get()));
+                (float) (blood * saturation * CompatConfig.VAMPIRISM_HYDRATION_PER_BLOOD.get()));
     }
 }

@@ -15,7 +15,7 @@ public final class PurityConfig
     public static final ModConfigSpec.IntValue DEFAULT_PURITY;
     public static final ModConfigSpec.BooleanValue QUENCH_WHEN_DEBUFFED;
     public static final ModConfigSpec.IntValue PURE_THIRST_BONUS;
-    public static final ModConfigSpec.IntValue PURE_QUENCHED_BONUS;
+    public static final ModConfigSpec.IntValue PURE_HYDRATION_BONUS;
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> ALTITUDE_BANDS;
     public static final ModConfigSpec.BooleanValue ALTITUDE_RELATIVE_TO_SEA_LEVEL;
@@ -57,7 +57,7 @@ public final class PurityConfig
                 "Bottles, buckets, bowls, the Traveler's Backpack hose, Cold Sweat waterskins and other purity containers count; a sip by hand does not.",
                 "Other drinks with a purity do not get it. 2 points = 1 droplet on the HUD").push("pureWater");
         PURE_THIRST_BONUS = BUILDER.comment("Thirst added when drinking pure water").defineInRange("thirstBonus", 2, 0, 20);
-        PURE_QUENCHED_BONUS = BUILDER.comment("Quenched added when drinking pure water").defineInRange("quenchedBonus", 3, 0, 20);
+        PURE_HYDRATION_BONUS = BUILDER.comment("Hydration added when drinking pure water").defineInRange("hydrationBonus", 3, 0, 20);
         BUILDER.pop();
 
         BUILDER.push("world");

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public record ThirstValuesSyncMessage(Map<Item, int[]> drinks, Map<Item, int[]> foods, List<Item> estimated, List<Item> containers, int defaultPurity, int waterBottleStackSize, boolean purityEnabled, boolean canFillFromFlowingWater,
-                                      int pureThirstBonus, int pureQuenchedBonus) implements CustomPacketPayload
+                                      int pureThirstBonus, int pureHydrationBonus) implements CustomPacketPayload
 {
     public static final CustomPacketPayload.Type<ThirstValuesSyncMessage> TYPE = new Type<>(DropletsOfThirst.asResource("thirst_values"));
 
@@ -28,7 +28,7 @@ public record ThirstValuesSyncMessage(Map<Item, int[]> drinks, Map<Item, int[]> 
             ByteBufCodecs.VAR_INT, values -> values[0],
             ByteBufCodecs.VAR_INT, values -> values[1],
             ByteBufCodecs.VAR_INT, values -> values[2],
-            (thirst, quenched, purity) -> new int[]{thirst, quenched, purity});
+            (thirst, hydration, purity) -> new int[]{thirst, hydration, purity});
     private static final StreamCodec<RegistryFriendlyByteBuf, Map<Item, int[]>> TABLE = ByteBufCodecs.map(HashMap::new, ITEM, VALUES);
 
     private static final StreamCodec<ByteBuf, boolean[]> FLAGS = StreamCodec.composite(
@@ -48,7 +48,7 @@ public record ThirstValuesSyncMessage(Map<Item, int[]> drinks, Map<Item, int[]> 
             TABLE, ThirstValuesSyncMessage::foods,
             ITEM.apply(ByteBufCodecs.list()), ThirstValuesSyncMessage::estimated,
             ITEM.apply(ByteBufCodecs.list()), ThirstValuesSyncMessage::containers,
-            NUMBERS, message -> new int[]{message.defaultPurity, message.waterBottleStackSize, message.pureThirstBonus, message.pureQuenchedBonus},
+            NUMBERS, message -> new int[]{message.defaultPurity, message.waterBottleStackSize, message.pureThirstBonus, message.pureHydrationBonus},
             FLAGS, message -> new boolean[]{message.purityEnabled, message.canFillFromFlowingWater},
             (drinks, foods, estimated, containers, numbers, flags) -> new ThirstValuesSyncMessage(drinks, foods, estimated, containers,
                     numbers[0], numbers[1], flags[0], flags[1], numbers[2], numbers[3]));
@@ -57,7 +57,7 @@ public record ThirstValuesSyncMessage(Map<Item, int[]> drinks, Map<Item, int[]> 
     {
         return new ThirstValuesSyncMessage(ThirstHelper.drinkTable(), ThirstHelper.foodTable(), List.copyOf(ThirstHelper.estimatedItems()), WaterPurity.dataContainerItems(),
                 SyncedValues.defaultPurity(), SyncedValues.waterBottleStackSize(), SyncedValues.purityEnabled(), SyncedValues.canFillFromFlowingWater(),
-                SyncedValues.pureThirstBonus(), SyncedValues.pureQuenchedBonus());
+                SyncedValues.pureThirstBonus(), SyncedValues.pureHydrationBonus());
     }
 
     public static void clientHandle(final ThirstValuesSyncMessage message, final IPayloadContext context)
@@ -65,7 +65,7 @@ public record ThirstValuesSyncMessage(Map<Item, int[]> drinks, Map<Item, int[]> 
         context.enqueueWork(() -> {
             ThirstHelper.useServerTables(message.drinks, message.foods, message.containers, message.estimated);
             SyncedValues.useServerValues(message.defaultPurity, message.waterBottleStackSize, message.purityEnabled, message.canFillFromFlowingWater,
-                    message.pureThirstBonus, message.pureQuenchedBonus);
+                    message.pureThirstBonus, message.pureHydrationBonus);
         });
     }
 

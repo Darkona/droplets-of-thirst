@@ -44,7 +44,7 @@ public class SaveTests
         PlayerThirst loaded = new PlayerThirst();
         loaded.deserializeNBT(helper.getLevel().registryAccess(), tag);
         helper.assertValueEqual(loaded.getThirst(), 13, "thirst after a save");
-        helper.assertValueEqual(loaded.getQuenched(), 7, "quenched after a save");
+        helper.assertValueEqual(loaded.getHydration(), 7, "hydration after a save");
         helper.assertValueEqual(loaded.getExhaustion(), 2.5F, "exhaustion after a save");
         helper.assertFalse(loaded.getShouldTickThirst(), "disabled thirst came back enabled");
         helper.succeed();
@@ -58,7 +58,7 @@ public class SaveTests
         tag.putInt("quenched", 15);
         PlayerThirst loaded = new PlayerThirst();
         loaded.deserializeNBT(helper.getLevel().registryAccess(), tag);
-        helper.assertValueEqual(loaded.getQuenched(), 10, "quenched above thirst in an old save");
+        helper.assertValueEqual(loaded.getHydration(), 10, "hydration above thirst in an old save");
         helper.assertTrue(loaded.getShouldTickThirst(), "a save without the enable flag is disabled");
         helper.succeed();
     }
@@ -100,11 +100,11 @@ public class SaveTests
     @GameTest(template = "empty")
     public static void drinksDataMapAcceptsSaltyAndRejectsOutOfRange(GameTestHelper helper)
     {
-        helper.assertTrue(parse("{\"thirst\": -2, \"quenched\": -2}"), "salty entry rejected");
-        helper.assertTrue(parse("{\"thirst\": 6, \"quenched\": 8, \"purity\": 5}"), "water entry of purity 5 rejected");
-        helper.assertFalse(parse("{\"thirst\": 21, \"quenched\": 0}"), "thirst 21 accepted");
-        helper.assertFalse(parse("{\"thirst\": 2, \"quenched\": -30}"), "quenched -30 accepted");
-        helper.assertFalse(parse("{\"thirst\": 2, \"quenched\": 2, \"purity\": 6}"), "purity 6 accepted");
+        helper.assertTrue(parse("{\"thirst\": -2, \"hydration\": -2}"), "salty entry rejected");
+        helper.assertTrue(parse("{\"thirst\": 6, \"hydration\": 8, \"purity\": 5}"), "water entry of purity 5 rejected");
+        helper.assertFalse(parse("{\"thirst\": 21, \"hydration\": 0}"), "thirst 21 accepted");
+        helper.assertFalse(parse("{\"thirst\": 2, \"hydration\": -30}"), "hydration -30 accepted");
+        helper.assertFalse(parse("{\"thirst\": 2, \"hydration\": 2, \"purity\": 6}"), "purity 6 accepted");
         helper.succeed();
     }
 
@@ -131,7 +131,7 @@ public class SaveTests
         helper.assertValueEqual(received.drinks().get(Items.POTION)[0], sent.drinks().get(Items.POTION)[0], "water bottle thirst");
         helper.assertValueEqual(received.defaultPurity(), sent.defaultPurity(), "defaultPurity sent");
         helper.assertValueEqual(received.pureThirstBonus(), sent.pureThirstBonus(), "pureWater.thirstBonus sent");
-        helper.assertValueEqual(received.pureQuenchedBonus(), sent.pureQuenchedBonus(), "pureWater.quenchedBonus sent");
+        helper.assertValueEqual(received.pureHydrationBonus(), sent.pureHydrationBonus(), "pureWater.hydrationBonus sent");
         helper.succeed();
     }
 

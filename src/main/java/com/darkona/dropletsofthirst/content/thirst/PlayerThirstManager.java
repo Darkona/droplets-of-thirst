@@ -58,7 +58,7 @@ public class PlayerThirstManager {
         MinecraftServer server = player.serverLevel().getServer();
         server.tell(new TickTask(server.getTickCount(), () -> {
             if (player.getFoodData().getFoodLevel() > food)
-                PlayerThirst.eat(player, ItemStack.EMPTY, values.thirst(), values.quenched());
+                PlayerThirst.eat(player, ItemStack.EMPTY, values.thirst(), values.hydration());
         }));
     }
 
@@ -101,8 +101,8 @@ public class PlayerThirstManager {
         PlayerThirst thirst = event.getEntity().getData(DropletsAttachmentTypes.PLAYER_THIRST);
         if (!event.isEndConquered()) {
             int respawnThirst = GameplayConfig.RESPAWN_THIRST.get();
-            int respawnQuenched = GameplayConfig.RESPAWN_QUENCHED.get();
-            thirst.change(event.getEntity(), respawnThirst >= 0 ? respawnThirst : thirst.getThirst(), respawnQuenched >= 0 ? respawnQuenched : thirst.getQuenched(), ThirstChangeEvent.Cause.DEATH);
+            int respawnHydration = GameplayConfig.RESPAWN_HYDRATION.get();
+            thirst.change(event.getEntity(), respawnThirst >= 0 ? respawnThirst : thirst.getThirst(), respawnHydration >= 0 ? respawnHydration : thirst.getHydration(), ThirstChangeEvent.Cause.DEATH);
         }
         thirst.updateThirstData(event.getEntity());
     }
@@ -179,17 +179,17 @@ public class PlayerThirstManager {
     public static void estimatedTooltip(ItemTooltipEvent event){
         ItemStack stack = event.getItemStack();
         if (!ClientConfig.SHOW_TOOLTIP_ICONS.get() && ThirstHelper.isEstimated(stack))
-            event.getToolTip().add(estimatedLine(ThirstHelper.getThirst(stack), ThirstHelper.getQuenched(stack)));
+            event.getToolTip().add(estimatedLine(ThirstHelper.getThirst(stack), ThirstHelper.getHydration(stack)));
     }
 
-    private record EstimatedLine(int thirst, int quenched, Component line) {}
+    private record EstimatedLine(int thirst, int hydration, Component line) {}
 
     private static volatile @Nullable EstimatedLine lastEstimated;
 
-    public static Component estimatedLine(int thirst, int quenched){
+    public static Component estimatedLine(int thirst, int hydration){
         EstimatedLine last = lastEstimated;
-        if (last == null || last.thirst() != thirst || last.quenched() != quenched)
-            lastEstimated = last = new EstimatedLine(thirst, quenched, Component.translatable("droplets_of_thirst.tooltip.estimated", thirst, quenched).withStyle(ChatFormatting.GRAY));
+        if (last == null || last.thirst() != thirst || last.hydration() != hydration)
+            lastEstimated = last = new EstimatedLine(thirst, hydration, Component.translatable("droplets_of_thirst.tooltip.estimated", thirst, hydration).withStyle(ChatFormatting.GRAY));
         return last.line();
     }
 

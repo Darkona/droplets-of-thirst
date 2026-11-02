@@ -62,21 +62,21 @@ public class DropletsCommands {
                                     ServerPlayer player = EntityArgument.getPlayer(context,"Player");
                                     PlayerThirst thirst = player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
                                     int value = thirst.getThirst();
-                                    int quenched = thirst.getQuenched();
-                                    context.getSource().sendSuccess(() -> Component.translatable("command.droplets_of_thirst.query", value, quenched, player.getDisplayName()), false);
+                                    int hydration = thirst.getHydration();
+                                    context.getSource().sendSuccess(() -> Component.translatable("command.droplets_of_thirst.query", value, hydration, player.getDisplayName()), false);
                                     return value;
                                 }
                         )))
                 .then(Commands.literal("set").then(Commands.argument("Player", EntityArgument.player())
                         .then(Commands.argument("thirst", IntegerArgumentType.integer(0, PlayerThirst.MAX_THIRST))
-                                .then(Commands.argument("quenched", IntegerArgumentType.integer(0, PlayerThirst.MAX_THIRST))
+                                .then(Commands.argument("hydration", IntegerArgumentType.integer(0, PlayerThirst.MAX_THIRST))
                                         .executes(context -> {
                                             ServerPlayer player = EntityArgument.getPlayer(context,"Player");
                                             PlayerThirst thirst = player.getData(DropletsAttachmentTypes.PLAYER_THIRST);
-                                            thirst.change(player, IntegerArgumentType.getInteger(context,"thirst"), IntegerArgumentType.getInteger(context,"quenched"), ThirstChangeEvent.Cause.COMMAND);
+                                            thirst.change(player, IntegerArgumentType.getInteger(context,"thirst"), IntegerArgumentType.getInteger(context,"hydration"), ThirstChangeEvent.Cause.COMMAND);
                                             int value = thirst.getThirst();
-                                            int quenched = thirst.getQuenched();
-                                            context.getSource().sendSuccess(() -> Component.translatable("command.droplets_of_thirst.set", value, quenched, player.getDisplayName()), true);
+                                            int hydration = thirst.getHydration();
+                                            context.getSource().sendSuccess(() -> Component.translatable("command.droplets_of_thirst.set", value, hydration, player.getDisplayName()), true);
                                             return value;
                                         })))
                 ))
@@ -144,7 +144,7 @@ public class DropletsCommands {
         text.append("\n  droplets_of_thirst:thirst_drain: x").append(format(drain))
                 .append("\n  total: x").append(format(cached * drain))
                 .append("\n  exhaustion ").append(format(thirst.getExhaustion())).append(" / ").append(format(GameplayConfig.EXHAUSTION_PER_POINT.get()))
-                .append(", thirst ").append(thirst.getThirst()).append(", quenched ").append(thirst.getQuenched())
+                .append(", thirst ").append(thirst.getThirst()).append(", hydration ").append(thirst.getHydration())
                 .append(thirst.getShouldTickThirst() ? "" : " (thirst disabled for this player)");
         source.sendSuccess(() -> Component.literal(text.toString()), false);
         return 1;

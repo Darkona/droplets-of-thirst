@@ -28,7 +28,7 @@ public final class GameplayConfig
     public static final ModConfigSpec.BooleanValue WATER_BREATHING_REDUCES_THIRST;
     public static final ModConfigSpec.DoubleValue UNDERWATER_BREATHING_MULTIPLIER;
     public static final ModConfigSpec.BooleanValue FULL_HYDRATION_BONUS;
-    public static final ModConfigSpec.IntValue FULL_HYDRATION_MIN_QUENCHED;
+    public static final ModConfigSpec.IntValue FULL_HYDRATION_MIN_HYDRATION;
     public static final ModConfigSpec.IntValue FULL_HYDRATION_SECONDS;
     public static final ModConfigSpec.IntValue FULL_HYDRATION_DURATION_TICKS;
     public static final ModConfigSpec.BooleanValue OVERHYDRATION;
@@ -81,23 +81,23 @@ public final class GameplayConfig
     public static final ModConfigSpec.BooleanValue SPRINT_BLOCKED_WHEN_THIRSTY;
     public static final ModConfigSpec.IntValue SPRINT_MIN_THIRST;
 
-    public static final ModConfigSpec.BooleanValue EXTRA_THIRST_TO_QUENCHED;
+    public static final ModConfigSpec.BooleanValue EXTRA_THIRST_TO_HYDRATION;
     public static final ModConfigSpec.IntValue WATER_BOTTLE_STACK_SIZE;
     public static final ModConfigSpec.BooleanValue CAN_FILL_FROM_FLOWING_WATER;
     public static final ModConfigSpec.BooleanValue RAIN_DRINKING;
     public static final ModConfigSpec.DoubleValue RAIN_MAX_PITCH;
     public static final ModConfigSpec.IntValue RAIN_INTERVAL_TICKS;
     public static final ModConfigSpec.IntValue RAIN_THIRST;
-    public static final ModConfigSpec.IntValue RAIN_QUENCHED;
+    public static final ModConfigSpec.IntValue RAIN_HYDRATION;
     public static final ModConfigSpec.BooleanValue HAND_DRINKING;
     public static final ModConfigSpec.BooleanValue HAND_DRINKING_BOTH_HANDS;
     public static final ModConfigSpec.IntValue HAND_DRINKING_THIRST;
-    public static final ModConfigSpec.IntValue HAND_DRINKING_QUENCHED;
+    public static final ModConfigSpec.IntValue HAND_DRINKING_HYDRATION;
     public static final ModConfigSpec.IntValue HAND_DRINKING_COOLDOWN;
     public static final ModConfigSpec.BooleanValue HAND_DRINKING_EFFECTS;
 
     public static final ModConfigSpec.IntValue RESPAWN_THIRST;
-    public static final ModConfigSpec.IntValue RESPAWN_QUENCHED;
+    public static final ModConfigSpec.IntValue RESPAWN_HYDRATION;
 
     public static final ModConfigSpec.BooleanValue LOOT;
 
@@ -109,9 +109,9 @@ public final class GameplayConfig
         MODE = BUILDER.comment("MIRROR_FOOD: thirst follows the exhaustion vanilla adds to hunger (as before; includes other mods' exhaustion).",
                 "OWN: Droplets of Thirst counts the activities in [depletion.activity] itself, with vanilla's numbers by default; hunger is not read")
                 .defineEnum("mode", Mode.MIRROR_FOOD);
-        BASAL_PER_TICK = BUILDER.comment("Exhaustion added every tick even when doing nothing (4.0 = one quenched or thirst point); scaled by the multipliers")
+        BASAL_PER_TICK = BUILDER.comment("Exhaustion added every tick even when doing nothing (4.0 = one hydration or thirst point); scaled by the multipliers")
                 .defineInRange("basalPerTick", 0.0, 0.0, 1.0);
-        EXHAUSTION_PER_POINT = BUILDER.comment("Exhaustion that removes one quenched point, or one thirst point when quenched is 0 (hunger: 4.0)").defineInRange("exhaustionPerPoint", 4.0, 0.1, 100.0);
+        EXHAUSTION_PER_POINT = BUILDER.comment("Exhaustion that removes one hydration point, or one thirst point when hydration is 0 (hunger: 4.0)").defineInRange("exhaustionPerPoint", 4.0, 0.1, 100.0);
         NAUSEA_PER_TICK = BUILDER.comment("Exhaustion per tick while nauseous (with nauseaDepletes)").defineInRange("nauseaPerTick", 0.06, 0.0, 1.0);
         DEPLETION_MULTIPLIER = BUILDER.comment("How much faster thirst goes down than hunger (1 = same speed). Was thirstDepletionModifier")
                 .defineInRange("multiplier", 1.2, 0.0, 10.0);
@@ -182,33 +182,33 @@ public final class GameplayConfig
         BUILDER.pop();
 
         BUILDER.push("drinking");
-        EXTRA_THIRST_TO_QUENCHED = BUILDER.comment("Whether thirst restored above full turns into quenched").define("extraThirstToQuenched", true);
+        EXTRA_THIRST_TO_HYDRATION = BUILDER.comment("Whether thirst restored above full turns into hydration").define("extraThirstToHydration", true);
         WATER_BOTTLE_STACK_SIZE = BUILDER.comment("Stack size of water bottles").defineInRange("waterBottleStackSize", 16, 1, 99);
         CAN_FILL_FROM_FLOWING_WATER = BUILDER.comment("Whether glass bottles and terracotta bowls can be filled from flowing water; if false only source blocks work, as in vanilla. Buckets always need a source").define("canFillFromFlowingWater", true);
         RAIN_DRINKING = BUILDER.comment("Whether players drink rain by looking up").define("rain", true);
         RAIN_MAX_PITCH = BUILDER.comment("How far up players must look to drink rain (-90 = straight up)").defineInRange("rainMaxPitch", -80.0, -90.0, 90.0);
         RAIN_INTERVAL_TICKS = BUILDER.comment("Ticks between two sips of rain").defineInRange("rainIntervalTicks", 11, 1, 1200);
         RAIN_THIRST = BUILDER.defineInRange("rainThirst", 1, 0, 20);
-        RAIN_QUENCHED = BUILDER.defineInRange("rainQuenched", 1, 0, 20);
+        RAIN_HYDRATION = BUILDER.defineInRange("rainHydration", 1, 0, 20);
         BUILDER.pop();
 
         BUILDER.push("hand");
         HAND_DRINKING = BUILDER.comment("Whether players can drink water in the world by sneaking and right-clicking with an empty hand").define("enabled", true);
         HAND_DRINKING_BOTH_HANDS = BUILDER.comment("Whether both hands must be empty").define("bothHandsEmpty", true);
         HAND_DRINKING_THIRST = BUILDER.comment("Thirst restored per sip").defineInRange("thirst", 1, 0, 20);
-        HAND_DRINKING_QUENCHED = BUILDER.comment("Quenched restored per sip").defineInRange("quenched", 1, 0, 20);
+        HAND_DRINKING_HYDRATION = BUILDER.comment("Hydration restored per sip").defineInRange("hydration", 1, 0, 20);
         HAND_DRINKING_COOLDOWN = BUILDER.comment("Minimum ticks between two sips (20 ticks = 1 second)").defineInRange("cooldownTicks", 10, 0, 1200);
         HAND_DRINKING_EFFECTS = BUILDER.comment("Swing the arm and splash water particles when drinking by hand (visual only)").define("effects", true);
         BUILDER.pop();
 
         BUILDER.push("death");
         RESPAWN_THIRST = BUILDER.comment("Thirst after respawning; -1 keeps the thirst the player died with").defineInRange("respawnThirst", 20, -1, 20);
-        RESPAWN_QUENCHED = BUILDER.comment("Quenched after respawning (at most the thirst); -1 keeps it").defineInRange("respawnQuenched", 5, -1, 20);
+        RESPAWN_HYDRATION = BUILDER.comment("Hydration after respawning (at most the thirst); -1 keeps it").defineInRange("respawnHydration", 5, -1, 20);
         BUILDER.pop();
 
         BUILDER.push("effects");
         DEHYDRATION_MULTIPLIER = BUILDER.comment("Multiplier of the thirst exhaustion the Dehydration effect adds every tick (0.005 per level)").defineInRange("dehydrationMultiplier", 1.0, 0.0, 10.0);
-        QUENCHNESS_INTERVAL_TICKS = BUILDER.comment("Quenchness restores (level) thirst and quenched every this many ticks").defineInRange("quenchnessIntervalTicks", 40, 1, 1200);
+        QUENCHNESS_INTERVAL_TICKS = BUILDER.comment("Quenchness restores (level) thirst and hydration every this many ticks").defineInRange("quenchnessIntervalTicks", 40, 1, 1200);
         QUENCHNESS_POTION = BUILDER.comment("Brewing recipes for the Quenchness potions (awkward potion + prismarine crystals). Keep the same value on the server and the clients").define("quenchnessPotion", true);
         HYDRATED_MULTIPLIER = BUILDER.comment("Thirst loss with the Hydrated effect, once per level (0.5: level I halves it, level II quarters it)").defineInRange("hydratedMultiplier", 0.5, 0.0, 1.0);
         WATER_BREATHING_REDUCES_THIRST = BUILDER.comment("Whether Water Breathing or Conduit Power multiplies thirst loss by underwaterBreathingMultiplier while fully underwater").define("waterBreathingReducesThirst", false);
@@ -216,13 +216,13 @@ public final class GameplayConfig
         BUILDER.pop();
 
         BUILDER.push("hydration");
-        FULL_HYDRATION_BONUS = BUILDER.comment("Staying fully hydrated (thirst 20 and at least minQuenched) for fullBonusSeconds gives Hydrated I, refreshed while it lasts").define("fullBonus", false);
-        FULL_HYDRATION_MIN_QUENCHED = BUILDER.defineInRange("minQuenched", 10, 0, 20);
+        FULL_HYDRATION_BONUS = BUILDER.comment("Staying fully hydrated (thirst 20 and at least minHydration) for fullBonusSeconds gives Hydrated I, refreshed while it lasts").define("fullBonus", false);
+        FULL_HYDRATION_MIN_HYDRATION = BUILDER.defineInRange("minHydration", 10, 0, 20);
         FULL_HYDRATION_SECONDS = BUILDER.defineInRange("fullBonusSeconds", 30, 1, 3600);
         FULL_HYDRATION_DURATION_TICKS = BUILDER.comment("Duration of the Hydrated effect it gives; it keeps going this long after the player is no longer fully hydrated").defineInRange("fullBonusDurationTicks", 200, 40, 12000);
         BUILDER.pop();
 
-        BUILDER.comment("Drinking past full: thirst and quenched that no longer fit add up as overflow, which drains over time.",
+        BUILDER.comment("Drinking past full: thirst and hydration that no longer fit add up as overflow, which drains over time.",
                 "At the threshold the player gets Overhydrated (slowness), one level more per half threshold past it or while it lasts (at most III)").push("overhydration");
         OVERHYDRATION = BUILDER.comment("Whether drinking past full can cause Overhydrated").define("enabled", true);
         OVERHYDRATION_THRESHOLD = BUILDER.comment("Overflow (points drunk past full) that causes Overhydrated").defineInRange("threshold", 20, 1, 1000);

@@ -14,7 +14,7 @@ StartupEvents.registry('item', event => {
     .food(food => food.nutrition(1).saturation(0.1).alwaysEdible())
 })
 
-// The item exists now: give it thirst 6 and quenched 4, and a purity for the effects rolled when drinking it.
+// The item exists now: give it thirst 6 and hydration 4, and a purity for the effects rolled when drinking it.
 StartupEvents.postInit(() => {
   const lemonade = Item.of('kubejs:lemonade').item
   DropletsAPI.registerDrink(lemonade, 6, 4, PurityLevel.CLEAN.level())
