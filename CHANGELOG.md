@@ -4,6 +4,7 @@ Changes by feature, newest version first. Upstream issues are cited as `thirst#N
 
 ## Unreleased
 
+- Droplets of Thirst now supports Minecraft 1.21.1 and 1.20.1 only. The other versions are no longer maintained or available on GitHub.
 - Water of any purity now mixes in tanks and Canteens, and the whole tank drops to the dirtiest purity. It works with any mod tank built on the NeoForge fluid tank.
 - With Supplementaries and Moonlight, the Jar and the Faucet keep the purity of water: the Faucet takes it from water blocks and cauldrons, the Jar keeps it when filled by pipes or bottles and passes it to the bottles it fills.
 - Mekanism's Electric Pump and Immersive Engineering's Fluid Pump now keep the purity of the water they take from the world.

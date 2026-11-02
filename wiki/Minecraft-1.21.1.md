@@ -1,8 +1,8 @@
 # Minecraft 1.21.1
 
-Droplets of Thirst for Minecraft 1.21.1 runs on **Minecraft 1.21.1 and NeoForge 21.1.252 or newer** (branch `1.21.1`, jar `droplets-of-thirst-1.21.1-1.0.0.jar`). Thirst, water purity, effects, config files, data maps, commands and the API work as the rest of this wiki describes for 26.3.
+Droplets of Thirst for Minecraft 1.21.1 runs on **Minecraft 1.21.1 and NeoForge 21.1.252 or newer** (branch `1.21.1`, jar `droplets-of-thirst-1.21.1-1.0.0.jar`). Thirst, water purity, effects, config files, data maps, commands and the API work as the rest of this wiki describes.
 
-1.21.1 has the most integrations: Create, Farmer's Delight and its addons, Cold Sweat, Vampirism, Supernatural, Reliquary and KubeJS. It also has the Jade, JEI, AppleSkin, Serene Seasons and Traveler's Backpack support of 26.3. Most of those mods have no 26.x version yet. This page describes those integrations and the other differences from 26.3.
+1.21.1 has the most integrations: Create, Farmer's Delight and its addons, Cold Sweat, Vampirism, Supernatural, Reliquary and KubeJS. It also works with Jade, JEI, AppleSkin, Serene Seasons and Traveler's Backpack. This page describes those integrations.
 
 ---
 
@@ -10,7 +10,7 @@ Droplets of Thirst for Minecraft 1.21.1 runs on **Minecraft 1.21.1 and NeoForge 
 
 - **Sprinting**: with 3 droplets or less you cannot start a sprint. A sprint already in progress goes on.
 - **The Nether**: the Nether multiplier and the hot climate of dirty water apply in dimensions whose type is ultra-warm, as the Nether.
-- **With Create installed**, cooking stops at clean (4), and pure water (5) comes from a filter: the Sand Filter or the Charcoal Filter. Without Create, cooking reaches pure as on 26.3.
+- **With Create installed**, cooking stops at clean (4), and pure water (5) comes from a filter: the Sand Filter or the Charcoal Filter. Without Create, cooking reaches pure.
 
 ### Create
 
@@ -71,7 +71,7 @@ Drinking from the Emperor's Chalice hydrates like a drink of pure water (thirst 
 
 ## Configuration
 
-These keys exist on 1.21.1 and not on 26.3.
+These keys go with the mods above.
 
 ### `compat.toml`
 
@@ -111,14 +111,6 @@ These keys exist on 1.21.1 and not on 26.3.
 
 ## Modpack makers
 
-### Data formats
-
-- **Pack format**: datapacks declare `"pack_format": 48` in `pack.mcmeta`.
-- **Recipe ingredients**: NeoForge custom ingredients use `"type"`, not `"neoforge:ingredient_type"`: `{"type": "neoforge:components", "items": "minecraft:potion", "components": {"minecraft:potion_contents": {"potion": "minecraft:water"}, "droplets_of_thirst:purity": 3}}`. Results are `{"id": ..., "count": 1, "components": {...}}`.
-- **Brewing**: the mod registers the Potion of Quenchness mixes in code (NeoForge's `RegisterBrewingRecipesEvent`). They are not data. To use another ingredient, set `effects.quenchnessPotion = false` and add your own mix with KubeJS or a mod.
-- **Loot**: loot tables and modifiers use the loot format before 26.3 (`functions` and `conditions` lists, `"function"` and `"condition"` keys), as shown on [Minecraft 26.2](Minecraft-26.2#modpack-makers). `data/neoforge/loot_modifiers/global_loot_modifiers.json` lists the chest loot modifiers and carries the `droplets_of_thirst:loot_config` condition. The ones for Brewin' and Chewin' and Farmer's Respite drinks (`add_loot_*_bc`, `add_loot_*_fr`) load only with those mods.
-- **Attributes**: the `minecraft:attribute_modifiers` component is `{"modifiers": [...]}`, and Overhydrated modifies `minecraft:generic.movement_speed`.
-
 ### Defaults with other mods
 
 | Tag | Default on 1.21.1 |
@@ -132,7 +124,7 @@ These keys exist on 1.21.1 and not on 26.3.
 
 The `droplets_of_thirst:drinks` data map ships entries for the mods listed under [Farmer's Delight](#farmers-delight-and-its-addons), Create, Cold Sweat and Reliquary, each with a `neoforge:mod_loaded` condition.
 
-On 1.21.1 the tag folders are singular, as on 26.3: `tags/item/`, `tags/block/`, `tags/fluid/`, `tags/mob_effect/`.
+On 1.21.1 the tag folders are singular: `tags/item/`, `tags/block/`, `tags/fluid/`, `tags/mob_effect/`.
 
 ### Built-in datapacks
 
@@ -205,7 +197,6 @@ StartupEvents.postInit(() => {
 
 ## Mod developers
 
-- The API has the same classes and methods, with the 1.21.1 names: `ResourceLocation` in place of `Identifier` (`ResourceLocation.fromNamespaceAndPath`).
 - Fluids go through `IFluidHandler` and `FluidStack`. A water cauldron seen through NeoForge's fluid capability reports its water with the cauldron purity.
 - The mod also posts `EatEvent` when another mod calls `Player#eat` directly.
 - Built-in bar styles include the vampire style (priority 400).

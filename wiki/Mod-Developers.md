@@ -4,13 +4,13 @@ Droplets of Thirst has a small public API in `com.darkona.dropletsofthirst.api`.
 
 Start at `DropletsAPI`. Every public method has documentation. `DropletsAPI.API_VERSION` (1) goes up when the API changes incompatibly.
 
-This page shows the API on Minecraft 26.3 (NeoForge, Mojang names, `Identifier`). Every version has the same classes and methods, with the types of its Minecraft version. The [home page](Home) links the page of your version.
+This page shows the API on Minecraft 1.21.1 (NeoForge, Mojang names, `ResourceLocation`). Minecraft 1.20.1 has the same classes and methods, with the types of its Minecraft version. The [home page](Home) links the page of your version.
 
 ---
 
 ## Dependency
 
-There is no public Maven repository. Each [GitHub release](https://github.com/Darkona/droplets-of-thirst/releases) has the mod jar and the API jar, each with a sources jar. Use those jars as files, or build Droplets of Thirst from the tag of your version and publish it locally (`./gradlew publishToMavenLocal`). The version is `26.3-1.0.0-beta.1`.
+There is no public Maven repository. Each [GitHub release](https://github.com/Darkona/droplets-of-thirst/releases) has the mod jar and the API jar, each with a sources jar. Use those jars as files, or build Droplets of Thirst from the tag of your version and publish it locally (`./gradlew publishToMavenLocal`). The version is `1.21.1-1.0.0`.
 
 ```groovy
 repositories {
@@ -19,9 +19,9 @@ repositories {
 
 dependencies {
     // The API only: nothing of Droplets of Thirst's internals is on your compile classpath.
-    compileOnly "com.darkona.dropletsofthirst:droplets-of-thirst-api:26.3-1.0.0-beta.1"
+    compileOnly "com.darkona.dropletsofthirst:droplets-of-thirst-api:1.21.1-1.0.0"
     // The whole mod, to run it in your dev environment (optional).
-    localRuntime "com.darkona.dropletsofthirst:droplets-of-thirst:26.3-1.0.0-beta.1"
+    localRuntime "com.darkona.dropletsofthirst:droplets-of-thirst:1.21.1-1.0.0"
 }
 ```
 
@@ -170,7 +170,7 @@ Prefer the attribute `droplets_of_thirst:thirst_drain` (a multiplier, base 1.0):
 For rules the attribute cannot express (additive terms, your own climate or seasons), register a modifier. It runs on the server about once a second per player, and when armor, effects or the dimension change. It never runs every tick, and the mod caches the result. Modifiers run in id order and receive the multiplier so far:
 
 ```java
-DropletsAPI.registerExhaustionModifier(Identifier.fromNamespaceAndPath("mymod", "season"),
+DropletsAPI.registerExhaustionModifier(ResourceLocation.fromNamespaceAndPath("mymod", "season"),
         (player, multiplier) -> Seasons.isSummer(player.level()) ? multiplier * 1.25f : multiplier);
 
 // When what your modifier reads changes, don't wait for the next refresh:
@@ -188,7 +188,7 @@ The thirst bar is the GUI layer `droplets_of_thirst:thirst_level`, registered ri
 The droplets are tinted while a style is active, like vanilla hunger turns green under Hunger. Built-in styles and their priorities: Dehydration 300, Overhydrated 250, Poison 200, Quenchness 100, Hydrated 50. The active style with the highest priority wins. Add your own on the client, for example in `FMLClientSetupEvent`:
 
 ```java
-DropletsAPI.registerBarStyle(Identifier.fromNamespaceAndPath("mymod", "frozen"),
+DropletsAPI.registerBarStyle(ResourceLocation.fromNamespaceAndPath("mymod", "frozen"),
         player -> player.hasEffect(MyEffects.FROZEN), 0x9FD8FF, 250);
 ```
 

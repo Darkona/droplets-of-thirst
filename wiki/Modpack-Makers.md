@@ -7,7 +7,7 @@ Droplets of Thirst has two layers of configuration:
 
 All paths below are inside a datapack (`data/<namespace>/...`). The mod logs and skips bad entries. They never crash the game or disconnect players.
 
-The formats on this page are those of Minecraft 26.3: datapacks declare `"min_format": 121, "max_format": 121` in `pack.mcmeta`. Other versions read other formats, listed on their own page (see the [home page](Home)).
+The formats on this page are those of Minecraft 1.21.1: datapacks declare `"pack_format": 48` in `pack.mcmeta`. Minecraft 1.20.1 reads other formats, listed on [its page](Minecraft-1.20.1).
 
 ---
 
@@ -194,17 +194,7 @@ Droplets of Thirst sets `minecraft:the_end` to `thirst_multiplier` `0.6`, so the
 | `droplets_of_thirst:long_quenchness` | Quenchness I, 1:30 | Quenchness + redstone |
 | `droplets_of_thirst:strong_quenchness` | Quenchness II, 0:22 | Quenchness + glowstone dust |
 
-The mixes are 15 `minecraft:brewing` recipes in `data/droplets_of_thirst/recipe/brewing/`: each mix for the potion, splash and lingering containers, plus the gunpowder and dragon's breath container changes. Every one carries the load condition `droplets_of_thirst:quenchness_potion`, which follows `gameplay.toml` `effects.quenchnessPotion`. To use another ingredient, put a recipe with the same id in your datapack, or turn the switch off and add your own mixes without that condition. The first mix, `droplets_of_thirst:brewing/potion_awkward_prismarine_crystals`:
-
-```json
-{
-  "neoforge:conditions": [{ "type": "droplets_of_thirst:quenchness_potion" }],
-  "type": "minecraft:brewing",
-  "input": { "item": "minecraft:potion", "potion_contents": { "potions": "minecraft:awkward" } },
-  "reagent": { "item": "minecraft:prismarine_crystals" },
-  "output": { "id": "minecraft:potion", "components": { "minecraft:potion_contents": { "potion": "droplets_of_thirst:quenchness" } } }
-}
-```
+The mod registers the mixes in code (NeoForge's `RegisterBrewingRecipesEvent`), so they are not data. To use another ingredient, set `effects.quenchnessPotion = false` and add your own mix with KubeJS or a mod.
 
 
 ### Hydrated
@@ -213,7 +203,7 @@ The mixes are 15 `minecraft:brewing` recipes in `data/droplets_of_thirst/recipe/
 
 ### Overhydrated
 
-`droplets_of_thirst:overhydrated` makes the player 10% slower per level (an attribute modifier on `minecraft:movement_speed`, like Slowness). Drinking far past full gives it (`[overhydration]`, on by default), and `/effect` works too.
+`droplets_of_thirst:overhydrated` makes the player 10% slower per level (an attribute modifier on `minecraft:generic.movement_speed`, like Slowness). Drinking far past full gives it (`[overhydration]`, on by default), and `/effect` works too.
 
 Vanilla effects that change thirst: Nausea drains it (`depletion.nauseaDepletes`) and Fire Resistance reduces it (`fireResistancePercent`). With `effects.waterBreathingReducesThirst` (off), Water Breathing or Conduit Power reduce it while fully underwater. Hunger does not change thirst: `MIRROR_FOOD` mode leaves out its extra food exhaustion.
 
@@ -229,9 +219,9 @@ Every player has the attribute `droplets_of_thirst:thirst_drain` (base 1.0, 0 to
 - commands: `/attribute @s droplets_of_thirst:thirst_drain base set 0.5`.
 
 ```json
-"minecraft:attribute_modifiers": [
+"minecraft:attribute_modifiers": { "modifiers": [
   { "type": "droplets_of_thirst:thirst_drain", "id": "examplemod:cooling_helmet", "amount": -0.25, "operation": "add_multiplied_base", "slot": "head" }
-]
+] }
 ```
 
 ---
@@ -278,7 +268,7 @@ One level of purification for a modded water container:
   "neoforge:conditions": [{ "type": "droplets_of_thirst:purity_enabled" }],
   "type": "minecraft:campfire_cooking",
   "ingredient": {
-    "neoforge:ingredient_type": "neoforge:components",
+    "type": "neoforge:components",
     "items": "examplemod:canteen",
     "components": { "droplets_of_thirst:purity": 1 }
   },
@@ -293,10 +283,10 @@ Water with no purity stored does not match a `"droplets_of_thirst:purity": 3` in
 
 ```json
 "ingredient": {
-  "neoforge:ingredient_type": "neoforge:compound",
+  "type": "neoforge:compound",
   "children": [
-    { "neoforge:ingredient_type": "neoforge:components", "items": "minecraft:water_bucket", "components": { "droplets_of_thirst:purity": 3 } },
-    { "neoforge:ingredient_type": "neoforge:components", "items": "minecraft:water_bucket", "components": {}, "strict": true }
+    { "type": "neoforge:components", "items": "minecraft:water_bucket", "components": { "droplets_of_thirst:purity": 3 } },
+    { "type": "neoforge:components", "items": "minecraft:water_bucket", "components": {}, "strict": true }
   ]
 }
 ```
@@ -305,15 +295,14 @@ Water with no purity stored does not match a `"droplets_of_thirst:purity": 3` in
 
 ## Chest loot
 
-Droplets of Thirst adds water bottles, acceptable (3) or pure (5), to the chests of dungeons, mineshafts, shipwrecks (supply), Nether fortresses and bastions. Each chest is one loot table in `data/droplets_of_thirst/loot_table/chests/` and one global loot modifier in `data/droplets_of_thirst/loot_modifiers/`. NeoForge loads every file in that folder, with no `global_loot_modifiers.json` list. Both carry the load condition `droplets_of_thirst:loot_config`, which follows `gameplay.toml` `loot.enabled`.
+Droplets of Thirst adds water bottles, acceptable (3) or pure (5), to the chests of dungeons, mineshafts, shipwrecks (supply), Nether fortresses and bastions. Each chest is one loot table in `data/droplets_of_thirst/loot_table/chests/` and one global loot modifier in `data/droplets_of_thirst/loot_modifiers/`. `data/neoforge/loot_modifiers/global_loot_modifiers.json` lists the modifiers and carries the load condition `droplets_of_thirst:loot_config`, which follows `gameplay.toml` `loot.enabled`. The modifiers for Brewin' and Chewin' and Farmer's Respite drinks (`add_loot_*_bc`, `add_loot_*_fr`) load only with those mods.
 
-Loot tables and modifiers use the Minecraft 26.3 loot format: `modifier` in place of `functions`, a single `condition` in place of the `conditions` list, and `type` as the key of every function and condition. Several conditions go in `{"type": "minecraft:all_of", "terms": [...]}`.
+Loot tables and modifiers use a `functions` list with `"function"` as the key of each function, and a `conditions` list with `"condition"` as the key.
 
 ```json
 {
-  "neoforge:conditions": [{ "type": "droplets_of_thirst:loot_config" }],
   "type": "neoforge:add_table",
-  "condition": { "type": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/simple_dungeon" },
+  "conditions": [{ "condition": "neoforge:loot_table_id", "loot_table_id": "minecraft:chests/simple_dungeon" }],
   "table": "droplets_of_thirst:chests/simple_dungeon"
 }
 ```
@@ -321,14 +310,12 @@ Loot tables and modifiers use the Minecraft 26.3 loot format: `modifier` in plac
 The purity of a bottle in a loot table goes on a `set_components` function with the loot condition `droplets_of_thirst:purity_enabled`, so the bottle comes without a purity when purity is off:
 
 ```json
-"modifier": [
-  { "type": "minecraft:set_components", "components": { "droplets_of_thirst:purity": 3 }, "condition": { "type": "droplets_of_thirst:purity_enabled" } },
-  { "type": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 1, "max": 3 } },
-  { "type": "minecraft:set_potion", "id": "minecraft:water" }
+"functions": [
+  { "function": "minecraft:set_components", "components": { "droplets_of_thirst:purity": 3 }, "conditions": [{ "condition": "droplets_of_thirst:purity_enabled" }] },
+  { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 1, "max": 3 } },
+  { "function": "minecraft:set_potion", "id": "minecraft:water" }
 ]
 ```
-
-Loot in the old format loads without an error, but the game ignores its functions and conditions. A global loot modifier with the old `conditions` list adds its table to every loot table in the game. `scripts/loot/convert.py` in the repository converts loot tables and modifiers to the 26.3 format.
 
 ---
 
@@ -347,4 +334,4 @@ The TOML files only list the keys they change. Droplets of Thirst adds the rest 
 
 ## Resource packs
 
-The terracotta water bowl's item model (`assets/droplets_of_thirst/items/terracotta_water_bowl.json`) tints its water layer with the item tint source `droplets_of_thirst:water_purity` (field `default`, an RGB colour used when the stack has no purity). A resource pack can put the same tint source on other water containers. Water bottles are tinted through vanilla's potion tint.
+The terracotta water bowl tints the water layer of its item model (tint index 1) with a colour handler in the mod's code, so a resource pack can redraw the bowl but cannot add the tint to other items. Water bottles are tinted through vanilla's potion tint.

@@ -4,7 +4,7 @@ All TOML files are in `config/droplets_of_thirst/`. They are NeoForge configs. N
 
 Values that belong to an item, a biome or a dimension are in datapacks. See [Modpack makers](Modpack-Makers).
 
-This page lists the keys of Minecraft 26.3. Older versions have more keys, for the mods they work with. The [home page](Home) links the page of your version.
+This page lists the keys both versions share. Each version has more keys, for the mods it works with, on its own page: [Minecraft 1.21.1](Minecraft-1.21.1) and [Minecraft 1.20.1](Minecraft-1.20.1).
 
 ---
 
@@ -15,7 +15,7 @@ This page lists the keys of Minecraft 26.3. Older versions have more keys, for t
 | `gameplay.toml` | common | Thirst loss, drinking, damage, regeneration, sprint, effects, loot |
 | `purity.toml` | common | Water purity in the world and its effects |
 | `items.toml` | common | Per-item overrides, purity containers, salty items, keywords, recipe inference |
-| `compat.toml` | common | One section per optional mod (on 26.3, `[sereneseasons]`) |
+| `compat.toml` | common | One section per optional mod |
 | `client.toml` | client | HUD and tooltips; each player's own |
 
 The gameplay files are common configs. They exist before a world loads, because tooltips and stack sizes need them, and one file serves every world. On a dedicated server, the server's values win. The server sends the values the client needs to each player on join, after `/reload` and after a config change: the sprint rule, hand drinking and its two-hands rule, the drink tables, the purity containers, `purity.enabled`, `defaultPurity`, the pure water bonus, filling from flowing water and the water bottle stack size.
