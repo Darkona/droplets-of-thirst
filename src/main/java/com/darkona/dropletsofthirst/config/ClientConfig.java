@@ -10,6 +10,7 @@ public final class ClientConfig
     public static final ModConfigSpec.BooleanValue TINT_WATER_BY_PURITY;
     public static final ModConfigSpec.BooleanValue SHOW_TOOLTIP_ICONS;
     public static final ModConfigSpec.BooleanValue FOLLOW_APPLESKIN;
+    public static final ModConfigSpec.BooleanValue JADE_STORED_WATER_PURITY;
     public static final ModConfigSpec.ConfigValue<Integer> THIRST_BAR_Y_OFFSET;
     public static final ModConfigSpec.ConfigValue<Integer> THIRST_BAR_X_OFFSET;
 
@@ -39,6 +40,7 @@ public final class ClientConfig
         BUILDER.push("Tooltip");
         SHOW_TOOLTIP_ICONS = BUILDER.comment("Show the thirst and hydration an item gives as icons in its tooltip; when off, only estimated values are shown, as text").define("showTooltipIcons", true);
         FOLLOW_APPLESKIN = BUILDER.comment("With AppleSkin installed, also hide the hydration outline, drink preview, exhaustion underlay and tooltip icons when its food counterpart is turned off in AppleSkin's config (tooltip icons then also follow its hold-Shift option)").define("followAppleSkin", true);
+        JADE_STORED_WATER_PURITY = BUILDER.comment("With Jade installed, also list the purity and amount of the water containers stored in a block while Jade shows its contents").define("jadeStoredWaterPurity", true);
         BUILDER.pop();
 
         BUILDER.push("Thirst Bar");

@@ -2,7 +2,6 @@ package com.darkona.dropletsofthirst.compat.jei;
 
 import com.darkona.dropletsofthirst.DropletsOfThirst;
 import com.darkona.dropletsofthirst.content.purity.WaterPurity;
-import com.darkona.dropletsofthirst.config.CompatConfig;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
 import mezz.jei.api.gui.placement.HorizontalAlignment;
@@ -59,9 +58,6 @@ final class PurificationCategory extends AbstractRecipeCategory<PurificationEntr
     {
         builder.addRecipeArrow().setPosition(36, 10);
         builder.addRecipeArrow().setPosition(WIDTH - 60, 10);
-        Component text = entry.method().equals("sand_filter")
-                ? Component.translatable(DropletsOfThirst.ID + ".jei.purification.sand_filter", CompatConfig.SAND_FILTER_FILTRATION_AMOUNT.get(), WaterPurity.getPurityText(CompatConfig.SAND_FILTER_MAX_PURITY.get()))
-                : Component.translatable(DropletsOfThirst.ID + ".jei.purification." + entry.method());
-        builder.addText(text, WIDTH, 20).setPosition(0, TEXT_Y).setColor(0xFF404040).setTextAlignment(HorizontalAlignment.CENTER);
+        builder.addText(entry.description(), WIDTH, 20).setPosition(0, TEXT_Y).setColor(0xFF404040).setTextAlignment(HorizontalAlignment.CENTER);
     }
 }

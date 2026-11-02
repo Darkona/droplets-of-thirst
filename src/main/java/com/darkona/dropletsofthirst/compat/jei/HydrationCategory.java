@@ -36,8 +36,7 @@ final class HydrationCategory extends AbstractRecipeCategory<HydrationEntry>
     {
         ThirstValues values = entry.values();
         builder.addDrawable(new Droplets(DrinkTooltip.of(values)), VALUES_X, 1);
-        String key = DropletsOfThirst.ID + (values.estimated() ? ".jei.hydration.values_estimated" : ".jei.hydration.values");
-        builder.addText(Component.translatable(key, values.thirst(), values.quenched()), WIDTH - VALUES_X, 10).setPosition(VALUES_X, 22).setColor(0xFF404040);
+        builder.addText(entry.valuesText(), WIDTH - VALUES_X, 10).setPosition(VALUES_X, 22).setColor(0xFF404040);
     }
 
     private record Droplets(DrinkTooltip row) implements IDrawable

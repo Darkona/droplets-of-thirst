@@ -28,6 +28,9 @@ sourceSets {
         compileClasspath += sourceSets.main.output + sourceSets.api.output
         runtimeClasspath += sourceSets.main.output + sourceSets.api.output
     }
+    clientVampirism {
+        runtimeClasspath += sourceSets.main.output + sourceSets.api.output + sourceSets.gametest.output
+    }
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
@@ -66,6 +69,7 @@ neoForge {
     version = project.neo_version
     addModdingDependenciesTo(sourceSets.api)
     addModdingDependenciesTo(sourceSets.gametest)
+    addModdingDependenciesTo(sourceSets.clientVampirism)
 
     parchment {
         mappingsVersion = project.parchment_mappings_version
@@ -76,6 +80,10 @@ neoForge {
         client {
             client()
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+        clientVampirism {
+            client()
+            gameDirectory = project.file('run/vampirism')
         }
         // Headless client straight into a copy of a test world: scripts/client-boot-check.sh.
         bootCheck {
@@ -108,7 +116,7 @@ neoForge {
                     '--existing', file('src/main/resources/').getAbsolutePath()
         }
         configureEach {
-            sourceSet = sourceSets.gametest
+            sourceSet = name == 'clientVampirism' ? sourceSets.clientVampirism : sourceSets.gametest
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             logLevel = org.slf4j.event.Level.DEBUG
         }
@@ -133,6 +141,10 @@ configurations {
     gametestCompileOnly.extendsFrom compileOnly
     gametestRuntimeOnly.extendsFrom runtimeOnly
     gametestRuntimeClasspath.extendsFrom localRuntime
+    clientVampirismImplementation.extendsFrom gametestImplementation
+    clientVampirismRuntimeOnly.extendsFrom runtimeOnly
+    clientVampirismRuntimeClasspath.extendsFrom localRuntime
+    clientVampirismRuntimeClasspath.exclude group: 'mezz.jei'
 }
 
 dependencies {
@@ -173,6 +185,7 @@ dependencies {
     compileOnly 'maven.modrinth:travelersbackpack:1.21.1-10.1.39'
     compileOnly 'curse.maven:appleskin-248787:5586600'
     compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly 'maven.modrinth:emi:1.1.24+1.21.1+neoforge'
     compileOnly 'maven.modrinth:serene-seasons:pHEgQQUE'
     compileOnly 'maven.modrinth:glitchcore:S2TfWrZR'
     compileOnly 'maven.modrinth:mekanism:10.7.19.85'
@@ -250,6 +263,10 @@ dependencies {
     }
 
     localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+
+    clientVampirismRuntimeOnly 'maven.modrinth:vampirism:8KCSZKt6'
+    clientVampirismRuntimeOnly 'maven.modrinth:emi:1.1.24+1.21.1+neoforge'
+    clientVampirismRuntimeOnly 'curse.maven:jade-324717:6291517'
 }
 
 // -PwithKubeJS: copy the example scripts into run/kubejs-test/kubejs before the game tests, which run in that folder.

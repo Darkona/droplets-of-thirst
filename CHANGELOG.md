@@ -2,6 +2,12 @@
 
 Changes by feature, newest version first. Upstream issues are cited as `thirst#NN` (ghen-git/Thirst-Mod).
 
+## Unreleased
+
+- EMI now shows the Hydration and Water Purification pages by itself, without JEI.
+- Jade now lists the purity and amount of water bottles, buckets and other water containers stored in a block while it shows that block's contents. `Tooltip.jadeStoredWaterPurity` in `client.toml` turns it off.
+- In creative mode, filling a bottle, bucket or bowl with water no longer leaves a copy without purity in the inventory.
+
 ## 1.21.1-1.1.0 (Minecraft 1.21.1, NeoForge), 2026-11-02
 
 - Quenched is now called **hydration** in the game, the commands, the data maps (field `hydration`), the config keys (`hydrationBonus`, `rainHydration`, `respawnHydration` and the others) and the textures (`textures/gui/hydration_icons.png`). Datapacks and resource packs that use the old names need updating, and config keys with the old names go back to their defaults. Saved thirst is kept, and the API keeps the name `quenched`.

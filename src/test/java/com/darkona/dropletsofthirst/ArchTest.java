@@ -17,7 +17,7 @@ class ArchTest {
     private static final DescribedPredicate<JavaClass> PLATFORM = ArchZones.packages("java..", "javax..", "jdk..", "net.minecraft..",
             "com.mojang..", "net.neoforged..", "it.unimi.dsi.fastutil..", "org.jetbrains.annotations..", "org.jspecify.annotations..",
             "org.joml..", "org.slf4j..", "com.electronwill.nightconfig..", "com.google..", "io.netty..", "org.apache..", "dev.darkona.jdlib..", MOD + "..");
-    private static final DescribedPredicate<JavaClass> USES_CLIENT = new DescribedPredicate<>("use client classes or the client-only JEI API") {
+    private static final DescribedPredicate<JavaClass> USES_CLIENT = new DescribedPredicate<>("use client classes or the client-only JEI and EMI APIs") {
         @Override
         public boolean test(JavaClass type) {
             return type.getDirectDependenciesFromSelf().stream().anyMatch(dependency -> isClientPackage(dependency.getTargetClass().getPackageName()));
@@ -25,7 +25,7 @@ class ArchTest {
     };
 
     private static boolean isClientPackage(String name) {
-        return name.startsWith("net.minecraft.client") || name.startsWith("net.neoforged.neoforge.client") || name.startsWith("mezz.jei");
+        return name.startsWith("net.minecraft.client") || name.startsWith("net.neoforged.neoforge.client") || name.startsWith("mezz.jei") || name.startsWith("dev.emi");
     }
 
     @Test
