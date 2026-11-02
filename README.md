@@ -3,7 +3,7 @@
 **Thirst for Minecraft** Activity and heat make you thirsty, and you drink to keep going. 
 **Water Purity** Not all water is safe: water from a swamp, the sea or a puddle can make you sick until you clean it.
 
-![The droplets above the food bar, with a water bottle in hand](https://raw.githubusercontent.com/Darkona/droplets-of-thirst/main/wiki/images/hud.png)
+![The droplets above the food bar, with a water bottle in hand](https://raw.githubusercontent.com/Darkona/droplets-of-thirst/master/wiki/images/hud.png)
 
 - **Thirst**: sprinting, jumping, fighting and hot, dry biomes drain makes you thirsty. Drink 
   water or other hydrating drinks to stabilize yourself.
@@ -12,7 +12,7 @@
   to make the experience they want. By default it has sensible values and adds a fun challenge 
   to survival.
 
-![A bottle of dirty water: drinking it makes you sick](https://raw.githubusercontent.com/Darkona/droplets-of-thirst/main/wiki/images/dirty-water.png)
+![A bottle of dirty water: drinking it makes you sick](https://raw.githubusercontent.com/Darkona/droplets-of-thirst/master/wiki/images/dirty-water.png)
 
 **Minecraft versions:** 1.21.1 on NeoForge and 1.20.1 on Forge. The [wiki](https://github.com/Darkona/droplets-of-thirst/wiki) has the details and what changes from one version to another.
 
