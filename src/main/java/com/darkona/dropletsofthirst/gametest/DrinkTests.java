@@ -24,6 +24,7 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
@@ -36,6 +37,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -268,7 +270,7 @@ public class DrinkTests
     }
 
     @GameTest(template = "box", templateNamespace = DropletsOfThirst.ID, timeoutTicks = 40)
-    public static void anEmptyHandCarriesTheAmphoraWithItsWater(GameTestHelper helper)
+    public static void anEmptyHandDropsTheAmphoraWithItsWater(GameTestHelper helper)
     {
         BlockPos pos = helper.absolutePos(new BlockPos(2, 2, 2));
         amphora(helper, pos).fill(WaterPurity.addPurity(new FluidStack(Fluids.WATER, 3000), 5), IFluidHandler.FluidAction.EXECUTE);
@@ -276,8 +278,10 @@ public class DrinkTests
         player.gameMode.destroyBlock(pos);
         helper.assertTrue(helper.getLevel().isEmptyBlock(pos), "the block is gone");
         helper.runAfterDelay(3, () -> {
-            ItemStack held = heldAmphora(player);
-            helper.assertTrue(held.is(DropletsItems.AMPHORA.get()), "the player holds " + held);
+            ItemStack held = droppedAmphora(helper, pos);
+            helper.assertTrue(held.is(DropletsItems.AMPHORA.get()), "the amphora drops, got " + held);
+            helper.assertTrue(player.getInventory().isEmpty(), "it does not go straight to the inventory");
+            helper.assertItemEntityNotPresent(Items.BRICK, new BlockPos(2, 2, 2), 3.0);
             helper.assertTrue(held.getUseAnimation() == UseAnim.NONE, "a carried amphora cannot be drunk from");
             helper.assertTrue(helper.getLevel().getFluidState(pos).isEmpty(), "carrying it spills nothing");
             helper.getLevel().setBlockAndUpdate(pos, DropletsBlocks.AMPHORA.get().defaultBlockState());
@@ -290,11 +294,11 @@ public class DrinkTests
         });
     }
 
-    private static ItemStack heldAmphora(ServerPlayer player)
+    private static ItemStack droppedAmphora(GameTestHelper helper, BlockPos pos)
     {
-        for (int slot = 0; slot < player.getInventory().getContainerSize(); slot++)
-            if (player.getInventory().getItem(slot).is(DropletsItems.AMPHORA.get()))
-                return player.getInventory().getItem(slot);
+        for (ItemEntity item : helper.getLevel().getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(3.0)))
+            if (item.getItem().is(DropletsItems.AMPHORA.get()))
+                return item.getItem();
         return ItemStack.EMPTY;
     }
 
@@ -307,8 +311,8 @@ public class DrinkTests
         player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.STICK));
         player.gameMode.destroyBlock(pos);
         helper.runAfterDelay(2, () -> {
-            helper.assertTrue(heldAmphora(player).isEmpty(), "a tool does not carry it");
             helper.assertItemEntityNotPresent(DropletsItems.AMPHORA.get(), new BlockPos(2, 2, 2), 3.0);
+            helper.assertItemEntityPresent(Items.BRICK, new BlockPos(2, 2, 2), 3.0);
             helper.assertTrue(helper.getLevel().getFluidState(pos).is(FluidTags.WATER), "the water spills");
             helper.succeed();
         });

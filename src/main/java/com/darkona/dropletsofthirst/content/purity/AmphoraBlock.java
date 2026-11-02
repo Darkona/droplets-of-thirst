@@ -165,20 +165,21 @@ public class AmphoraBlock extends BaseEntityBlock
     public void playerWillDestroy(@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull Player player)
     {
         if (!level.isClientSide() && !player.isCreative() && player.getMainHandItem().isEmpty() && level.getBlockEntity(pos) instanceof AmphoraBlockEntity amphora)
-        {
-            ItemStack carried = new ItemStack(this);
-            if (!amphora.tank().isEmpty())
-                amphora.saveToItem(carried);
-            amphora.tank().setFluid(FluidStack.EMPTY);
-            player.getInventory().placeItemBackInInventory(carried);
-        }
+            amphora.markCarried();
         super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
     public void playerDestroy(@NotNull Level level, @NotNull Player player, @NotNull BlockPos pos, @NotNull BlockState state, @Nullable BlockEntity blockEntity, @NotNull ItemStack tool)
     {
-        if (!tool.isEmpty())
+        if (blockEntity instanceof AmphoraBlockEntity amphora && amphora.carried())
+        {
+            ItemStack carried = new ItemStack(this);
+            if (!amphora.tank().isEmpty())
+                amphora.saveToItem(carried);
+            popResource(level, pos, carried);
+        }
+        else
             super.playerDestroy(level, player, pos, state, blockEntity, tool);
     }
 
@@ -212,7 +213,7 @@ public class AmphoraBlock extends BaseEntityBlock
     public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean moved)
     {
         if (level instanceof ServerLevel server && !state.is(newState.getBlock()) && !server.dimensionType().ultraWarm()
-                && level.getBlockEntity(pos) instanceof AmphoraBlockEntity amphora && amphora.tank().getFluid().getFluid().is(FluidTags.WATER))
+                && level.getBlockEntity(pos) instanceof AmphoraBlockEntity amphora && !amphora.carried() && amphora.tank().getFluid().getFluid().is(FluidTags.WATER))
             spill(server, pos);
         super.onRemove(state, level, pos, newState, moved);
     }

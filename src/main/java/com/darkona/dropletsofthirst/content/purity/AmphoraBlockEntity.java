@@ -27,6 +27,7 @@ public class AmphoraBlockEntity extends BlockEntity
         }
     };
     private final LazyOptional<IFluidHandler> handler = LazyOptional.of(() -> tank);
+    private boolean carried;
 
     public AmphoraBlockEntity(BlockPos pos, BlockState state)
     {
@@ -36,6 +37,16 @@ public class AmphoraBlockEntity extends BlockEntity
     public FluidTank tank()
     {
         return tank;
+    }
+
+    public void markCarried()
+    {
+        carried = true;
+    }
+
+    public boolean carried()
+    {
+        return carried;
     }
 
     @Override
