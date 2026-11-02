@@ -1,6 +1,6 @@
 # Minecraft 1.21.1
 
-Droplets of Thirst for Minecraft 1.21.1 runs on **Minecraft 1.21.1 and NeoForge 21.1.252 or newer** (branch `1.21.1`, jar `droplets-of-thirst-1.21.1-1.0.0.jar`). Thirst, water purity, effects, config files, data maps, commands and the API work as the rest of this wiki describes.
+Droplets of Thirst for Minecraft 1.21.1 runs on **Minecraft 1.21.1 and NeoForge 21.1.252 or newer** (branch `1.21.1`, jar `droplets-of-thirst-1.21.1-1.1.0.jar`). Thirst, water purity, effects, config files, data maps, commands and the API work as the rest of this wiki describes.
 
 1.21.1 has the most integrations: Create, Farmer's Delight and its addons, Cold Sweat, Vampirism, Supernatural, Reliquary and KubeJS. It also works with Jade, JEI, AppleSkin, Serene Seasons and Traveler's Backpack. This page describes those integrations.
 
@@ -192,4 +192,4 @@ StartupEvents.postInit(() => {
 - Fluids go through `IFluidHandler` and `FluidStack`. A water cauldron seen through NeoForge's fluid capability reports its water with the cauldron purity.
 - The mod also posts `EatEvent` when another mod calls `Player#eat` directly.
 - Built-in bar styles include the vampire style (priority 400).
-- The Maven version is `1.21.1-1.0.0`. Declare the dependency in `neoforge.mods.toml` with `type = "optional"`.
+- The Maven version is `1.21.1-1.1.0`. Declare the dependency in `neoforge.mods.toml` with `type = "optional"`.

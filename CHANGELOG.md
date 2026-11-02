@@ -2,7 +2,7 @@
 
 Changes by feature, newest version first. Upstream issues are cited as `thirst#NN` (ghen-git/Thirst-Mod).
 
-## 1.20.1-1.1.0 (Minecraft 1.20.1, Forge 47 and NeoForge 47.1)
+## 1.20.1-1.1.0 (Minecraft 1.20.1, Forge 47 and NeoForge 47.1), 2026-11-02
 
 Brings 1.20.1 up to 1.21.1-1.1.0. One jar, `droplets-of-thirst-1.20.1-1.1.0.jar`, as before.
 
