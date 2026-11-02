@@ -2,7 +2,7 @@
 
 Changes by feature, newest version first. Upstream issues are cited as `thirst#NN` (ghen-git/Thirst-Mod).
 
-## Unreleased
+## 1.21.1-1.1.0 (Minecraft 1.21.1, NeoForge), 2026-11-02
 
 - Droplets of Thirst now supports Minecraft 1.21.1 and 1.20.1 only. The other versions are no longer maintained or available on GitHub.
 - Water of any purity now mixes in tanks and Canteens, and the whole tank drops to the dirtiest purity. It works with any mod tank built on the NeoForge fluid tank.
