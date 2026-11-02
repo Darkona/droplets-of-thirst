@@ -1,12 +1,16 @@
 # Droplets of Thirst
 
-**Thirst for Minecraft, as a row of droplets above the food bar.** Activity and heat make you thirsty, and you drink to keep going. Not all water is safe: water from a swamp, the sea or a puddle can make you sick until you clean it.
+**Thirst for Minecraft** Activity and heat make you thirsty, and you drink to keep going. 
+**Water Purity** Not all water is safe: water from a swamp, the sea or a puddle can make you sick until you clean it.
 
 ![The droplets above the food bar, with a water bottle in hand](https://raw.githubusercontent.com/Darkona/droplets-of-thirst/main/wiki/images/hud.png)
 
-- **Thirst**: sprinting, jumping, fighting and hot, dry biomes drain the droplets. Drinking fills them back.
-- **Water purity**: every bottle, bowl and bucket shows the purity of its water. Boil dirty water before you drink it: in a cauldron over a fire, on a campfire or in a furnace. Purity can be turned off if you only want thirst.
-- **Made for modpacks**: every number lives in a config file or a datapack, and it works with many popular mods.
+- **Thirst**: sprinting, jumping, fighting and hot, dry biomes drain makes you thirsty. Drink 
+  water or other hydrating drinks to stabilize yourself.
+- **Water purity**: Boil dirty water before you drink it: in a cauldron over a fire, on a campfire or in a furnace. Purity can be turned off if you only want thirst.
+- **Made for modpacks**: most of the mod can be enable dor disabled by server ops or pack makers 
+  to make the experience they want. By default it has sensible values and adds a fun challenge 
+  to survival.
 
 ![A bottle of dirty water: drinking it makes you sick](https://raw.githubusercontent.com/Darkona/droplets-of-thirst/main/wiki/images/dirty-water.png)
 
@@ -19,4 +23,4 @@
 - **Mikul** ([MikulDev](https://github.com/MikulDev)) made the NeoForge 1.21.1 port this mod starts from.
 - Maintained by **Darkona**.
 
-Released under the [MIT license](LICENSE), which keeps the original Thirst Was Taken copyright notice.
+Released under the [MIT license](LICENSE).

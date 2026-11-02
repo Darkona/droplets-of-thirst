@@ -175,7 +175,7 @@ If the server turns purity off, all water is the same and only thirst matters.
 | Clay bowl | 3 clay balls in a V shape give 4 | Cook it into a terracotta bowl |
 | Terracotta bowl | Clay bowl in a furnace or on a campfire | Fill it with water like a glass bottle, from the world or a cauldron |
 | Terracotta water bowl | Terracotta bowl filled with water | Drink it like a water bottle. It can be purified like a bottle |
-| Charcoal Filter | Planks, leaves, sand, charcoal and gravel, in a funnel shape. Leaves need shears | Purifies water by gravity. See [Charcoal Filter](#charcoal-filter) |
+| Charcoal Filter | Copper ingots, leaves, sand, charcoal and gravel, in a funnel shape. Leaves need shears | Purifies water by gravity. See [Charcoal Filter](#charcoal-filter) |
 | Amphora | 6 terracotta | Stores 4 buckets of water and keeps its purity. See [Amphora](#amphora) |
 | Canteen | Leather and 3 iron ingots | Carries 8 drinks of one kind. See [Canteen](#canteen) |
 
